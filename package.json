@@ -1,4 +1,6 @@
 {
+  "name": "esy-reason-project",
+  "version": "1.0.0",
   "description": "My website",
   "esy": {
     "build": [

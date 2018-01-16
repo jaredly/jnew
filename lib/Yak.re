@@ -1,5 +1,5 @@
 
-let page = (~title as name, ~description, ~body as bodyText, ~extraHead="", ()) => {
+let renderPage = (~title as name, ~description, ~body as bodyText, ~extraHead="", ()) => {
   open Html;
   <html>
     <head>
@@ -85,7 +85,15 @@ let run = () => {
   |> List.filter(f => Filename.check_suffix(f, ".md"))
   |> List.map(fileName => {
     let contents = Files.readFile(Filename.concat(base, fileName)) |> unwrap("Cannot read file");
-    let (config, body) = parseConfig(fileName, raw);
+    let (config, body) = parseConfig(fileName, contents);
+    let dest = Filename.concat("./test/pages/", Filename.chop_extension(fileName) ++ ".html");
+    let html = renderPage(
+      ~title=config.title,
+      ~description=config.description,
+      ~body=Omd.to_html(Omd.of_string(body)),
+      ()
+    );
+    Files.writeFile(dest, html);
     print_endline(config.title)
   }) |> ignore
   ;

@@ -7,7 +7,7 @@ let normal = (name, preattrs, ~attrs=[], ~children, ()) => {
   "<" ++ name ++ formatAttributes(preattrs @ attrs) ++ ">\n" ++ String.concat("\n", children) ++ "\n</" ++ name ++ ">"
 };
 
-let meta = (~charset="") => normal("", [("charset", charset)]);
+let meta = (~charset="") => normal("meta", [("charset", charset)]);
 let html = normal("html", []);
 let body = normal("body", []);
 
