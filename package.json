@@ -2,6 +2,10 @@
   "name": "esy-reason-project",
   "version": "1.0.0",
   "description": "My website",
+  "scripts": {
+    "test": "esy build && esy jbuilder exec Hello",
+    "start": "watchexec -w lib -w bin npm test"
+  },
   "esy": {
     "build": [
       ["refmterr", "jbuilder", "build"]

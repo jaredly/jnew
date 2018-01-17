@@ -1,20 +1,4 @@
 
-let renderPage = (~title as name, ~description, ~body as bodyText, ~extraHead="", ()) => {
-  open Html;
-  <html>
-    <head>
-      <meta charset="utf8"/>
-      <title>{name}</title>
-      {extraHead}
-    </head>
-    <body>
-      {bodyText}
-    </body>
-  </html>
-};
-
-/* gotta parse toml */
-
 let unwrap = (message, x) => switch x { | None => failwith(message) | Some(x) => x };
 
 type config = {
@@ -39,33 +23,20 @@ let defaultConfig = fileName => {
   featured: false
 };
 
+let check = (opt, base, fn) => switch opt {
+| None => base
+| Some(value) => fn(value)
+};
+
 let parseConfig = (fileName, text) => {
   let opts = Toml.parse(text);
   let config = defaultConfig(fileName);
-  let config = switch (Toml.string("title", opts)) {
-  | None => config
-  | Some(title) => {...config, title}
-  };
-  let config = switch (Toml.string("description", opts)) {
-  | None => config
-  | Some(description) => {...config, description: Some(description)}
-  };
-  let config = switch (Toml.stringList("tags", opts)) {
-  | None => config
-  | Some(tags) => {...config, tags}
-  };
-  let config = switch (Toml.stringList("categories", opts)) {
-  | None => config
-  | Some(categories) => {...config, categories}
-  };
-  let config = switch (Toml.string("date", opts)) {
-  | None => config
-  | Some(date) => {...config, date}
-  };
-  let config = switch (Toml.bool("featured", opts)) {
-  | None => config
-  | Some(featured) => {...config, featured}
-  };
+  let config = check(Toml.string("title", opts), config, title => {...config, title});
+  let config = check(Toml.string("description", opts), config, description => {...config, description: Some(description)});
+  let config = check(Toml.stringList("tags", opts), config, tags => {...config, tags});
+  let config = check(Toml.stringList("categories", opts), config, categories => {...config, categories});
+  let config = check(Toml.string("date", opts), config, date => {...config, date});
+  let config = check(Toml.bool("featured", opts), config, featured => {...config, featured});
   config
 };
 
@@ -83,24 +54,18 @@ let run = () => {
   let base = "./test/posts";
   Files.readDirectory(base)
   |> List.filter(f => Filename.check_suffix(f, ".md"))
-  |> List.map(fileName => {
+  |> List.iter(fileName => {
     let contents = Files.readFile(Filename.concat(base, fileName)) |> unwrap("Cannot read file");
     let (config, body) = parseConfig(fileName, contents);
     let dest = Filename.concat("./test/pages/", Filename.chop_extension(fileName) ++ ".html");
-    let html = renderPage(
+    let html = Post.renderPost(
       ~title=config.title,
       ~description=config.description,
-      ~body=Omd.to_html(Omd.of_string(body)),
-      ()
+      ~thumbnail=config.thumbnail,
+      body
     );
-    Files.writeFile(dest, html);
+    Files.writeFile(dest, html) |> ignore;
     print_endline(config.title)
-  }) |> ignore
-  ;
-  let json = Yojson.Basic.from_string("{\"2\":3}");
-  let x = Yojson.Basic.to_string(json);
-  print_endline(x);
-  let md = Omd.of_string("Hello");
-  let html = Omd.to_html(~override=?None, ~pindent=false, ~nl2br=true, ~cs=?None, md);
+  });
 
 };
