@@ -60,6 +60,8 @@ let run = () => {
     let dest = Filename.concat("./test/pages/", Filename.chop_extension(fileName) ++ ".html");
     let html = Post.renderPost(
       ~title=config.title,
+      ~date=config.date,
+      ~tags=config.tags,
       ~description=config.description,
       ~thumbnail=config.thumbnail,
       body

@@ -3,10 +3,16 @@ let props = "";
 
 let formatAttributes = (attrs) => String.concat("", List.map(((name, v)) => " " ++ name ++ "=\"" ++ String.escaped(v) ++ "\"", attrs));
 
+let selfClosing = tag => switch tag {
+| "meta" => true
+| "img" => true
+| _ => false
+};
+
 let normal = (name, preattrs, ~attrs=[], ~children, ()) => {
   let head = name ++ formatAttributes(preattrs @ attrs);
   if (children == []) {
-    "<" ++ head ++ "/>"
+    "<" ++ head ++ (selfClosing(name) ? "/>" : "></" ++ name ++ ">")
   } else {
     "<" ++ head ++ ">\n" ++ String.concat("\n", children) ++ "\n</" ++ name ++ ">"
   }

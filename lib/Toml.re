@@ -22,7 +22,7 @@ let parse = (text) => {
         switch curList {
         | None => failwith("Unexpected list item, not in a list: " ++ line)
         | Some(name) => {
-          let value = String.sub(line, 0, String.length("- "));
+          let value = String.sub(line, String.length("- "), String.length(line) - 2);
           (curList, {...doc, stringLists: StrMap.add(name, [value, ...StrMap.find(name, doc.stringLists)], doc.stringLists)})
         }
         }
