@@ -88,26 +88,3 @@ let style = normal("style", []);
 let head = normal("head", []);
 let title = normal("title", []);
 
-
-let startPage = () => {
-  let ids = Hashtbl.create(50);
-
-  let css = (items) => {
-    let hash = Hashtbl.hash(items);
-    Hashtbl.replace(ids, hash, items);
-    "style-" ++ string_of_int(hash);
-  };
-
-  let inlineCss = () => {
-    Hashtbl.fold(
-      (k, v, res) => [".style-" ++ string_of_int(k) ++ " {\n" ++ String.concat(
-        "\n",
-        List.map(((attr, value)) => "  " ++ attr ++ ": " ++ value ++ ";", v)
-      ) ++ "\n}", ...res],
-      ids,
-      []
-    ) |> String.concat("\n")
-  };
-
-  (css, inlineCss)
-};

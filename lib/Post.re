@@ -29,23 +29,24 @@ let showDate = (~date as (year, month, _), ~children, ()) => {
 
 let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
   open Html;
+  open Css;
   <div className=css([
-    ("color", Shared.Colors.lightText),
-    ("font-family", "Open sans"),
-    ("font-size", "14px"),
-    ("display", "flex"),
-    ("flex-direction", "row"),
-    ("align-items", "center"),
-    ("justify-content", "flex-start"),
+    A("color", Shared.Colors.lightText),
+    A("font-family", "Open sans"),
+    A("font-size", "14px"),
+    A("display", "flex"),
+    A("flex-direction", "row"),
+    A("align-items", "center"),
+    A("justify-content", "flex-start"),
   ])>
     (withPic
       ? <fragment>
         <userPic css />
         (spacer(12))
         <a href="/about" className=css([
-          ("color", "currentColor"),
-          ("text-decoration", "none"),
-          ("font-weight", "bold")
+          A("color", "currentColor"),
+          A("text-decoration", "none"),
+          A("font-weight", "bold")
         ])>"Jared Forsyth"</a>
         (spacer(4))
         " · "
@@ -58,7 +59,7 @@ let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
     (spacer(8))
     (String.concat(", " ++ spacer(4), List.map(tag => <a
       href=("/tags/" ++ tag ++ "/")
-      className=css([("text-decoration", "none")])
+      className=css([A("text-decoration", "none")])
     >tag</a>, tags)))
   </div>
 };
@@ -67,8 +68,9 @@ let pageWithTopAndBottom = Shared.pageWithTopAndBottom;
 let pageHead = Shared.pageHead;
 
 let renderPost = (~title as contentTitle, ~description, ~date, ~tags, ~thumbnail, rawBody) => {
-  let (css, inlineCss) = Html.startPage();
+  let (css, inlineCss) = Css.startPage();
   open Html;
+  open Css;
 
   let body = <pageWithTopAndBottom
       css
@@ -77,23 +79,30 @@ let renderPost = (~title as contentTitle, ~description, ~date, ~tags, ~thumbnail
           <a
             href="/"
             className=css([
-              ("position", "fixed"),
-              ("top", "10px"),
-              ("left", "10px"),
-              ("padding", "8px"),
-              ("background-color", "black")
+              A("position", "fixed"),
+              A("top", "10px"),
+              A("left", "10px"),
+              A("padding", "8px"),
+              A("background-color", "black"),
+              Media("max-width: 600px", [
+                ("display", "none"),
+              ])
             ])
           >
             <div className=css([
-              ("height", "32px"),
-              ("width", "32px"),
-              ("background-size", "cover")
+              A("height", "32px"),
+              A("width", "32px"),
+              A("background-size", "cover")
             ]) style="background-image: url(/images/logo/JF_64.png)" />
           </a>
           <h1 className=css([
-            ("font-size", "56px"),
-            ("margin-top", "100px"),
-            ("margin-bottom", "16px"),
+            A("font-size", "56px"),
+            A("margin-top", "100px"),
+            A("margin-bottom", "16px"),
+            Media("max-width: 600px", [
+              ("font-size", "32px"),
+              ("margin-top", "40px"),
+            ])
           ])>contentTitle</h1>
           <postAbout css date tags />
         </fragment>
@@ -101,9 +110,13 @@ let renderPost = (~title as contentTitle, ~description, ~date, ~tags, ~thumbnail
       middle=(
         <div
         className=css([
-          ("font-size", "24px"),
-          ("line-height", "36px"),
-          ("hyphens", "auto"),
+          A("font-size", "24px"),
+          A("line-height", "36px"),
+          A("hyphens", "auto"),
+          Media("max-width: 600px", [
+            ("font-size", "20px"),
+            ("line-height", "30px"),
+          ])
         ])
         >
           (MarkdownParser.parse(rawBody))
@@ -128,16 +141,16 @@ let renderPost = (~title as contentTitle, ~description, ~date, ~tags, ~thumbnail
 
 let postList = (posts) => {
   open Html;
-  let (css, inlineCss) = Html.startPage();
+  let (css, inlineCss) = Css.startPage();
   let contentTitle = "All posts";
   let body = <pageWithTopAndBottom
     css
     top=(
       <fragment>
         <h1 className=css([
-          ("font-size", "56px"),
-          ("margin-top", "150px"),
-          ("margin-bottom", "16px"),
+          A("font-size", "56px"),
+          A("margin-top", "150px"),
+          A("margin-bottom", "16px"),
         ])>contentTitle</h1>
       </fragment>
     )
@@ -151,8 +164,8 @@ let postList = (posts) => {
             : "Read more";
           <div>
             <a href className=css([
-                ("color", "currentColor"),
-                ("text-decoration", "none")
+                A("color", "currentColor"),
+                A("text-decoration", "none")
               ])
             >
               <h2>(config.title)</h2>
@@ -162,15 +175,15 @@ let postList = (posts) => {
             | None => ""
             | Some(teaser) =>
               <div className=css([
-                ("hyphens", "auto"),
-                ("padding-top", "16px"),
-          ("font-size", "24px"),
-          ("line-height", "36px"),
+                A("hyphens", "auto"),
+                A("padding-top", "16px"),
+                A("font-size", "24px"),
+                A("line-height", "36px"),
               ])>
                 (Omd.to_html(Omd.of_string(teaser)))
               </div>
             })
-            <a className=css([("font-size", "24px")]) href>readTime</a>
+            <a className=css([A("font-size", "24px")]) href>readTime</a>
           </div>
         },
         posts

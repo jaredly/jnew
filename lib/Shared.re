@@ -6,15 +6,15 @@ let module Colors = {
   let lightText = "#999";
 };
 
-let userPic = (~css, ~children, ()) => Html.(
+let userPic = (~css, ~children, ()) => Css.(Html.(
     <div className=css([
-      ("background-image", "url(https://www.gravatar.com/avatar/313878fc8f316fc3fe4443b13913d0a4.png?s=30)"),
-      ("background-size", "cover"),
-      ("display", "inline-block"),
-      ("width", "30px"),
-      ("height", "30px"),
-      ("border-radius", "50%")
-    ]) />);
+      A("background-image", "url(https://www.gravatar.com/avatar/313878fc8f316fc3fe4443b13913d0a4.png?s=30)"),
+      A("background-size", "cover"),
+      A("display", "inline-block"),
+      A("width", "30px"),
+      A("height", "30px"),
+      A("border-radius", "50%")
+    ]) />));
 
 let twitter = (~contentTitle, ~description, ~thumbnail, ~children, ()) => {
   open Html;
@@ -73,6 +73,10 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
 
     <style>
       {|
+      div {
+        flex-shrink: 0;
+        flex-wrap: wrap;
+      }
       pre {
         line-height: 18px;
         font-size: 16px;
@@ -150,23 +154,24 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
 
 let pageWithTopAndBottom = (~css, ~top, ~middle, ~bottom, ~children, ()) => {
   open Html;
+  open Css;
   <body className=css([
-    ("font-family", "Linux Libertine"),
-    ("color", Colors.text),
+    A("font-family", "Linux Libertine"),
+    A("color", Colors.text),
   ]) lang="en">
     <main role="main">
       <article lang="en">
         <header>
           <div className=css([
-            ("max-width", "700px"),
-            ("margin", "0 auto 48px")
+            A("max-width", "700px"),
+            A("margin", "0 auto 48px")
           ])>
             top
           </div>
         </header>
         <div className=css([
-          ("max-width", "700px"),
-          ("margin", "0 auto")
+          A("max-width", "700px"),
+          A("margin", "0 auto")
         ])>
           middle
         </div>
@@ -175,9 +180,9 @@ let pageWithTopAndBottom = (~css, ~top, ~middle, ~bottom, ~children, ()) => {
 
     <footer>
       <div className=css([
-        ("max-width", "700px"),
-        ("margin", "100px auto 150px"),
-        ("text-align", "center"),
+        A("max-width", "700px"),
+        A("margin", "100px auto 150px"),
+        A("text-align", "center"),
       ])>
         bottom
       </div>
