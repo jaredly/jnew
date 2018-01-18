@@ -8,7 +8,11 @@
   },
   "esy": {
     "build": [
-      ["refmterr", "jbuilder", "build"]
+      [
+        "refmterr",
+        "jbuilder",
+        "build"
+      ]
     ],
     "install": [
       "esy-installer"
@@ -17,13 +21,11 @@
   },
   "dependencies": {
     "@esy-ocaml/esy-installer": "^0.0.0",
-    "@opam/jbuilder": "^1.0.0-beta14",
-    "@opam/lambda-term": "^1.11.0",
-    "@opam/lwt": "^3.1.0",
-    "@opam/omd": "*",
-    "@opam/yojson": "*",
     "@opam/ezjsonm": "*",
+    "@opam/jbuilder": "^1.0.0-beta14",
     "@opam/reason": "^3.0.0",
+    "@opam/yojson": "*",
+    "omd": "link:../omd",
     "refmterr": "^3.0.4"
   },
   "peerDependencies": {

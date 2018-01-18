@@ -505,6 +505,10 @@ ocaml@~4.6.0:
   version "4.6.1"
   resolved "https://registry.yarnpkg.com/ocaml/-/ocaml-4.6.1.tgz#8babea2c41a9f734313b4fc1841ec0963c9d7a07"
 
+"omd@link:../omd":
+  version "0.0.0"
+  uid ""
+
 refmterr@^3.0.4:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/refmterr/-/refmterr-3.0.6.tgz#e910ae12e87796959a4635805c9668ce792bbb70"
