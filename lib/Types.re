@@ -7,5 +7,6 @@ type config = {
   description: option(string),
   thumbnail: option(string),
   featured: bool,
-  fileName: string
+  fileName: string,
+  wordCount: int
 };

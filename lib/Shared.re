@@ -85,6 +85,8 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
         background-color: #fff4ef;
         color: #692900;
         border-radius: 4px;
+        margin: 0;
+        margin-bottom: 1em;
       }
       img {
         max-width: 100%;

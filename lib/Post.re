@@ -18,7 +18,16 @@ let monthName = month => switch month {
 let spacer = Shared.spacer;
 let userPic = Shared.userPic;
 
-let postAbout = (~css, ~date as (year, month, day), ~tags, ~children, ()) => {
+let showDate = (~date as (year, month, _), ~children, ()) => {
+  open Html;
+  <fragment>
+    (monthName(month))
+    (spacer(4))
+    (string_of_int(year))
+  </fragment>
+};
+
+let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
   open Html;
   <div className=css([
     ("color", Shared.Colors.lightText),
@@ -29,25 +38,28 @@ let postAbout = (~css, ~date as (year, month, day), ~tags, ~children, ()) => {
     ("align-items", "center"),
     ("justify-content", "flex-start"),
   ])>
-    <userPic css />
-    (spacer(12))
-    <a href="/about" className=css([
-      ("color", "currentColor"),
-      ("text-decoration", "none"),
-      ("font-weight", "bold")
-    ])>"Jared Forsyth"</a>
-    (spacer(4))
+    (withPic
+      ? <fragment>
+        <userPic css />
+        (spacer(12))
+        <a href="/about" className=css([
+          ("color", "currentColor"),
+          ("text-decoration", "none"),
+          ("font-weight", "bold")
+        ])>"Jared Forsyth"</a>
+        (spacer(4))
+        " · "
+        (spacer(4))
+      </fragment>
+      : "")
+    <showDate date />
+    (spacer(8))
     " · "
-    (spacer(4))
-    (monthName(month))
-    (spacer(4))
-    (string_of_int(year))
-    (spacer(4))
-    " · "
-    (spacer(4))
-    " tagged "
-    (spacer(4))
-    (String.concat(", " ++ spacer(4), List.map(tag => <a href=("/tags/" ++ tag)>tag</a>, tags)))
+    (spacer(8))
+    (String.concat(", " ++ spacer(4), List.map(tag => <a
+      href=("/tags/" ++ tag ++ "/")
+      className=css([("text-decoration", "none")])
+    >tag</a>, tags)))
   </div>
 };
 
@@ -132,22 +144,33 @@ let postList = (posts) => {
     middle=(
       List.map(
         ((config, teaser, _)) => {
+          open Types;
+          let href = (Filename.chop_extension(config.Types.fileName) ++ "/");
+          let readTime = config.wordCount > 0
+            ? string_of_int(config.wordCount / 225) ++ " minute read"
+            : "Read more";
           <div>
-            <a href=(Filename.chop_extension(config.Types.fileName) ++ "/")
+            <a href className=css([
+                ("color", "currentColor"),
+                ("text-decoration", "none")
+              ])
             >
-            <h2>
-              (config.Types.title)
-            </h2>
+              <h2>(config.title)</h2>
             </a>
+            <postAbout css date=config.date tags=config.tags withPic=false />
             (switch teaser {
             | None => ""
             | Some(teaser) =>
               <div className=css([
-                ("hyphens", "auto")
+                ("hyphens", "auto"),
+                ("padding-top", "16px"),
+          ("font-size", "24px"),
+          ("line-height", "36px"),
               ])>
                 (Omd.to_html(Omd.of_string(teaser)))
               </div>
             })
+            <a className=css([("font-size", "24px")]) href>readTime</a>
           </div>
         },
         posts

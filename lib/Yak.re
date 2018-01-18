@@ -11,7 +11,8 @@ let defaultConfig = fileName => {
   date: (0, 0, 0), /* Year, Month, Day */
   description: None,
   thumbnail: None,
-  featured: false
+  featured: false,
+  wordCount: 0
 };
 
 let check = (opt, base, fn) => switch opt {
@@ -44,7 +45,7 @@ let parseConfig = (fileName, raw) => {
   };
 };
 
-let getIntro = body => switch (Str.split(Str.regexp("\n<!-- more -->\n"), body)) {
+let getIntro = body => switch (Str.split(Str.regexp("<!-- more -->"), body)) {
 | [] => assert(false)
 | [one] => None
 | [top, ...rest] => Some(top)
@@ -69,6 +70,8 @@ let run = () => {
     let contents = Files.readFile(Filename.concat(base, fileName)) |> unwrap("Cannot read file");
     let (config, body) = parseConfig(fileName, contents);
     let intro = getIntro(body);
+    let wordCount = Str.split(Str.regexp("[^a-zA-Z0-9-]"), body) |> List.length;
+    let config = {...config, wordCount};
     let dest = Filename.concat("./test/pages/", Filename.chop_extension(fileName));
     Files.mkdirp(dest);
     let html = Post.renderPost(

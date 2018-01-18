@@ -94,7 +94,7 @@ let startPage = () => {
 
   let css = (items) => {
     let hash = Hashtbl.hash(items);
-    Hashtbl.add(ids, hash, items);
+    Hashtbl.replace(ids, hash, items);
     "style-" ++ string_of_int(hash);
   };
 
