@@ -91,6 +91,7 @@ let renderPost = (~title as contentTitle, ~description, ~date, ~tags, ~thumbnail
         className=css([
           ("font-size", "24px"),
           ("line-height", "36px"),
+          ("hyphens", "auto"),
         ])
         >
           (MarkdownParser.parse(rawBody))
@@ -132,7 +133,8 @@ let postList = (posts) => {
       List.map(
         ((config, teaser, _)) => {
           <div>
-            <a href=(Filename.chop_extension(config.Types.fileName) ++ ".html")>
+            <a href=(Filename.chop_extension(config.Types.fileName) ++ "/")
+            >
             <h2>
               (config.Types.title)
             </h2>
@@ -140,7 +142,9 @@ let postList = (posts) => {
             (switch teaser {
             | None => ""
             | Some(teaser) =>
-              <div>
+              <div className=css([
+                ("hyphens", "auto")
+              ])>
                 (Omd.to_html(Omd.of_string(teaser)))
               </div>
             })

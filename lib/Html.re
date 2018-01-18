@@ -32,6 +32,7 @@ let filterPresentValues = vals => List.rev(filterPresentValues(vals));
 
 let contentTag = (tagName, preattrs,
   ~id=?,
+  ~lang=?,
   ~className=?,
   ~style=?,
   ~itemprop=?,
@@ -42,6 +43,7 @@ let contentTag = (tagName, preattrs,
 ) => normal(tagName, (preattrs @ [
   ("class", className),
   ("id", id),
+  ("lang", lang),
   ("style", style),
   ("itemprop", itemprop),
   ("itemtype", itemtype),

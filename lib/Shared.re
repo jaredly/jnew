@@ -98,6 +98,7 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
       }
       blockquote {
           margin: 0;
+          margin-bottom: 1em;
           padding-left: 20px;
           border-left: 5px solid #1fad3e;
           font-style: italic;
@@ -106,6 +107,32 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
         color: #1fad3e;
         /* color: #28cc4c;
         text-decoration-color: #28cc4c; */
+      }
+      h2 {
+        padding-bottom: 16px;
+        font-size: 36px;
+        margin: 0;
+        margin-top: 1em;
+      }
+      p {
+        margin: 0;
+        padding-bottom: 1em;
+      }
+      blockquote > p:last-child {
+        padding-bottom: 0;
+      }
+      h3 {
+        margin-bottom: 8px;
+        font-family: Open sans;
+        font-weight: normal;
+        margin-top: 8px;
+        color: #6e6e6e;
+        font-size: 30px;
+      }
+      h5 {
+        font-family: open sans;
+        margin: 0;
+        margin-top: 16px;
       }
       /* a:visited {
         color: #333;
@@ -124,9 +151,9 @@ let pageWithTopAndBottom = (~css, ~top, ~middle, ~bottom, ~children, ()) => {
   <body className=css([
     ("font-family", "Linux Libertine"),
     ("color", Colors.text),
-  ])>
+  ]) lang="en">
     <main role="main">
-      <article>
+      <article lang="en">
         <header>
           <div className=css([
             ("max-width", "700px"),

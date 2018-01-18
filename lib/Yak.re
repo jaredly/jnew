@@ -69,7 +69,8 @@ let run = () => {
     let contents = Files.readFile(Filename.concat(base, fileName)) |> unwrap("Cannot read file");
     let (config, body) = parseConfig(fileName, contents);
     let intro = getIntro(body);
-    let dest = Filename.concat("./test/pages/", Filename.chop_extension(fileName) ++ ".html");
+    let dest = Filename.concat("./test/pages/", Filename.chop_extension(fileName));
+    Files.mkdirp(dest);
     let html = Post.renderPost(
       ~title=config.title,
       ~date=config.date,
@@ -78,7 +79,7 @@ let run = () => {
       ~thumbnail=config.thumbnail,
       body
     );
-    Files.writeFile(dest, html) |> ignore;
+    Files.writeFile(Filename.concat(dest, "index.html"), html) |> ignore;
     (config, intro, body)
   });
   print_endline("Done!");
@@ -86,5 +87,5 @@ let run = () => {
   /* All posts list */
   let html = Post.postList(sorted);
   Files.writeFile("./test/pages/index.html", html) |> ignore;
-  /* First page I think */
+  /* Front page I think */
 };
