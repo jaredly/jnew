@@ -7,14 +7,15 @@ let module Colors = {
 };
 
 let userPic = (~css, ~children, ()) => Css.(Html.(
-    <div className=css([
-      A("background-image", "url(https://www.gravatar.com/avatar/313878fc8f316fc3fe4443b13913d0a4.png?s=30)"),
-      A("background-size", "cover"),
-      A("display", "inline-block"),
-      A("width", "30px"),
-      A("height", "30px"),
-      A("border-radius", "50%")
-    ]) />));
+  <div className=css([
+    A("background-image", "url(https://www.gravatar.com/avatar/313878fc8f316fc3fe4443b13913d0a4.png?s=30)"),
+    A("background-size", "cover"),
+    A("display", "inline-block"),
+    A("width", "30px"),
+    A("height", "30px"),
+    A("border-radius", "50%")
+  ]) />
+));
 
 let twitter = (~contentTitle, ~description, ~thumbnail, ~children, ()) => {
   open Html;
@@ -159,25 +160,25 @@ let pageWithTopAndBottom = (~css, ~backgroundImage=?, ~top, ~middle, ~bottom, ~c
     A("font-family", "Linux Libertine"),
     A("color", Colors.text),
   ]) lang="en">
-          <a
-            href="/"
-            className=css([
-              A("position", "fixed"),
-              A("top", "10px"),
-              A("left", "10px"),
-              A("padding", "8px"),
-              A("background-color", "black"),
-              Media("max-width: 600px", [
-                ("display", "none"),
-              ])
-            ])
-          >
-            <div className=css([
-              A("height", "32px"),
-              A("width", "32px"),
-              A("background-size", "cover")
-            ]) style="background-image: url(/images/logo/JF_64.png)" />
-          </a>
+    <a
+      href="/"
+      className=css([
+        A("position", "fixed"),
+        A("top", "10px"),
+        A("left", "10px"),
+        A("padding", "8px"),
+        A("background-color", "black"),
+        Media("max-width: 600px", [
+          ("display", "none"),
+        ])
+      ])
+    >
+      <div className=css([
+        A("height", "32px"),
+        A("width", "32px"),
+        A("background-size", "cover")
+      ]) style="background-image: url(/images/logo/JF_64.png)" />
+    </a>
     <main role="main">
       <article lang="en">
         <header>

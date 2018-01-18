@@ -73,39 +73,38 @@ let renderPost = ({Types.title: contentTitle, description, date, tags, thumbnail
   open Css;
 
   let body = <pageWithTopAndBottom
-      css
-      top={
-        <fragment>
-          <h1 className=css([
-            A("font-size", "56px"),
-            A("margin-top", "100px"),
-            A("margin-bottom", "16px"),
-            Media("max-width: 600px", [
-              ("font-size", "32px"),
-              ("margin-top", "40px"),
-            ])
-          ])>contentTitle</h1>
-          <postAbout css date tags />
-        </fragment>
-      }
-      middle=(
-        <div
-        className=css([
-          A("font-size", "24px"),
-          A("line-height", "36px"),
-          A("hyphens", "auto"),
+    css
+    top={
+      <fragment>
+        <h1 className=css([
+          A("font-size", "56px"),
+          A("margin-top", "100px"),
+          A("margin-bottom", "16px"),
           Media("max-width: 600px", [
-            ("font-size", "20px"),
-            ("line-height", "30px"),
+            ("font-size", "32px"),
+            ("margin-top", "40px"),
           ])
+        ])>contentTitle</h1>
+        <postAbout css date tags />
+      </fragment>
+    }
+    middle=(
+      <div
+      className=css([
+        A("font-size", "24px"),
+        A("line-height", "36px"),
+        A("hyphens", "auto"),
+        Media("max-width: 600px", [
+          ("font-size", "20px"),
+          ("line-height", "30px"),
         ])
-        >
-          (MarkdownParser.parse(rawBody))
-          /* (Omd.to_html(Omd.of_string(rawBody))) */
-        </div>
-      )
-      bottom=("This is the personal site of Jared Forsyth")
-    />;
+      ])
+      >
+        (MarkdownParser.parse(rawBody))
+      </div>
+    )
+    bottom=("This is the personal site of Jared Forsyth")
+  />;
 
   <html>
     <pageHead
