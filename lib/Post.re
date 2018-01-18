@@ -67,7 +67,7 @@ let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
 let pageWithTopAndBottom = Shared.pageWithTopAndBottom;
 let pageHead = Shared.pageHead;
 
-let renderPost = (~title as contentTitle, ~description, ~date, ~tags, ~thumbnail, rawBody) => {
+let renderPost = ({Types.title: contentTitle, description, date, tags, thumbnail}, rawBody) => {
   let (css, inlineCss) = Css.startPage();
   open Html;
   open Css;
@@ -76,25 +76,6 @@ let renderPost = (~title as contentTitle, ~description, ~date, ~tags, ~thumbnail
       css
       top={
         <fragment>
-          <a
-            href="/"
-            className=css([
-              A("position", "fixed"),
-              A("top", "10px"),
-              A("left", "10px"),
-              A("padding", "8px"),
-              A("background-color", "black"),
-              Media("max-width: 600px", [
-                ("display", "none"),
-              ])
-            ])
-          >
-            <div className=css([
-              A("height", "32px"),
-              A("width", "32px"),
-              A("background-size", "cover")
-            ]) style="background-image: url(/images/logo/JF_64.png)" />
-          </a>
           <h1 className=css([
             A("font-size", "56px"),
             A("margin-top", "100px"),
@@ -139,26 +120,50 @@ let renderPost = (~title as contentTitle, ~description, ~date, ~tags, ~thumbnail
   </html>
 };
 
-let postList = (posts) => {
+let myBigFace = css => Css.(Html.(
+  <a
+    href="/about/"
+    style="background-image: url(https://www.gravatar.com/avatar/313878fc8f316fc3fe4443b13913d0a4.png?s=200)"
+    className=css([
+      A("width", "120px"),
+      A("height", "120px"),
+      A("position", "absolute"),
+      A("top", "-60px"),
+      A("right", "50%"),
+      A("margin-right", "-60px"),
+      A("background-size", "cover"),
+      A("border-radius", "60px"),
+      A("z-index", "99"),
+      A("text-indent", "-9999px"),
+      A("border", "3px solid white"),
+      A("background-color", "white"),
+      A("box-shadow", "0 1px 1px rgba(0, 0, 0, 0.3)"),
+    ])
+  >"Jared Forsyth"</a>
+));
+
+let postList = (posts, contentTitle) => {
   open Html;
   let (css, inlineCss) = Css.startPage();
-  let contentTitle = "All posts";
+  /* let contentTitle = "All posts"; */
   let body = <pageWithTopAndBottom
     css
+    backgroundImage="/images/trees.jpg"
     top=(
-      <fragment>
+      <div className=css([A("padding", "1px"), A("position", "relative")])>
+        (myBigFace(css))
         <h1 className=css([
+          A("text-align", "center"),
           A("font-size", "56px"),
-          A("margin-top", "150px"),
           A("margin-bottom", "16px"),
         ])>contentTitle</h1>
-      </fragment>
+      </div>
     )
     middle=(
       List.map(
         ((config, teaser, _)) => {
           open Types;
-          let href = (Filename.chop_extension(config.Types.fileName) ++ "/");
+          let href = ("/" ++ Filename.chop_extension(config.Types.fileName) ++ "/");
           let readTime = config.wordCount > 0
             ? string_of_int(config.wordCount / 225) ++ " minute read"
             : "Read more";
@@ -187,7 +192,7 @@ let postList = (posts) => {
           </div>
         },
         posts
-      ) |> String.concat("\n")
+      ) |> String.concat("\n<div style='height: 32px'></div>\n")
     )
     bottom=("This is the personal site of Jared Forsyth")
   />;

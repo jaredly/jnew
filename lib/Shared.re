@@ -152,16 +152,49 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
 };
 
 
-let pageWithTopAndBottom = (~css, ~top, ~middle, ~bottom, ~children, ()) => {
+let pageWithTopAndBottom = (~css, ~backgroundImage=?, ~top, ~middle, ~bottom, ~children, ()) => {
   open Html;
   open Css;
   <body className=css([
     A("font-family", "Linux Libertine"),
     A("color", Colors.text),
   ]) lang="en">
+          <a
+            href="/"
+            className=css([
+              A("position", "fixed"),
+              A("top", "10px"),
+              A("left", "10px"),
+              A("padding", "8px"),
+              A("background-color", "black"),
+              Media("max-width: 600px", [
+                ("display", "none"),
+              ])
+            ])
+          >
+            <div className=css([
+              A("height", "32px"),
+              A("width", "32px"),
+              A("background-size", "cover")
+            ]) style="background-image: url(/images/logo/JF_64.png)" />
+          </a>
     <main role="main">
       <article lang="en">
         <header>
+          (switch backgroundImage {
+          | None => ""
+          | Some(backgroundImage) => (
+            <div style=("background-image: url(" ++ backgroundImage ++ ")")
+              className=css([
+                A("height", "400px"),
+                A("background-size", "cover"),
+                A("background-position", "center"),
+                A("margin", "-8px -8px 0"),
+              ])
+            >
+            </div>
+           )
+          })
           <div className=css([
             A("max-width", "700px"),
             A("margin", "0 auto 48px")

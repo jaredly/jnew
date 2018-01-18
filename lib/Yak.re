@@ -61,12 +61,16 @@ let dateSort = ((y1, m1, d1), (y2, m2, d2)) => {
   }
 };
 
+let sortPostsByDate = (({date: date1}, _, _), ({date: date2}, _, _)) => dateSort(date2, date1);
+
+let module StrMap = Map.Make(String);
+
 let run = () => {
   print_endline("Hello " ++ Unix.getcwd());
   let base = "./test/posts";
-  let posts = Files.readDirectory(base)
-  |> List.filter(f => Filename.check_suffix(f, ".md"))
-  |> List.map(fileName => {
+  let (posts, byTag) = Files.readDirectory(base)
+  |> List.filter(f => Filename.check_suffix(f, ".md")) /* TODO .html suffix too */
+  |> List.fold_left(((posts, byTag), fileName) => {
     let contents = Files.readFile(Filename.concat(base, fileName)) |> unwrap("Cannot read file");
     let (config, body) = parseConfig(fileName, contents);
     let intro = getIntro(body);
@@ -74,21 +78,29 @@ let run = () => {
     let config = {...config, wordCount};
     let dest = Filename.concat("./test/pages/", Filename.chop_extension(fileName));
     Files.mkdirp(dest);
-    let html = Post.renderPost(
-      ~title=config.title,
-      ~date=config.date,
-      ~tags=config.tags,
-      ~description=config.description,
-      ~thumbnail=config.thumbnail,
-      body
-    );
+    let html = Post.renderPost(config, body);
     Files.writeFile(Filename.concat(dest, "index.html"), html) |> ignore;
-    (config, intro, body)
-  });
+    let byTag = List.fold_left(
+      (byTag, tag) => StrMap.add(tag, switch (StrMap.find(tag, byTag)) {
+      | exception Not_found => [(config, intro, body)]
+      | items => [(config, intro, body), ...items]
+      }, byTag),
+      byTag,
+      config.tags
+    );
+    ([(config, intro, body), ...posts], byTag)
+  }, ([], StrMap.empty));
   print_endline("Done!");
-  let sorted = List.sort((({date: date1}, _, _), ({date: date2}, _, _)) => dateSort(date2, date1), posts);
+  let sorted = List.sort(sortPostsByDate, posts);
   /* All posts list */
-  let html = Post.postList(sorted);
+  let html = Post.postList(sorted, "All posts");
   Files.writeFile("./test/pages/index.html", html) |> ignore;
+  StrMap.iter((tag, posts) => {
+    print_endline("Tag: " ++ tag);
+    let dest = Filename.concat("./test/pages/tags", tag);
+    Files.mkdirp(dest);
+    let html = Post.postList(List.sort(sortPostsByDate, posts), "Tag: " ++ tag);
+    Files.writeFile(Filename.concat(dest, "index.html"), html) |> ignore;
+  }, byTag);
   /* Front page I think */
 };
