@@ -66,6 +66,7 @@ let html = (~attrs=[], ~children, ()) => "<!DOCTYPE HTML>\n" ++ normal("html", [
 let fragment = (~children, ()) => String.concat("\n", children);
 
 let time = (~datetime) => contentTag("time", [("datetime", Some(datetime))]);
+let img = (~src, ~alt) => contentTag("img", [("src", Some(src)), ("alt", Some(alt))]);
 let body = contentTag("body", []);
 let section = contentTag("section", []);
 let article = contentTag("article", []);

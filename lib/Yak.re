@@ -97,8 +97,8 @@ let run = () => {
   collectPages("static", Static.render) |> ignore;
   /* Project pages */
   let projects = collectPages("projects", Project.render) |> List.sort(sortProjectsByDate);
-  /* let html = Project.renderList(projects, "All projects");
-  Files.writeFile("./test/pages/projects/index.html", html) |> ignore; */
+  let html = Project.renderList(projects, "All projects");
+  Files.writeFile("./test/pages/projects/index.html", html) |> ignore;
   /* Posts */
   let posts = collectPages("posts", Post.render) |> List.sort(sortPostsByDate);
   let html = Post.postList(posts, "All posts");

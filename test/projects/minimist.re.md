@@ -1,7 +1,7 @@
 title: Minimist.re
 description: A simple cli argument parser for reason + bsb-native
 github: minimist.re
-done: true
+wip: false
 
 ---
 date: 2018-1-10
