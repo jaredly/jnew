@@ -96,6 +96,7 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
       img {
         max-width: 100%;
       }
+      li > code,
       p > code {
         font-size: 90%;
         padding: 4px;
@@ -263,6 +264,37 @@ let dateSort = ((y1, m1, d1), (y2, m2, d2)) => {
   }
 };
 
+let myBigFaceStatic = css => {
+  open Css;
+  open Html;
+  let size = 160;
+  let ssize = string_of_int(size) ++ "px";
+  <a
+    href="/about/"
+    className=css([
+      A("margin", "0 auto"),
+      A("width", ssize),
+      A("overflow", "hidden"),
+      A("height", ssize),
+      A("display", "block"),
+      A("border-radius", "50%"),
+      A("border", "5px solid white"),
+      A("background-color", "white"),
+      A("box-shadow", "0 1px 1px rgba(0, 0, 0, 0.3)"),
+    ])
+  >
+    <img
+      src="https://www.gravatar.com/avatar/313878fc8f316fc3fe4443b13913d0a4.png?s=200"
+      alt="Jared Forsyth"
+      className=css([
+        A("display", "block"),
+        A("width", ssize),
+        A("height", ssize),
+      ])
+    />
+  </a>
+};
+
 let myBigFace = css => Css.(Html.(
   <a
     href="/about/"
@@ -290,6 +322,7 @@ let module Styles = {
   let title = [
     A("font-size", "56px"),
     A("margin-bottom", "16px"),
+    A("padding-top", "32px"),
     Media("max-width: 600px", [
       ("font-size", "32px"),
       ("margin-top", "40px"),

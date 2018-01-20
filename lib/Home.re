@@ -75,8 +75,23 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
         <Header href="/talks/" css title="Talks" />
       </div>
 
-      <div className=css([Media("min-width: 1341px", [("flex", "1")])])>
-        "I'm Jared Forsyth"
+      <div className=css([Media("min-width: 1341px", [("flex", "1")]), A("text-align", "center")])>
+        (Shared.myBigFaceStatic(css))
+        (Shared.hspace(32))
+        <div className=css([A("font-size", "32px")])>
+          "I'm Jared Forsyth"
+        </div>
+        (Shared.hspace(32))
+        <div className=css([A("font-size", "24px"), A("line-height", "36px"), A("text-align", "left"),
+        /* A("text-indent", "1.5em") */
+        ])>
+          <p>
+          "I’m an unashamed idealist, prepared to defend my opinions, but not afraid to change my position when presented with a better one. The most important aspect of my life is my connection to God."
+          </p>
+          <p>
+          "I’m currently a mobile & web developer for Khan Academy, where we’re working to bring a free, world-class education to anyone anywhere. If you want to help, send me an email!"
+          </p>
+        </div>
       </div>
       </div>
     </div>
