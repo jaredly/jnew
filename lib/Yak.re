@@ -3,17 +3,14 @@ let unwrap = (message, x) => switch x { | None => failwith(message) | Some(x) =>
 
 open Types;
 
-let dateSort = ((y1, m1, d1), (y2, m2, d2)) => {
-  switch (y1 - y2) {
-  | 0 => switch (m1 - m2) {
-    | 0 => d1 - d2
-    | x => x
-    }
-  | x => x
-  }
-};
+let sortPostsByDate = (({date: date1}, _, _), ({date: date2}, _, _)) => Shared.dateSort(date2, date1);
 
-let sortPostsByDate = (({date: date1}, _, _), ({date: date2}, _, _)) => dateSort(date2, date1);
+let sortProjectsByDate = ({Project.updates}, {Project.updates: updates2}) => switch (updates, updates2) {
+| ([(date1, _, _), ..._], [(date2, _, _), ..._]) => Shared.dateSort(date2, date1)
+| ([], []) => 0
+| ([], _) => -1
+| (_, []) => 1
+};
 
 let module StrMap = Map.Make(String);
 
@@ -99,10 +96,12 @@ let run = () => {
   /* Static pages */
   collectPages("static", Static.render) |> ignore;
   /* Project pages */
-  let projects = collectPages("projects", Project.render);
+  let projects = collectPages("projects", Project.render) |> List.sort(sortProjectsByDate);
+  /* let html = Project.renderList(projects, "All projects");
+  Files.writeFile("./test/pages/projects/index.html", html) |> ignore; */
   /* Posts */
-  let posts = collectPages("posts", Post.render);
-  let html = Post.postList(List.sort(sortPostsByDate, posts), "All posts");
+  let posts = collectPages("posts", Post.render) |> List.sort(sortPostsByDate);
+  let html = Post.postList(posts, "All posts");
   Files.writeFile("./test/pages/posts/index.html", html) |> ignore;
 
   let tags = assembleTags(posts);

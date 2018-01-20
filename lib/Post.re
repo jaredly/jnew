@@ -103,9 +103,7 @@ let postList = (posts, contentTitle) => {
         ((config, teaser, _)) => {
           open Types;
           let href = ("/" ++ Filename.chop_extension(config.Types.fileName) ++ "/");
-          let readTime = config.wordCount > 0
-            ? string_of_int(config.wordCount / 225) ++ " minute read"
-            : "Read more";
+          let readTime = Shared.minuteReadText(config.wordCount);
           <div>
             <a href className=css([
                 A("color", "currentColor"),

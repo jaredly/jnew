@@ -225,6 +225,8 @@ let pageWithTopAndBottom = (~css, ~backgroundImage=?, ~top, ~middle, ~bottom, ~c
 };
 
 let spacer = num => Html.(<div style=("flex-basis: " ++ string_of_int(num) ++ "px") />);
+let hspace = num => Html.(<div style=("height: " ++ string_of_int(num) ++ "px") />);
+let vspace = num => Html.(<div style=("width: " ++ string_of_int(num) ++ "px") />);
 
 let monthName = month => switch month {
 | 1 => "January"
@@ -249,6 +251,16 @@ let showDate = (~date as (year, month, _), ~children, ()) => {
     (spacer(4))
     (string_of_int(year))
   </fragment>
+};
+
+let dateSort = ((y1, m1, d1), (y2, m2, d2)) => {
+  switch (y1 - y2) {
+  | 0 => switch (m1 - m2) {
+    | 0 => d1 - d2
+    | x => x
+    }
+  | x => x
+  }
 };
 
 let myBigFace = css => Css.(Html.(
@@ -303,3 +315,9 @@ let module Styles = {
   ];
 
 };
+
+let minuteRead = wordCount => wordCount / 225;
+
+let minuteReadText = wordCount => wordCount > 0
+  ? string_of_int(minuteRead(wordCount)) ++ " minute read"
+  : "Read more";

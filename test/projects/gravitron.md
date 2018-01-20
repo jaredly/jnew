@@ -1,5 +1,6 @@
 title: Gravitron
-description: A cross-platform game made in Reason.
+description: An arcade-style gravity game, written in Reason & targetting 4 platforms.
+screenshot: /images/projects/gravitron.png
 
 ---
 date: 2018-1-10
