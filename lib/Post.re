@@ -1,31 +1,12 @@
 
-let monthName = month => switch month {
-| 1 => "January"
-| 2 => "February"
-| 3 => "March"
-| 4 => "April"
-| 5 => "May"
-| 6 => "June"
-| 7 => "July"
-| 8 => "August"
-| 9 => "September"
-| 10 => "October"
-| 11 => "November"
-| 12 => "December"
-| _ => failwith("Invalid month")
-};
+let (|?) = (x, y) => switch x { | None => y | Some(x) => x };
+let (|?>) = (x, f) => switch x { | None => None | Some(x) => f(x) };
+let (|?>>) = (x, f) => switch x { | None => None | Some(x) => Some(f(x)) };
+let (|!) = (x, y) => switch x { | None => failwith(y) | Some(x) => x };
 
 let spacer = Shared.spacer;
 let userPic = Shared.userPic;
-
-let showDate = (~date as (year, month, _), ~children, ()) => {
-  open Html;
-  <fragment>
-    (monthName(month))
-    (spacer(4))
-    (string_of_int(year))
-  </fragment>
-};
+let showDate = Shared.showDate;
 
 let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
   open Html;
@@ -76,30 +57,12 @@ let renderPost = ({Types.title: contentTitle, description, date, tags, thumbnail
     css
     top={
       <fragment>
-        <h1 className=css([
-          A("font-size", "56px"),
-          A("margin-top", "100px"),
-          A("margin-bottom", "16px"),
-          Media("max-width: 600px", [
-            ("font-size", "32px"),
-            ("margin-top", "40px"),
-          ])
-        ])>contentTitle</h1>
+        <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>
         <postAbout css date tags />
       </fragment>
     }
     middle=(
-      <div
-      className=css([
-        A("font-size", "24px"),
-        A("line-height", "36px"),
-        A("hyphens", "auto"),
-        Media("max-width: 600px", [
-          ("font-size", "20px"),
-          ("line-height", "30px"),
-        ])
-      ])
-      >
+      <div className=css(Shared.Styles.bodyText)>
         (MarkdownParser.parse(rawBody))
       </div>
     )
@@ -119,28 +82,6 @@ let renderPost = ({Types.title: contentTitle, description, date, tags, thumbnail
   </html>
 };
 
-let myBigFace = css => Css.(Html.(
-  <a
-    href="/about/"
-    style="background-image: url(https://www.gravatar.com/avatar/313878fc8f316fc3fe4443b13913d0a4.png?s=200)"
-    className=css([
-      A("width", "120px"),
-      A("height", "120px"),
-      A("position", "absolute"),
-      A("top", "-60px"),
-      A("right", "50%"),
-      A("margin-right", "-60px"),
-      A("background-size", "cover"),
-      A("border-radius", "60px"),
-      A("z-index", "99"),
-      A("text-indent", "-9999px"),
-      A("border", "3px solid white"),
-      A("background-color", "white"),
-      A("box-shadow", "0 1px 1px rgba(0, 0, 0, 0.3)"),
-    ])
-  >"Jared Forsyth"</a>
-));
-
 let postList = (posts, contentTitle) => {
   open Html;
   let (css, inlineCss) = Css.startPage();
@@ -150,11 +91,10 @@ let postList = (posts, contentTitle) => {
     backgroundImage="/images/trees.jpg"
     top=(
       <div className=css([A("padding", "1px"), A("position", "relative")])>
-        (myBigFace(css))
+        (Shared.myBigFace(css))
         <h1 className=css([
           A("text-align", "center"),
-          A("font-size", "56px"),
-          A("margin-bottom", "16px"),
+          ...Shared.Styles.title
         ])>contentTitle</h1>
       </div>
     )
@@ -178,12 +118,7 @@ let postList = (posts, contentTitle) => {
             (switch teaser {
             | None => ""
             | Some(teaser) =>
-              <div className=css([
-                A("hyphens", "auto"),
-                A("padding-top", "16px"),
-                A("font-size", "24px"),
-                A("line-height", "36px"),
-              ])>
+              <div className=css([A("padding-top", "16px"), ...Shared.Styles.bodyText])>
                 (Omd.to_html(Omd.of_string(teaser)))
               </div>
             })
@@ -204,4 +139,55 @@ let postList = (posts, contentTitle) => {
     </pageHead>
     body
   </html>
+};
+
+
+
+open Types;
+let defaultConfig = fileName => {
+  fileName,
+  title: "JaredForsyth.com",
+  tags: [],
+  categories: [],
+  date: (0, 0, 0), /* Year, Month, Day */
+  description: None,
+  thumbnail: None,
+  featured: false,
+  wordCount: 0
+};
+
+let check = (opt, base, fn) => switch opt {
+| None => base
+| Some(value) => fn(value)
+};
+
+let parseDate = text => {
+  Scanf.sscanf(text, "%d-%d-%d", (year, month, day) => (year, month, day))
+};
+
+let parseConfig = (fileName, opts) => {
+  let config = defaultConfig(fileName);
+  let config = check(Toml.string("title", opts), config, title => {...config, title});
+  let config = check(Toml.string("description", opts), config, description => {...config, description: Some(description)});
+  let config = check(Toml.stringList("tags", opts), config, tags => {...config, tags});
+  let config = check(Toml.stringList("categories", opts), config, categories => {...config, categories});
+  let config = check(Toml.string("date", opts), config, date => {...config, date: parseDate(date)});
+  let config = check(Toml.bool("featured", opts), config, featured => {...config, featured});
+  config
+};
+
+let getIntro = body => switch (Str.split(Str.regexp("<!-- more -->"), body)) {
+| [] => assert(false)
+| [one] => None
+| [top, ...rest] => Some(top)
+};
+
+let render = (fileName, opts, content) => {
+  let opts = opts |! "No options for post " ++ fileName;
+  let config = parseConfig(fileName, opts);
+  let intro = getIntro(content);
+  let wordCount = Str.split(Str.regexp("[^a-zA-Z0-9-]+"), content) |> List.length;
+  let config = {...config, wordCount};
+
+  (renderPost(config, content), (config, intro, content))
 };

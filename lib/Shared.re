@@ -225,3 +225,81 @@ let pageWithTopAndBottom = (~css, ~backgroundImage=?, ~top, ~middle, ~bottom, ~c
 };
 
 let spacer = num => Html.(<div style=("flex-basis: " ++ string_of_int(num) ++ "px") />);
+
+let monthName = month => switch month {
+| 1 => "January"
+| 2 => "February"
+| 3 => "March"
+| 4 => "April"
+| 5 => "May"
+| 6 => "June"
+| 7 => "July"
+| 8 => "August"
+| 9 => "September"
+| 10 => "October"
+| 11 => "November"
+| 12 => "December"
+| _ => failwith("Invalid month")
+};
+
+let showDate = (~date as (year, month, _), ~children, ()) => {
+  open Html;
+  <fragment>
+    (monthName(month))
+    (spacer(4))
+    (string_of_int(year))
+  </fragment>
+};
+
+let myBigFace = css => Css.(Html.(
+  <a
+    href="/about/"
+    style="background-image: url(https://www.gravatar.com/avatar/313878fc8f316fc3fe4443b13913d0a4.png?s=200)"
+    className=css([
+      A("width", "120px"),
+      A("height", "120px"),
+      A("position", "absolute"),
+      A("top", "-60px"),
+      A("right", "50%"),
+      A("margin-right", "-60px"),
+      A("background-size", "cover"),
+      A("border-radius", "60px"),
+      A("z-index", "99"),
+      A("text-indent", "-9999px"),
+      A("border", "3px solid white"),
+      A("background-color", "white"),
+      A("box-shadow", "0 1px 1px rgba(0, 0, 0, 0.3)"),
+    ])
+  >"Jared Forsyth"</a>
+));
+
+let module Styles = {
+  open Css;
+  let title = [
+    A("font-size", "56px"),
+    A("margin-bottom", "16px"),
+    Media("max-width: 600px", [
+      ("font-size", "32px"),
+      ("margin-top", "40px"),
+    ])
+  ];
+
+  let titleWithTopMargin = [
+    A("margin-top", "100px"),
+    Media("max-width: 600px", [
+      ("margin-top", "40px"),
+    ]),
+    ...title
+  ];
+
+  let bodyText = [
+    A("font-size", "24px"),
+    A("line-height", "36px"),
+    A("hyphens", "auto"),
+    Media("max-width: 600px", [
+      ("font-size", "20px"),
+      ("line-height", "30px"),
+    ])
+  ];
+
+};

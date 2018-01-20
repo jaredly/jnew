@@ -1,0 +1,28 @@
+[
+  {
+    "title": "ReasonML: JavaScript-flavored OCaml",
+    "venues": [
+      {"date": "2017-11", "where": "ReactiveConf 2017", "video": "///"},
+      {"date": "2017-11", "where": "Vienna Reason/Clojure Meetup", "video": "///"}
+    ]
+  },
+  {
+    "title": "Type systems will make you a better JavaScript developer",
+    "values": [
+      {"where": "ReactConf 2017, San Francisco"},
+      {"where": "Web Rebels 2017, Oslo"}
+    ]
+  },
+  {
+    "title": "Paradigms for dealing with asynchrony",
+    "venues": [{"where": "ReactiveConf 2016, Bratislava"}]
+  },
+  {
+    "title": "Real World React Debugging",
+    "venues": [{"where": "Web thing, Toronto"}, {"where": "ReactRally, Salt Lake City"}]
+  },
+  {
+    "title": "Relay, Redux, Om/next Oh my!",
+    "venues": [{"where": "React Conf 2016, San Francisco"}]
+  }
+]
