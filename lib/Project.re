@@ -40,7 +40,7 @@ let renderUpdate = (css, ((year, month, day), screenshot, content)) => {
   </div>
 };
 
-let render = ({title: contentTitle, description, longDescription, status, screenshot, updates}) => {
+let render = ({title: contentTitle, description, github, longDescription, status, screenshot, updates}) => {
   let (css, inlineCss) = Css.startPage();
   open Html;
   open Css;
@@ -50,15 +50,25 @@ let render = ({title: contentTitle, description, longDescription, status, screen
     top={ <fragment>
       <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>
       <div className=css(Shared.Styles.bodyText)>
-      (MarkdownParser.parse(description))
-      (switch status {
-      | None => ""
-      | Some(status) => <div
-          className=css([
-            A("font-family", "Open sans, sans-serif")
-          ])
-        >status</div>
-      })
+        (MarkdownParser.parse(description))
+        <div className=css([
+                A("font-family", "Open sans, sans-serif"),
+                A("font-size", "16px"),
+          A("display", "flex"), A("flex-direction", "row")
+        ])>
+          (switch status {
+          | None => ""
+          | Some(status) => <span
+              className=css([
+              ])
+            >status</span>
+          })
+          <div style="flex: 1" />
+          (switch github {
+          | None => ""
+          | Some(href) => <a href target="_blank">href</a>
+          })
+        </div>
       </div>
     </fragment>}
     middle=(
