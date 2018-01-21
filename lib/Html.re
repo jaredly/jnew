@@ -79,6 +79,8 @@ let h3 = contentTag("h3", []);
 let h4 = contentTag("h4", []);
 let div = contentTag("div", []);
 let span = contentTag("span", []);
+let ul = contentTag("ul", []);
+let li = contentTag("li", []);
 let p = contentTag("p", []);
 let a = (~href, ~target=?) => contentTag("a", [("href", Some(href)), ("target", target)]);
 

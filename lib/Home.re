@@ -34,13 +34,20 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
 
   let column = [A("flex", "1"), A("padding", "24px"), A("min-width", "300px")];
 
+  let subtleLink = [
+    A("text-decoration", "none"),
+    A("color", "currentColor"),
+    Hover([("text-decoration", "underline")]),
+  ];
+
   let module Header = {
     open Html;
     open Css;
     let createElement = (~css, ~href, ~title, ~children, ()) =>
       <a href className=css([
         A("text-decoration", "none"),
-        A("color", "#147429")
+        A("color", "#147429"),
+        Hover([("text-decoration", "underline")]),
       ])>
         <h1 className=css([A("margin-top", "0")])>title</h1>
       </a>
@@ -65,10 +72,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
               open Types;
               let href = ("/" ++ Filename.chop_extension(config.fileName) ++ "/");
               let (year, month, day) = config.date;
-              <a href className=css([
-                A("text-decoration", "none"),
-                A("color", "currentColor"),
-              ])>
+              <a href className=css(subtleLink)>
                 <div
                   className=css([
                     A("font-size", "26px"),
@@ -107,9 +111,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                 <div
                   className=css([A("font-size", "26px")])
                 >
-                  <a href className=css([ A("text-decoration", "none"), A("color", "currentColor"), ])>
-                    title
-                  </a>
+                  <a href className=css(subtleLink)>title</a>
                   (switch github {
                   | None => ""
                   | Some(href) => <a target="_blank" href className=css([
@@ -120,9 +122,8 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                 <a
                   href
                   className=css([
-                    A("text-decoration", "none"),
-                    A("color", "currentColor"),
                     A("display", "block"),
+                    ...subtleLink
                   ])
                 >
                   (switch screenshot {
@@ -147,14 +148,57 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
 
 
       <div className=css([A("display", "flex"), A("flex-direction", "column"), ...column] @ [
+        A("padding", "0"),
         Media("min-width: 1341px", [("flex", "2"), ("flex-direction", "row"), ("min-width", "600px")])
       ])>
-
-        <div className=css([Media("max-width: 1340px", [("order", "1")]), A("flex", "1")])>
-          <Header href="/talks/" css title="Talks" />
+        <div className=css([Media("max-width: 1340px", [("order", "1")]), A("flex", "1"), A("padding", "24px")])>
+          <Header href="/" css title="Talks" />
+          (List.map(
+            ({Talk.title, image, slides, venues}) => {
+              let main = switch image {
+                | None =>
+                  <div
+                    className=css([A("font-size", "20px")])
+                  >
+                  title
+                  </div>
+                | Some(src) =>
+                  <img alt=title src className=css([
+                    A("max-width", "100%"),
+                    /* A("margin", "8px"), */
+                    A("box-shadow", "0 0 5px #aaa"),
+                  ])/>
+              };
+              <div>
+                (switch slides {
+                | None => main
+                | Some(href) =>
+                  <a href target="_blank" className=css(subtleLink)>
+                    main
+                  </a>
+                })
+                <ul>
+                (List.map(
+                  ({Talk.where, date, video}) => {
+                    <li>
+                    (switch video {
+                    | None => where
+                    | Some(href) => <a href>where "📹"</a>
+                    })
+                    </li>
+                  },
+                  venues
+                ) |> String.concat("\n"))
+                </ul>
+              </div>
+            },
+            talks
+          ) |> String.concat("\n" ++ Shared.hspace(16)))
         </div>
 
-        <div className=css([Media("min-width: 1341px", [("flex", "1")]), A("text-align", "center")])>
+        <div className=css([
+          A("padding", "24px"),
+          Media("min-width: 1341px", [("flex", "1")]), A("text-align", "center")])>
           (Shared.myBigFaceStatic(css))
           (Shared.hspace(32))
           <div className=css([A("font-size", "32px")])>
@@ -177,7 +221,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
   </body>;
 
   <html>
-    <pageHead title="Jared Forsyh.com" description="My website">
+    <pageHead title="Jared Forsyth.com" description="My website">
       <style>(inlineCss())</style>
     </pageHead>
     body

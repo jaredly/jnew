@@ -110,11 +110,10 @@ let run = () => {
   }, tags);
 
   /* Talks */
-  let talks = ();
-  /* collectTalks("talks.yaml"); */
+  let talks = Talk.collect("./test/talks.json");
 
   /* Home page */
-  Files.writeFile("./test/pages/index.html", Home.render(~projects, ~posts, ~tags, ~talks));
+  Files.writeFile("./test/pages/index.html", Home.render(~projects, ~posts, ~tags, ~talks)) |> ignore;
 
   MarkdownParser.saveTwitterCache();
 };
