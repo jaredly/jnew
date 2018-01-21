@@ -72,6 +72,7 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
     <link rel="stylesheet" media="print" href="/css/print.css" />
     <link rel="stylesheet" media="screen" href="/css/solarized-dark.css" />
 
+    <asyncScript src="//platform.twitter.com/widgets.js" />
     <style>
       {|
       div {
@@ -110,6 +111,13 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
           padding-left: 20px;
           border-left: 5px solid #1fad3e;
           font-style: italic;
+      }
+      blockquote.twitter-tweet {
+        font-style: normal;
+        border: 1px solid #1fad3e;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 20px;
       }
       a {
         color: #1fad3e;

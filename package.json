@@ -25,6 +25,7 @@
     "@opam/jbuilder": "^1.0.0-beta14",
     "@opam/reason": "^3.0.0",
     "@opam/yojson": "*",
+    "@opam/ocurl": "*",
     "omd": "link:../omd",
     "refmterr": "^3.0.4"
   },

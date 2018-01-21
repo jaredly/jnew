@@ -1,19 +1,6 @@
 
 let pageHead = Shared.pageHead;
 
-let module Header = {
-  open Html;
-  open Css;
-  let createElement = (~css, ~href, ~title, ~children, ()) =>
-    <a href className=css([
-      A("text-decoration", "none"),
-      A("color", "#147429")
-    ])>
-      <h1>title</h1>
-    </a>
-  ;
-};
-
 let monthDate = ((year, month, _)) => string_of_int(year) ++ " " ++ Shared.monthName(month);
 
 let timeSpanMonths = ((year1, month1, _), (year2, month2, _)) => {
@@ -45,7 +32,20 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
   open Html;
   open Css;
 
-  let column = [A("flex", "1"), A("padding", "16px"), A("min-width", "300px")];
+  let column = [A("flex", "1"), A("padding", "24px"), A("min-width", "300px")];
+
+  let module Header = {
+    open Html;
+    open Css;
+    let createElement = (~css, ~href, ~title, ~children, ()) =>
+      <a href className=css([
+        A("text-decoration", "none"),
+        A("color", "#147429")
+      ])>
+        <h1 className=css([A("margin-top", "0")])>title</h1>
+      </a>
+    ;
+  };
 
   let body = <body className=css([
     A("font-family", "Linux Libertine"),
@@ -77,7 +77,12 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                   (config.title)
                 </div>
                 (Shared.hspace(8))
-                <div className=css([A("display", "flex"), A("flex-direction", "row")])>
+                <div className=css([
+                  A("display", "flex"),
+                  A("color", Shared.Colors.lightText),
+                  A("font-family", "Open sans, sans-serif"),
+                  A("font-size", "14px"),
+                  A("flex-direction", "row")])>
                   (string_of_int(year))
                   (Shared.monthName(month))
                   (string_of_int(day))
@@ -160,7 +165,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
           /* A("text-indent", "1.5em") */
           ])>
             <p>
-            "I’m an unashamed idealist, prepared to defend my opinions, but not afraid to change my position when presented with a better one. The most important aspect of my life is my connection to God."
+            "I’m an unashamed idealist with strong opinions, but I'm happy to learn where I'm wrong. We all need more empathy. The most important aspect of my life is my connection to God."
             </p>
             <p>
             "I’m currently a mobile & web developer for Khan Academy, where we’re working to bring a free, world-class education to anyone anywhere. If you want to help, send me an email!"

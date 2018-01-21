@@ -83,6 +83,7 @@ let p = contentTag("p", []);
 let a = (~href, ~target=?) => contentTag("a", [("href", Some(href)), ("target", target)]);
 
 let script = (~src) => normal("script", [("src", src)]);
+let asyncScript = (~src) => normal("script", [("async", "true"), ("src", src)]);
 let escapeScript = str => str; /* TODO impl */
 let inlineScript = (~children, ()) => normal("script",  [], ~children=List.map(escapeScript, children), ());
 let style = normal("style", []);

@@ -1,4 +1,6 @@
 
+let module StrMap = Map.Make(String);
+
 type config = {
   title: string,
   tags: list(string),

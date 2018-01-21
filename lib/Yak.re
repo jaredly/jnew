@@ -12,9 +12,6 @@ let sortProjectsByDate = ({Project.updates}, {Project.updates: updates2}) => swi
 | (_, []) => 1
 };
 
-let module StrMap = Map.Make(String);
-
-
 /*
  *
  * /
@@ -118,6 +115,8 @@ let run = () => {
 
   /* Home page */
   Files.writeFile("./test/pages/index.html", Home.render(~projects, ~posts, ~tags, ~talks));
+
+  MarkdownParser.saveTwitterCache();
 };
 
 

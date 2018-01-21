@@ -89,6 +89,17 @@
   peerDependencies:
     ocaml " >= 4.2.3"
 
+"@opam/conf-libcurl@*":
+  version "1.0.0"
+  uid "5e2f27ddfe026ef1895563e23e2585e4"
+  resolved "@opam/conf-libcurl@1.0.0-5e2f27ddfe026ef1895563e23e2585e4.tgz"
+  dependencies:
+    "@esy-ocaml/esy-installer" "^0.0.0"
+    "@esy-ocaml/substs" "^0.0.1"
+    "@opam/conf-pkg-config" "*"
+  peerDependencies:
+    ocaml "*"
+
 "@opam/conf-m4@*":
   version "1.0.0"
   uid "97f0966b2e2652d02c0d9125781c31df"
@@ -96,6 +107,17 @@
   dependencies:
     "@esy-ocaml/esy-installer" "^0.0.0"
     "@esy-ocaml/substs" "^0.0.1"
+  peerDependencies:
+    ocaml "*"
+
+"@opam/conf-pkg-config@*":
+  version "1.0.0"
+  uid "68a9b01bb6c56b3a094946dcc8ab76f9"
+  resolved "@opam/conf-pkg-config@1.0.0-68a9b01bb6c56b3a094946dcc8ab76f9.tgz"
+  dependencies:
+    "@esy-ocaml/esy-installer" "^0.0.0"
+    "@esy-ocaml/substs" "^0.0.1"
+    yarn-pkg-config esy-ocaml/yarn-pkg-config#esy
   peerDependencies:
     ocaml "*"
 
@@ -198,7 +220,7 @@
   peerDependencies:
     ocaml " >= 4.1.0"
 
-"@opam/lambda-term@ >= 1.2.0", "@opam/lambda-term@^1.11.0":
+"@opam/lambda-term@ >= 1.2.0":
   version "1.12.0"
   uid b1b97a4a29e48a80737103642ef60ba2
   resolved "@opam/lambda-term@1.12.0-b1b97a4a29e48a80737103642ef60ba2.tgz"
@@ -214,7 +236,7 @@
   peerDependencies:
     ocaml " >= 4.2.3"
 
-"@opam/lwt@ >= 2.7.0", "@opam/lwt@ >= 3.0.0", "@opam/lwt@*", "@opam/lwt@^3.1.0":
+"@opam/lwt@ >= 2.7.0", "@opam/lwt@ >= 3.0.0", "@opam/lwt@*":
   version "3.2.1"
   uid "68730f65fa3100090cdaf788a1df2bf8"
   resolved "@opam/lwt@3.2.1-68730f65fa3100090cdaf788a1df2bf8.tgz"
@@ -324,19 +346,18 @@
   peerDependencies:
     ocaml " >= 3.12.0"
 
-"@opam/omd@*":
-  version "1.3.1"
-  uid cdbe4bac66fcd922721543e5d2424c7d
-  resolved "@opam/omd@1.3.1-cdbe4bac66fcd922721543e5d2424c7d.tgz"
+"@opam/ocurl@*":
+  version "0.8.0"
+  uid ec8f6c4f09c599a49860a9e592b5d5cd
+  resolved "@opam/ocurl@0.8.0-ec8f6c4f09c599a49860a9e592b5d5cd.tgz"
   dependencies:
     "@esy-ocaml/esy-installer" "^0.0.0"
     "@esy-ocaml/substs" "^0.0.1"
-    "@opam/base-bigarray" "*"
-    "@opam/base-bytes" "*"
-    "@opam/ocamlbuild" "*"
-    "@opam/ocamlfind" " >= 1.5.0"
+    "@opam/base-unix" "*"
+    "@opam/conf-libcurl" "*"
+    "@opam/ocamlfind" "*"
   peerDependencies:
-    ocaml " >= 4.1.0"
+    ocaml "*"
 
 "@opam/ppx_tools_versioned@*":
   version "5.0.1"
@@ -518,3 +539,7 @@ refmterr@^3.0.4:
     "@opam/reason" "^3.0.0"
   peerDependencies:
     ocaml " >= 4.2.0  < 4.7.0"
+
+yarn-pkg-config@esy-ocaml/yarn-pkg-config#esy:
+  version "0.29.5"
+  resolved "https://codeload.github.com/esy-ocaml/yarn-pkg-config/tar.gz/d488cd9321cd5036bd36ec96744ce78c5d45fc49"

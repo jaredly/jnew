@@ -88,7 +88,7 @@ let render = ({title: contentTitle, description, longDescription, status, screen
   </html>
 };
 
-let fullGithub = text => if (Str.string_match(Str.regexp("^[a-zA-Z0-9.]+$"), text, 0)) {
+let fullGithub = text => if (Str.string_match(Str.regexp("^[^/]+$"), text, 0)) {
   "https://github.com/jaredly/" ++ text
 } else {
   text

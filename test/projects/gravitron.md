@@ -13,7 +13,9 @@ reloading on android & web as well! And a much simpler & reproducable setup.
 ---
 date: 2017-12-29
 
-Published to the iOS app store! [tweet](https://twitter.com/jaredforsyth/status/946972513367666688).
+Published to the iOS app store!
+
+https://twitter.com/jaredforsyth/status/946972513367666688
 
 ---
 date: 2017-12-28
