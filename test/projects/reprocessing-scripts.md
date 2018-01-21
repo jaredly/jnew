@@ -2,9 +2,14 @@ title: Reprocessing-scripts
 description: A cli tool simplifying the process of building a reprocessing game to ios/android/web/desktop
 
 ---
-date: 2011-11-1
+date: 2018-1-13
 
-I got hot reloading working!!!
+Hot reloading on web 🚀 (enabled by [my reason-native javascript bundler](/projects/pack.re/)) [tweet](https://twitter.com/jaredforsyth/status/952081627676540928).
+
+---
+date: 2018-1-9
+
+Got hot reloading working on android!!
 
 ---
 date: 2018-2-1

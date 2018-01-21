@@ -8,7 +8,7 @@
   },
   {
     "title": "Type systems will make you a better JavaScript developer",
-    "link": "",
+    "link": "https://jaredforsyth.com/type-systems-js-dev/",
     "values": [
       {"where": "ReactConf 2017, San Francisco"},
       {"where": "Web Rebels 2017, Oslo"}
@@ -16,7 +16,8 @@
   },
   {
     "title": "Paradigms for dealing with asynchrony",
-    "venues": [{"where": "ReactiveConf 2016, Bratislava"}]
+    "venues": [{"where": "ReactiveConf 2016, Bratislava"}],
+    "tweets": ["https://twitter.com/jaredforsyth/status/791248883825401856"]
   },
   {
     "title": "Real World React Debugging",
@@ -24,6 +25,7 @@
   },
   {
     "title": "Relay, Redux, Om/next Oh my!",
-    "venues": [{"where": "React Conf 2016, San Francisco"}]
+    "venues": [{"where": "React Conf 2016, San Francisco"}],
+    "tweets": ["https://twitter.com/jaredforsyth/status/706932061655797760"]
   }
 ]

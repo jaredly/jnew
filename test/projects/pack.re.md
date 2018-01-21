@@ -6,6 +6,8 @@ date: 2018-9-11
 
 I did some benchmarking, compiling [gravitron](/projects/gravitron/), and pack.re was pretty fast 😄
 
+benchmarked compiling gravitron: parcel 3.0s, webpack 1.25s, pack.re 0.2s 🏎 🚀 node takes 0.3 seconds just in startup Is it 6-10x faster because of native compilation, or because it has no features? 🤔 NB:I'm not saying we should ditch JS build tools, webpack& parcel are great😄
+
 - webpack (no pre/post-processing, simplest config) - 333.eee
 - parcel (no cache, no minify) - 3333.2222
 - pack.re - 0.2s 🚀

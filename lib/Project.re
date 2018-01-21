@@ -21,14 +21,21 @@ let renderUpdate = (css, ((year, month, day), screenshot, content)) => {
   open Html;
   open Css;
   <div className=css([A("margin-bottom", "17px")])>
+    <div className=css([
+      A("font-size", "16px"),
+      A("color", Shared.Colors.lightText),
+      A("font-family", "Open sans"),
+      /* A("font-size", "14px"), */
+    ])>
     (string_of_int(year))
     (Shared.monthName(month))
     (string_of_int(day))
+    </div>
     (MarkdownParser.parse(content))
   </div>
 };
 
-let render = (contentTitle, description, updates) => {
+let render = (contentTitle, description, screenshot, updates) => {
   let (css, inlineCss) = Css.startPage();
   open Html;
   open Css;
@@ -38,8 +45,14 @@ let render = (contentTitle, description, updates) => {
     top={ <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>}
     middle=(
       <div className=css(Shared.Styles.bodyText)>
+        (switch screenshot {
+        | None => ""
+        | Some(src) => <img src alt=(contentTitle ++ " screenshot") className=css([
+            A("width", "100%")
+          ]) />
+        })
         (MarkdownParser.parse(description))
-        <div style="height: 64px"/>
+        <div style="height: 32px"/>
         (List.map(renderUpdate(css), updates) |> String.concat("\n"))
       </div>
     )
@@ -71,7 +84,7 @@ let render = (fileName, opts, rawBody) => {
       (date, screenshot, content)
     }
   ) |> List.sort(((date, _, _), (date2, _, _)) => Shared.dateSort(date2, date));
-  (render(title, description, updates), {
+  (render(title, description, screenshot, updates), {
     title,
     id: Filename.basename(fileName) |> Filename.chop_extension,
     fileName,

@@ -1,0 +1,9 @@
+title: Commented
+description: A firebase-backed open-source commenting system
+
+---
+date: 2014-7-7
+
+Quite inspired by disqus + medium.
+
+https://twitter.com/jaredforsyth/status/486373138993672194
