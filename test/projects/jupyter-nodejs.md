@@ -1,6 +1,8 @@
 title: Jupyter-NodeJS
 description: A node kernel for @ProjectJupyter
 github: jupyter-nodejs
+status: semi-retired
+tags: javascript
 
 ---
 date: 2015-4-22

@@ -1,5 +1,7 @@
 title: Reprocessing-scripts
 description: A cli tool simplifying the process of building a reprocessing game to ios/android/web/desktop
+status: beta
+tags: reason, tool, library
 
 ---
 date: 2018-1-13

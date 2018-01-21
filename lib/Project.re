@@ -7,7 +7,12 @@ let (|!) = (x, y) => switch x { | None => failwith(y) | Some(x) => x };
 type project = {
   title: string,
   description: string,
+  longDescription: option(string),
   screenshot: option(string),
+  github: option(string),
+  link: option(string),
+  tags: list(string),
+  status: option(string),
   id: string,
   fileName: string,
   wip: bool,
@@ -35,14 +40,27 @@ let renderUpdate = (css, ((year, month, day), screenshot, content)) => {
   </div>
 };
 
-let render = (contentTitle, description, screenshot, updates) => {
+let render = ({title: contentTitle, description, longDescription, status, screenshot, updates}) => {
   let (css, inlineCss) = Css.startPage();
   open Html;
   open Css;
 
   let body = <pageWithTopAndBottom
     css
-    top={ <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>}
+    top={ <fragment>
+      <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>
+      <div className=css(Shared.Styles.bodyText)>
+      (MarkdownParser.parse(description))
+      (switch status {
+      | None => ""
+      | Some(status) => <div
+          className=css([
+            A("font-family", "Open sans, sans-serif")
+          ])
+        >status</div>
+      })
+      </div>
+    </fragment>}
     middle=(
       <div className=css(Shared.Styles.bodyText)>
         (switch screenshot {
@@ -51,7 +69,10 @@ let render = (contentTitle, description, screenshot, updates) => {
             A("width", "100%")
           ]) />
         })
-        (MarkdownParser.parse(description))
+        (switch longDescription {
+        | None => ""
+        | Some(text) => <div style="padding: 16px 0">(MarkdownParser.parse(text))</div>
+        })
         <div style="height: 32px"/>
         (List.map(renderUpdate(css), updates) |> String.concat("\n"))
       </div>
@@ -67,12 +88,27 @@ let render = (contentTitle, description, screenshot, updates) => {
   </html>
 };
 
+let fullGithub = text => if (Str.string_match(Str.regexp("^[a-zA-Z0-9.]+$"), text, 0)) {
+  "https://github.com/jaredly/" ++ text
+} else {
+  text
+};
+
+let splitTags = text => Str.split(Str.regexp(","), text) |> List.map(String.trim);
+
 let render = (fileName, opts, rawBody) => {
   let opts = opts |! "No options for static file " ++ fileName;
   let title = Toml.string("title", opts) |! "No title for static page " ++ fileName;
   let description = Toml.string("description", opts) |! "No description for static page " ++ fileName;
   let screenshot = Toml.string("screenshot", opts);
+  let status = Toml.string("status", opts);
+  let github = Toml.string("github", opts) |?>> fullGithub;
+  let link = Toml.string("link", opts);
+  let tags = Toml.string("tags", opts) |?>> splitTags |? [];
   let wip = Toml.bool("wip", opts) |? false;
+
+  let (longDescription, rawBody) = Util.splitFirst("\n===\n", rawBody);
+
   let updates = Util.split("\n---\n", rawBody)
   |> List.map(
     update => {
@@ -84,15 +120,21 @@ let render = (fileName, opts, rawBody) => {
       (date, screenshot, content)
     }
   ) |> List.sort(((date, _, _), (date2, _, _)) => Shared.dateSort(date2, date));
-  (render(title, description, screenshot, updates), {
+  let config = {
     title,
     id: Filename.basename(fileName) |> Filename.chop_extension,
+    github,
+    link,
+    status,
+    tags,
     fileName,
     description,
+    longDescription,
     screenshot,
     wip,
     updates
-  })
+  };
+  (render(config), config)
 };
 
 let renderList = (projects, contentTitle) => {

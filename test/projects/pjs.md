@@ -1,5 +1,7 @@
 title: PJs
 description: A python-to-js transpiler... from before it was cool
+status: retired
+tags: tool, python
 
 
 ---

@@ -14,6 +14,30 @@ let module Header = {
   ;
 };
 
+let monthDate = ((year, month, _)) => string_of_int(year) ++ " " ++ Shared.monthName(month);
+
+let timeSpanMonths = ((year1, month1, _), (year2, month2, _)) => {
+  if (year1 == year2) {
+    if (month1 == month2) {
+      monthDate((year1, month1, 0))
+    } else {
+      string_of_int(year1) ++ " " ++ Shared.monthName(month1) ++ " - " ++ Shared.monthName(month2)
+    }
+  } else {
+    monthDate((year1, month1, 0)) ++ " - " ++ monthDate((year2, month2, 0))
+  }
+};
+
+let updateText = updates => switch updates {
+| [] => ""
+| [(date, screenshot, text)] => "1 update " ++ (monthDate(date))
+| [(date, _, _), ...rest] => {
+  let total = List.length(rest) + 1;
+  let (date2, _, _) = List.nth(rest, total - 2);
+  string_of_int(total) ++ " updates, " ++ timeSpanMonths(date2, date)
+}
+};
+
 let render = (~projects, ~posts, ~tags, ~talks) => {
   open Html;
   open Css;
@@ -40,7 +64,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
             ((config, intro, body)) => {
               open Types;
               let href = ("/" ++ Filename.chop_extension(config.fileName) ++ "/");
-              let (year, month, _) = config.date;
+              let (year, month, day) = config.date;
               <a href className=css([
                 A("text-decoration", "none"),
                 A("color", "currentColor"),
@@ -56,6 +80,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                 <div className=css([A("display", "flex"), A("flex-direction", "row")])>
                   (string_of_int(year))
                   (Shared.monthName(month))
+                  (string_of_int(day))
                   /* (Shared.showDate(~date=config.date, ~children=[], ())) */
                   <div style="flex: 1"/>
                   (Shared.minuteReadText(config.wordCount))
@@ -71,31 +96,44 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
         <Header href="/projects/" css title="Projects" />
         <div>
           (List.map(
-            ({Project.title, fileName, description, screenshot, updates}) => {
+            ({Project.title, fileName, description, screenshot, github, updates}) => {
               let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
-              <a
-                href
-                className=css([
-                  A("text-decoration", "none"),
-                  A("color", "currentColor"),
-                  A("display", "block"),
-                ])
-              >
-              /* <div> */
+              <div>
                 <div
                   className=css([A("font-size", "26px")])
                 >
-                title</div>
-                (switch screenshot {
-                | None => ""
-                | Some(src) => <img src alt=(title ++ " screenshot") className=css([
-                    A("width", "100%")
-                  ]) />
-                })
-                <div>
-                  (MarkdownParser.parse(description))
+                  <a href className=css([ A("text-decoration", "none"), A("color", "currentColor"), ])>
+                    title
+                  </a>
+                  (switch github {
+                  | None => ""
+                  | Some(href) => <a target="_blank" href className=css([
+                      A("font-size", "16px")
+                    ])>"github"</a>
+                  })
                 </div>
-              </a>
+                <a
+                  href
+                  className=css([
+                    A("text-decoration", "none"),
+                    A("color", "currentColor"),
+                    A("display", "block"),
+                  ])
+                >
+                  (switch screenshot {
+                  | None => ""
+                  | Some(src) => <img src alt=(title ++ " screenshot") className=css([
+                      A("width", "100%")
+                    ]) />
+                  })
+                  <div className=css([A("padding-top", "8px"), Sub("p", [("padding-bottom", "8px")])])>
+                    (MarkdownParser.parse(description))
+                  </div>
+                  <div className=css([A("color", Shared.Colors.lightText), A("font-family", "Open sans"), A("font-size", "14px")])>
+                    (updateText(updates))
+                  </div>
+                </a>
+              </div>
             },
             projects
           ) |> String.concat("\n" ++ Shared.hspace(16)))

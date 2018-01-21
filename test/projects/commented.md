@@ -1,5 +1,7 @@
 title: Commented
 description: A firebase-backed open-source commenting system
+status: retired
+tags: firebase
 
 ---
 date: 2014-7-7

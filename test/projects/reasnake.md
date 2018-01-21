@@ -1,6 +1,7 @@
 title: ReaSnake
 description: A snake game in reason/bucklescript
 link: https://cowcow.surge.sh
+status: finished
 github: cowcow
 tags: reason, game
 

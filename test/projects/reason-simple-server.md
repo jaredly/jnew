@@ -1,5 +1,7 @@
 title: Reason Simple Server
 description: A simple server library for native reason
+tags: library, reason
+status: alpha
 
 ---
 date: 2018-1-4

@@ -1,6 +1,8 @@
 title: Reason Maze
 description: This is a maze I made in reason
 screenshot: /images/projects/reason-maze.png
+tags: art, toy, reason
+status: released
 
 ---
 date: 2017-6-26

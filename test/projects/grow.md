@@ -1,6 +1,8 @@
 title: Grow
 description: Fungi-like generative art
 github: grow
+status: finished
+tags: art, javascript, rust
 
 ---
 date: 2015-7-27

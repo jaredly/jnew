@@ -1,6 +1,7 @@
 title: Pack.re
 description: A reason-native javascript bundler 🏎
-wip: true
+status: alpha
+tags: tool, javascript, reason
 ---
 date: 2018-9-11
 

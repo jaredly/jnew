@@ -34,13 +34,13 @@ let selectors = (k, items, res) => {
   )
   @
   List.map(
-    ((name, items)) => rule(name, items),
+    ((name, items)) => rule(ruleName ++ " " ++ name, items),
     subs
   )
   @
   switch hover {
   | [] => []
-  | items => [rule(".style-" ++ string_of_int(k), hover)]
+  | items => [rule(".style-" ++ string_of_int(k) ++ ":hover", hover)]
   }
   @ res
 };

@@ -1,6 +1,8 @@
 title: Gravitron
 description: An arcade-style gravity game, written in Reason & targetting 4 platforms.
 screenshot: /images/gravitron-banner.png
+status: released
+tags: game, app, reason
 
 ---
 date: 2018-1-13

@@ -2,6 +2,7 @@ title: Reason Bees
 description: Some animation experiments with reason + bucklescript
 screenshot: https://raw.githubusercontent.com/jaredly/bees/3895b823d63facf5d8331a6da3ec48e026b9154f/shots/olympics.png
 github: bees
+tags: art, reason
 
 ---
 date: 2017-11-1

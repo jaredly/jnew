@@ -1,6 +1,7 @@
 title: React Devtools
 description: The chrome/firefox add-on for viewing your react tree & monitoring props & state changes.
 status: Handed off
+tags: tool, javascript, react
 
 ---
 date: 2016-7-5
