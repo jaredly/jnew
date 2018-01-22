@@ -5,7 +5,8 @@ let (|?>) = (x, f) => switch x { | None => None | Some(x) => f(x) };
 let px = n => string_of_int(n) ++ "px";
 
 let module Consts = {
-  let colPadding = 32;
+  let colPadding = 40;
+  let colPaddingSmall = 16;
   let jaredSize = 36;
   let titleSize = 24;
   let statusSize = 20;
@@ -17,9 +18,9 @@ let module Consts = {
   let bigSpace = 40;
 
   let module Media = {
-    let oneCol = 675;
-    let twoCol = 1015;
-    let threeCol = 1340;
+    let oneCol = 835;
+    let twoCol = 1239;
+    let threeCol = 1400;
   };
 };
 
@@ -34,13 +35,16 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
   let colPaddingRules = [
     A("padding", px(Consts.colPadding)),
     Media("max-width: " ++ px(Consts.Media.oneCol), [
-      ("padding", px(Consts.colPadding / 2))
+      ("padding", px(Consts.colPaddingSmall))
     ])
   ];
 
   let column = [
     A("flex", "1"),
-    A("min-width", "300px"),
+    A("min-width", "400px"),
+    Media("max-width: " ++ px(Consts.Media.oneCol), [
+      ("min-width", "300px"),
+    ]),
     ...colPaddingRules
   ];
 
@@ -97,7 +101,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
       A("align-items", "stretch"),
       A("flex-wrap", "wrap"),
       Media("max-width: " ++ px(Consts.Media.oneCol), [
-        ("padding", px(Consts.colPadding / 4))
+        ("padding", px(Consts.colPaddingSmall / 2))
       ])
     ])>
       <div className=css([Media("max-width: " ++ px(Consts.Media.oneCol), [("order", "1")]), ...column])>

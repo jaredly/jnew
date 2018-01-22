@@ -81,6 +81,7 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
       div {
         flex-shrink: 0;
         flex-wrap: wrap;
+        box-sizing: border-box;
       }
       pre {
         line-height: 18px;
