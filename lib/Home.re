@@ -21,11 +21,61 @@ let module Consts = {
     let oneCol = 835;
     let twoCol = 1239;
     let threeCol = 1400;
+    let skinnyFourCol = 1650;
   };
 };
 
-let aboutMeColumn = css => Html.(
-  <fragment>
+let module Styles = {
+  open Css;
+
+  let colPaddingRules = [
+    A("padding", px(Consts.colPadding)),
+    Media("max-width: " ++ px(Consts.Media.skinnyFourCol), [
+      ("padding", px(Consts.colPadding / 2))
+    ]),
+    Media("max-width: " ++ px(Consts.Media.oneCol), [
+      ("padding", px(Consts.colPaddingSmall))
+    ])
+  ];
+
+  let column = [
+    A("flex", "1"),
+    A("min-width", "300px"),
+    Media("max-width: " ++ px(Consts.Media.oneCol), [
+      ("min-width", "300px"),
+    ]),
+    ...colPaddingRules
+  ];
+
+  let statusText = [
+    A("font-size", px(Consts.statusSize)),
+    A("color", Shared.Colors.red)
+  ];
+
+  let metaText = [
+    A("font-family", "Open sans, sans-serif"),
+    A("color", Shared.Colors.lightText),
+    A("font-size", px(Consts.updatesSize)),
+  ];
+
+  let hoverUnderline = [
+    A("text-decoration", "none"),
+    Hover([("text-decoration", "underline")]),
+  ];
+
+  let subtleLink = [
+    A("color", "currentColor"),
+    ...hoverUnderline
+  ];
+};
+
+let aboutMeColumn = css => Html.(Css.(
+  <div className=css([
+    Media("min-width: " ++ px(Consts.Media.oneCol), [
+      ("position", "sticky"),
+      ("top", px(Consts.colPadding / 2))
+    ])
+  ])>
     (Shared.myBigFaceStatic(css))
     (Shared.hspace(Consts.bigSpace))
     <div className=css([A("text-align", "center"), A("font-size", px(Consts.jaredSize))])>
@@ -55,49 +105,8 @@ let aboutMeColumn = css => Html.(
       <a href="https://github.com/jaredly">"github/@jaredly"</a>
       </div>
     </div>
-  </fragment>
-);
-
-let module Styles = {
-  open Css;
-
-  let colPaddingRules = [
-    A("padding", px(Consts.colPadding)),
-    Media("max-width: " ++ px(Consts.Media.oneCol), [
-      ("padding", px(Consts.colPaddingSmall))
-    ])
-  ];
-
-  let column = [
-    A("flex", "1"),
-    A("min-width", "400px"),
-    Media("max-width: " ++ px(Consts.Media.oneCol), [
-      ("min-width", "300px"),
-    ]),
-    ...colPaddingRules
-  ];
-
-  let statusText = [
-    A("font-size", px(Consts.statusSize)),
-    A("color", Shared.Colors.red)
-  ];
-
-  let metaText = [
-    A("font-family", "Open sans, sans-serif"),
-    A("color", Shared.Colors.lightText),
-    A("font-size", px(Consts.updatesSize)),
-  ];
-
-  let hoverUnderline = [
-    A("text-decoration", "none"),
-    Hover([("text-decoration", "underline")]),
-  ];
-
-  let subtleLink = [
-    A("color", "currentColor"),
-    ...hoverUnderline
-  ];
-};
+  </div>
+));
 
 let module Header = {
   open Html;
