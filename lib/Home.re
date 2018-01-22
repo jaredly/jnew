@@ -2,30 +2,6 @@
 let pageHead = Shared.pageHead;
 let (|?>) = (x, f) => switch x { | None => None | Some(x) => f(x) };
 
-let monthDate = ((year, month, _)) => string_of_int(year) ++ " " ++ Shared.monthName(month);
-
-let timeSpanMonths = ((year1, month1, _), (year2, month2, _)) => {
-  if (year1 == year2) {
-    if (month1 == month2) {
-      monthDate((year1, month1, 0))
-    } else {
-      string_of_int(year1) ++ " " ++ Shared.monthName(month1) ++ " - " ++ Shared.monthName(month2)
-    }
-  } else {
-    monthDate((year1, month1, 0)) ++ " - " ++ monthDate((year2, month2, 0))
-  }
-};
-
-let updateText = updates => switch updates {
-| [] => ""
-| [(date, screenshot, text)] => "1 update " ++ (monthDate(date))
-| [(date, _, _), ...rest] => {
-  let total = List.length(rest) + 1;
-  let (date2, _, _) = List.nth(rest, total - 2);
-  string_of_int(total) ++ " updates, " ++ timeSpanMonths(date2, date)
-}
-};
-
 let px = n => string_of_int(n) ++ "px";
 
 let module Consts = {
@@ -208,7 +184,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                     A("font-family", "Open sans"),
                     A("font-size", px(Consts.updatesSize))
                   ])>
-                    (updateText(updates))
+                    (Project.updateText(updates))
                   </div>
                 </a>
               </div>

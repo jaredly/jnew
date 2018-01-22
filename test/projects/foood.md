@@ -3,12 +3,13 @@ tags: firebase, website, reason
 link: https://foood.jaredforsyth.com
 description: A recipe manager website, written in reason
 screenshot: /images/projects/foood.png
+github: f3d
 status: alpha
 
 ---
-date: 2018-1-20
+date: 2017-11-25
 
-haven't worked on this in a while b/c I've been focused mostly on [gravitron](/projects/gravitron). Hope to get back to it soon.
+Added bugsnag to catch errors in prod, and did a little bit of phone stlying work.
 
 ---
 date: 2017-10-24

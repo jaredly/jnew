@@ -31,16 +31,43 @@ type project = {
 let pageWithTopAndBottom = Shared.pageWithTopAndBottom;
 let pageHead = Shared.pageHead;
 
+let monthDate = ((year, month, _)) => string_of_int(year) ++ " " ++ Shared.monthName(month);
+
+let timeSpanMonths = ((year1, month1, _), (year2, month2, _)) => {
+  if (year1 == year2) {
+    if (month1 == month2) {
+      monthDate((year1, month1, 0))
+    } else {
+      string_of_int(year1) ++ " " ++ Shared.monthName(month1) ++ " - " ++ Shared.monthName(month2)
+    }
+  } else {
+    monthDate((year1, month1, 0)) ++ " - " ++ monthDate((year2, month2, 0))
+  }
+};
+
+let updateText = (~num=true, updates) => switch updates {
+| [] => ""
+| [(date, screenshot, text)] => (num ? "1 update, " : "") ++ (monthDate(date))
+| [(date, _, _), ...rest] => {
+  let total = List.length(rest) + 1;
+  let (date2, _, _) = List.nth(rest, total - 2);
+  (num ? string_of_int(total) ++ " updates, "
+  : "")
+   ++ timeSpanMonths(date2, date)
+}
+};
+
+let metaText = Css.([
+  A("font-size", "16px"),
+  A("color", Shared.Colors.lightText),
+  A("font-family", "Open sans"),
+]);
+
 let renderUpdate = (css, ((year, month, day), screenshot, content)) => {
   open Html;
   open Css;
   <div className=css([A("margin-bottom", "17px")])>
-    <div className=css([
-      A("font-size", "16px"),
-      A("color", Shared.Colors.lightText),
-      A("font-family", "Open sans"),
-      /* A("font-size", "14px"), */
-    ])>
+    <div className=css(metaText)>
     (string_of_int(year))
     (Shared.monthName(month))
     (string_of_int(day))
@@ -173,7 +200,7 @@ let renderList = (projects, contentTitle) => {
     )
     middle=(
       List.map(
-        ({title, description, screenshot, wip, fileName, updates}) => {
+        ({title, description, longDescription, screenshot, wip, fileName, updates}) => {
           open Types;
           let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
           let numUpdates = List.length(updates);
@@ -183,20 +210,46 @@ let renderList = (projects, contentTitle) => {
                 A("text-decoration", "none")
               ])
             >
-              <h2>(title)</h2>
+              <h2 className=css([
+                A("margin", "0"),
+                A("padding", "0"),
+              ])>(title)</h2>
             </a>
+            (Shared.hspace(8))
+            <div className=css(metaText)>
+              (updateText(~num=false, updates))
+            </div>
+            (Shared.hspace(16))
             (switch screenshot {
             | None => ""
-            | Some(src) => <img src alt="Screenshot" />
+            | Some(src) => <img src alt="Screenshot" className=css([
+              A("margin-bottom", "16px"),
+              A("max-height", "300px"),
+              A("width", "100%"),
+              A("object-fit", "cover"),
+              A("box-shadow", "0 0 5px #aaa")
+            ]) />
             })
-            <div className=css([A("padding-top", "16px"), ...Shared.Styles.bodyText])>
+            <div className=css([
+              Sub("p", [("padding-bottom", "0")]),
+              ...Shared.Styles.bodyText
+            ])>
               (Omd.to_html(Omd.of_string(description)))
             </div>
+            (switch longDescription {
+            | None => ""
+            | Some(text) => <div className=css([
+              A("padding-top", "16px"),
+              Sub("p", [("padding-bottom", "0")]),
+              ...Shared.Styles.bodyText
+            ])>(MarkdownParser.parse(text))</div>
+            })
+            (Shared.hspace(16))
             <a className=css([A("font-size", "24px")]) href>(string_of_int(numUpdates)) (numUpdates == 1 ? "Update" : "Updates")</a>
           </div>
         },
         projects
-      ) |> String.concat("\n<div style='height: 32px'></div>\n")
+      ) |> String.concat("\n" ++ Shared.hspace(40))
     )
     bottom=("This is the personal site of Jared Forsyth")
   />;
