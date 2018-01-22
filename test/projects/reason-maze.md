@@ -2,7 +2,7 @@ title: Reason Maze
 description: This is a maze I made in reason
 screenshot: /images/projects/reason-maze.png
 tags: art, toy, reason
-status: released
+status: finished
 screenshot: https://reasonml.github.io/img/examples/maze.png
 
 ---

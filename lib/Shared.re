@@ -4,6 +4,7 @@ let (|?) = (x, y) => switch x { | None => y | Some(x) => x };
 let module Colors = {
   let text = "#333";
   let lightText = "#999";
+  let red = "#692900";
 };
 
 let userPic = (~css, ~children, ()) => Css.(Html.(

@@ -2,6 +2,7 @@ title: Fractal flames
 description: Render fractal flames, first with golang, then with rust, then with reason
 github: flame-rsn
 status: finished
+screenshot: https://pbs.twimg.com/media/DJ0XgDyUMAEijpM.jpg
 tags: art, math, rust, reason, go
 
 ---

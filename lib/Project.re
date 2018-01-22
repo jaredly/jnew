@@ -4,6 +4,15 @@ let (|?>) = (x, f) => switch x { | None => None | Some(x) => f(x) };
 let (|?>>) = (x, f) => switch x { | None => None | Some(x) => Some(f(x)) };
 let (|!) = (x, y) => switch x { | None => failwith(y) | Some(x) => x };
 
+let status = s => switch s {
+| "semi-retired" => Some("🛌")
+| "retired" => Some("🛌")
+| "alpha" => Some("α")
+| "beta" => Some("β")
+| "finished" => Some("🚀")
+| _ => None
+};
+
 type project = {
   title: string,
   description: string,

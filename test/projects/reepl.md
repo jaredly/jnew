@@ -1,6 +1,8 @@
 title: Reepl
 description: A cljs repl that's good
 status: retired
+github: reepl
+screenshot: https://github.com/jaredly/reepl/raw/master/screenshot.png
 tags: tool, library, clojurescript
 
 ---

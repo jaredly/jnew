@@ -1,5 +1,6 @@
 
 let pageHead = Shared.pageHead;
+let (|?>) = (x, f) => switch x { | None => None | Some(x) => f(x) };
 
 let monthDate = ((year, month, _)) => string_of_int(year) ++ " " ++ Shared.monthName(month);
 
@@ -32,7 +33,8 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
   open Html;
   open Css;
 
-  let column = [A("flex", "1"), A("padding", "24px"), A("min-width", "300px"), A("max-width", "500px")];
+  let column = [A("flex", "1"), A("padding", "24px"), A("min-width", "300px"),
+  ];
 
   let subtleLink = [
     A("text-decoration", "none"),
@@ -102,17 +104,27 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
         </div>
       </div>
 
-      <div className=css([Media("max-width: 1015px", [("order", "1")]), ...column])>
+      <div className=css([Media("max-width: 1015px", [("order", "1")]),
+        A("max-width", "500px"), ...column])>
         <Header href="/projects/" css title="Projects" />
         <div>
           (List.map(
-            ({Project.title, fileName, description, screenshot, github, updates}) => {
+            ({Project.title, fileName, description, screenshot, github, updates, status}) => {
               let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
               <div>
                 <div
                   className=css([A("font-size", "26px")])
                 >
                   <a href className=css(subtleLink)>title</a>
+                  (switch (status, status |?> Project.status) {
+                  | (Some(status), Some(text)) => <span title=status
+                    className=css([
+                      A("font-size", "20px"),
+                      A("color", Shared.Colors.red)
+                    ])
+                    >text</span>
+                  | _ => ""
+                  })
                   (switch github {
                   | None => ""
                   | Some(href) => <a target="_blank" href className=css([
@@ -131,6 +143,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                   | None => ""
                   | Some(src) => <img src alt=(title ++ " screenshot") className=css([
                       A("width", "100%"),
+                      A("margin-top", "8px"),
                       A("object-fit", "cover"),
                       A("max-height", "200px"),
                       A("box-shadow", "0 0 5px #aaa")
@@ -214,7 +227,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
           /* A("text-indent", "1.5em") */
           ])>
             <p>
-            "I’m an unashamed idealist with strong opinions, but I'm happy to learn where I'm wrong. We all need more empathy. The most important aspect of my life is my connection to God."
+            "I’m an idealist with strong opinions, but I'm happy to learn where I'm wrong. We all need more empathy & compassion. The most important aspect of my life is my connection to God."
             </p>
             <p>
             "I’m currently a mobile & web developer for Khan Academy, where we’re working to bring a free, world-class education to anyone anywhere. If you want to help, send me an email!"

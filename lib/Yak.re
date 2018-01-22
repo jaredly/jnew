@@ -116,6 +116,7 @@ let run = () => {
   Files.writeFile("./test/pages/index.html", Home.render(~projects, ~posts, ~tags, ~talks)) |> ignore;
 
   MarkdownParser.saveTwitterCache();
+  print_endline("Finished!");
 };
 
 
