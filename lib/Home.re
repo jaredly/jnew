@@ -26,6 +26,21 @@ let updateText = updates => switch updates {
 }
 };
 
+let px = n => string_of_int(n) ++ "px";
+
+let module Consts = {
+  let colPadding = 24;
+  let jaredSize = 36;
+  let titleSize = 24;
+  let statusSize = 20;
+  let githubSize = 16;
+  let updatesSize = 14;
+  let smallSpace = 8;
+  let medSpace = 16;
+  let bigSpace = 32;
+};
+
+
 let render = (~projects, ~posts, ~tags, ~talks) => {
   open Html;
   open Css;
@@ -33,7 +48,21 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
   open Html;
   open Css;
 
-  let column = [A("flex", "1"), A("padding", "24px"), A("min-width", "300px"),
+  let column = [
+    A("flex", "1"),
+    A("padding", px(Consts.colPadding)),
+    A("min-width", "300px"),
+  ];
+
+  let statusText = [
+    A("font-size", px(Consts.statusSize)),
+    A("color", Shared.Colors.red)
+  ];
+
+  let metaText = [
+    A("font-family", "Open sans, sans-serif"),
+    A("color", Shared.Colors.lightText),
+    A("font-size", px(Consts.updatesSize)),
   ];
 
   let subtleLink = [
@@ -48,7 +77,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
     let createElement = (~css, ~href, ~title, ~children, ()) =>
       <a href className=css([
         A("text-decoration", "none"),
-        A("color", "#147429"),
+        A("color", Shared.Colors.green),
         Hover([("text-decoration", "underline")]),
       ])>
         <h1 className=css([A("margin-top", "0")])>title</h1>
@@ -78,18 +107,17 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
               <a href className=css(subtleLink)>
                 <div
                   className=css([
-                    A("font-size", "26px"),
+                    A("font-size", px(Consts.titleSize)),
                   ])
                 >
                   (config.title)
                 </div>
-                (Shared.hspace(8))
+                (Shared.hspace(Consts.smallSpace))
                 <div className=css([
                   A("display", "flex"),
-                  A("color", Shared.Colors.lightText),
-                  A("font-family", "Open sans, sans-serif"),
-                  A("font-size", "14px"),
-                  A("flex-direction", "row")])>
+                  A("flex-direction", "row"),
+                  ...metaText
+                ])>
                   (string_of_int(year))
                   (Shared.monthName(month))
                   (string_of_int(day))
@@ -100,7 +128,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
               </a>
             },
             posts
-          ) |> String.concat("\n" ++ Shared.hspace(32)))
+          ) |> String.concat("\n" ++ Shared.hspace(Consts.bigSpace)))
         </div>
       </div>
 
@@ -113,22 +141,19 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
               let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
               <div>
                 <div
-                  className=css([A("font-size", "26px")])
+                  className=css([A("font-size", px(Consts.titleSize))])
                 >
                   <a href className=css(subtleLink)>title</a>
                   (switch (status, status |?> Project.status) {
                   | (Some(status), Some(text)) => <span title=status
-                    className=css([
-                      A("font-size", "20px"),
-                      A("color", Shared.Colors.red)
-                    ])
+                    className=css(statusText)
                     >text</span>
                   | _ => ""
                   })
                   (switch github {
                   | None => ""
                   | Some(href) => <a target="_blank" href className=css([
-                      A("font-size", "16px")
+                      A("font-size", px(Consts.githubSize))
                     ])>"github"</a>
                   })
                 </div>
@@ -143,23 +168,30 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                   | None => ""
                   | Some(src) => <img src alt=(title ++ " screenshot") className=css([
                       A("width", "100%"),
-                      A("margin-top", "8px"),
+                      A("margin-top", px(Consts.smallSpace)),
                       A("object-fit", "cover"),
                       A("max-height", "200px"),
                       A("box-shadow", "0 0 5px #aaa")
                     ]) />
                   })
-                  <div className=css([A("padding-top", "8px"), Sub("p", [("padding-bottom", "8px")])])>
+                  <div className=css([
+                    A("padding-top", px(Consts.smallSpace)),
+                    A("font-size", px(Consts.githubSize)),
+                    Sub("p", [("padding-bottom", px(Consts.smallSpace))])])>
                     (MarkdownParser.parse(description))
                   </div>
-                  <div className=css([A("color", Shared.Colors.lightText), A("font-family", "Open sans"), A("font-size", "14px")])>
+                  <div className=css([
+                    A("color", Shared.Colors.lightText),
+                    A("font-family", "Open sans"),
+                    A("font-size", px(Consts.updatesSize))
+                  ])>
                     (updateText(updates))
                   </div>
                 </a>
               </div>
             },
             projects
-          ) |> String.concat("\n" ++ Shared.hspace(16)))
+          ) |> String.concat("\n" ++ Shared.hspace(Consts.medSpace)))
         </div>
       </div>
 
@@ -168,14 +200,14 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
         A("padding", "0"),
         Media("min-width: 1341px", [("flex", "2"), ("flex-direction", "row"), ("min-width", "600px")])
       ])>
-        <div className=css([Media("max-width: 1340px", [("order", "1")]), A("flex", "1"), A("padding", "24px")])>
+        <div className=css([Media("max-width: 1340px", [("order", "1")]), A("flex", "1"), A("padding", px(Consts.colPadding))])>
           <Header href="/" css title="Talks" />
           (List.map(
             ({Talk.title, image, slides, venues}) => {
               let main = switch image {
                 | None =>
                   <div
-                    className=css([A("font-size", "20px")])
+                    className=css([A("font-size", px(Consts.statusSize))])
                   >
                   title
                   </div>
@@ -183,7 +215,6 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                   <img alt=title src className=css([
                     A("max-width", "min(400px, 100%)"),
                     A("max-height", "300px"),
-                    /* A("margin", "8px"), */
                     A("box-shadow", "0 0 5px #aaa"),
                   ])/>
               };
@@ -195,7 +226,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                     main
                   </a>
                 })
-                <ul>
+                <ul className=css([A("font-size", px(Consts.githubSize))])>
                 (List.map(
                   ({Talk.where, date, video}) => {
                     <li>
@@ -211,20 +242,19 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
               </div>
             },
             talks
-          ) |> String.concat("\n" ++ Shared.hspace(16)))
+          ) |> String.concat("\n" ++ Shared.hspace(Consts.medSpace)))
         </div>
 
         <div className=css([
-          A("padding", "24px"),
+          A("padding", px(Consts.colPadding)),
           Media("min-width: 1341px", [("flex", "1")]), A("text-align", "center")])>
           (Shared.myBigFaceStatic(css))
-          (Shared.hspace(32))
-          <div className=css([A("font-size", "32px")])>
+          (Shared.hspace(Consts.bigSpace))
+          <div className=css([A("font-size", px(Consts.jaredSize))])>
             "I'm Jared Forsyth"
           </div>
-          (Shared.hspace(32))
-          <div className=css([A("font-size", "24px"), A("line-height", "36px"), A("text-align", "left"),
-          /* A("text-indent", "1.5em") */
+          (Shared.hspace(Consts.bigSpace))
+          <div className=css([A("font-size", px(Consts.titleSize)), A("line-height", "36px"), A("text-align", "left"),
           ])>
             <p>
             "I’m an idealist with strong opinions, but I'm happy to learn where I'm wrong. We all need more empathy & compassion. The most important aspect of my life is my connection to God."
