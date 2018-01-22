@@ -59,10 +59,14 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
     A("font-size", px(Consts.updatesSize)),
   ];
 
-  let subtleLink = [
+  let hoverUnderline = [
     A("text-decoration", "none"),
-    A("color", "currentColor"),
     Hover([("text-decoration", "underline")]),
+  ];
+
+  let subtleLink = [
+    A("color", "currentColor"),
+    ...hoverUnderline
   ];
 
   /* let hiddenLink = [
@@ -75,9 +79,8 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
     open Css;
     let createElement = (~css, ~href, ~title, ~children, ()) =>
       <a href className=css([
-        A("text-decoration", "none"),
         A("color", Shared.Colors.darkGreen),
-        Hover([("text-decoration", "underline")]),
+        ...hoverUnderline
       ])>
         <h1 className=css([
           A("margin-top", "0"),
@@ -96,6 +99,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
     <div className=css([
       A("flex-direction", "row"),
       A("padding", px(Consts.colPadding / 2)),
+      A("padding-top", "0"),
       A("display", "flex"),
       A("justify-content", "center"),
       A("align-items", "stretch"),
@@ -209,7 +213,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                   ])>
                     (Project.updateText(updates))
                     (tags != [] ? Shared.spacer(8) ++ "·" ++ Shared.spacer(8) : "")
-                    (tags |> List.map(tag => <a className=css([A("text-decoration", "none")]) href=("/projects/tags/" ++ tag ++ "/")> tag </a>) |> String.concat("," ++ Shared.vspace(4)))
+                    (tags |> List.map(tag => <a className=css(hoverUnderline) href=("/projects/tags/" ++ tag ++ "/")> tag </a>) |> String.concat("," ++ Shared.vspace(4)))
                   </div>
                 /* </a> */
               </div>
@@ -263,7 +267,11 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                     <li>
                     (switch video {
                     | None => where
-                    | Some(href) => <a href>where "📹"</a>
+                    | Some(href) => <a href className=css([
+                      A("font-family", "Open sans, sans-serif"),
+                      A("font-size", "14px"),
+                      ...hoverUnderline
+                      ])>where "📹"</a>
                     })
                     </li>
                   },
@@ -293,8 +301,22 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
             "I’m an idealist with strong opinions, but I'm happy to learn where I'm wrong. We all need more empathy & compassion. The most important aspect of my life is my connection to God."
             </p>
             <p>
-            "I’m currently a mobile & web developer for Khan Academy, where we’re working to bring a free, world-class education to anyone anywhere. If you want to help, send me an email!"
+            "I’m currently a mobile & web developer for Khan Academy, where we’re working to bring a free, world-class education to anyone anywhere. If you want to help, get in touch!"
             </p>
+            <div style="text-align:center" className=css([
+              Sub("a", [(
+                ("text-decoration", "none"),
+              )]),
+              Sub("a:hover", [(
+                ("text-decoration", "underline"),
+              )]),
+              A("font-family", "Open sans, sans-serif"),
+              A("font-size", "20px")
+            ])>
+            <a href="https://twitter.com/jaredforsyth">"twitter/@jaredforsyth"</a>
+            "<br/>"
+            <a href="https://github.com/jaredly">"github/@jaredly"</a>
+            </div>
           </div>
         </div>
       </div>

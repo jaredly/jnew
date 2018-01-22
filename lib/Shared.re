@@ -5,6 +5,7 @@ let module Colors = {
   let text = "#333";
   let lightText = "#999";
   let red = "#692900";
+  let lightOrange = "#fff4ef";
   let darkGreen = "#147429";
   let green = "#1fad3e";
 };
@@ -92,7 +93,7 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
         padding: 15px;
         /* border: 1px solid #ddd; */
         font-family: Inconsolata;
-        background-color: #fff4ef;
+        background-color: |} ++ Colors.lightOrange ++ {|;
         color: #692900;
         border-radius: 4px;
         margin: 0;
