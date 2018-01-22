@@ -5,7 +5,8 @@ let module Colors = {
   let text = "#333";
   let lightText = "#999";
   let red = "#692900";
-  let green = "#147429";
+  let darkGreen = "#147429";
+  let green = "#1fad3e";
 };
 
 let userPic = (~css, ~children, ()) => Css.(Html.(
@@ -76,7 +77,7 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
 
     <asyncScript src="//platform.twitter.com/widgets.js" />
     <style>
-      {|
+      ({|
       div {
         flex-shrink: 0;
         flex-wrap: wrap;
@@ -111,18 +112,18 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
           margin: 0;
           margin-bottom: 1em;
           padding-left: 20px;
-          border-left: 5px solid #1fad3e;
+          border-left: 5px solid |} ++ Colors.green ++ {|;
           font-style: italic;
       }
       blockquote.twitter-tweet {
         font-style: normal;
-        border: 1px solid #1fad3e;
+        border: 1px solid |} ++ Colors.green ++ {|;
         border-radius: 4px;
         padding: 8px 16px;
         font-size: 20px;
       }
       a {
-        color: #1fad3e;
+        color: |} ++ Colors.green ++ {|;
         /* color: #28cc4c;
         text-decoration-color: #28cc4c; */
       }
@@ -155,7 +156,7 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
       /* a:visited {
         color: #333;
       } */
-      |}
+      |})
     </style>
 
     <title>{contentTitle}</title>

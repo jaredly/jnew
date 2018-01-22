@@ -28,6 +28,23 @@ type project = {
   updates: list(((int, int, int), option(string), string))
 };
 
+let githubLink = (href) => {
+  open Html;
+  <a target="_blank" href style="font-size: 16px">"github"</a>
+};
+
+let githubLink = (css, href) => {
+  open Html;
+  open Css;
+  <a title="github link" target="_blank" href style="font-size: 16px">
+    (GithubIcon.raw(css([
+      A("fill", Shared.Colors.green),
+      A("width", "20px"),
+      A("height", "20px"),
+    ])))
+  </a>
+};
+
 let pageWithTopAndBottom = Shared.pageWithTopAndBottom;
 let pageHead = Shared.pageHead;
 

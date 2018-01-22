@@ -72,7 +72,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
     let createElement = (~css, ~href, ~title, ~children, ()) =>
       <a href className=css([
         A("text-decoration", "none"),
-        A("color", Shared.Colors.green),
+        A("color", Shared.Colors.darkGreen),
         Hover([("text-decoration", "underline")]),
       ])>
         <h1 className=css([
@@ -149,7 +149,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                     A("font-size", px(Consts.titleSize)),
                     A("display", "flex"),
                     A("flex-direction", "row"),
-                    A("align-items", "center"),
+                    A("align-items", "flex-end"),
                   ])
                 >
                   <a href className=css([A("flex", "1"), ...subtleLink])>
@@ -167,9 +167,10 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                   /* <div style="flex: 1"/> */
                   (switch github {
                   | None => ""
-                  | Some(href) => <a target="_blank" href className=css([
+                  | Some(href) => Project.githubLink(css, href)
+                  /* <a target="_blank" href className=css([
                       A("font-size", px(Consts.githubSize))
-                    ])>"github"</a>
+                    ])>"github"</a> */
                   })
                 </div>
                 /* <a
