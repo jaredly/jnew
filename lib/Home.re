@@ -32,7 +32,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
   open Html;
   open Css;
 
-  let column = [A("flex", "1"), A("padding", "24px"), A("min-width", "300px")];
+  let column = [A("flex", "1"), A("padding", "24px"), A("min-width", "300px"), A("max-width", "500px")];
 
   let subtleLink = [
     A("text-decoration", "none"),
@@ -61,6 +61,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
     <div className=css([
       A("flex-direction", "row"),
       A("display", "flex"),
+      A("justify-content", "center"),
       A("align-items", "stretch"),
       A("flex-wrap", "wrap"),
     ])>
@@ -129,7 +130,10 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                   (switch screenshot {
                   | None => ""
                   | Some(src) => <img src alt=(title ++ " screenshot") className=css([
-                      A("width", "100%")
+                      A("width", "100%"),
+                      A("object-fit", "cover"),
+                      A("max-height", "200px"),
+                      A("box-shadow", "0 0 5px #aaa")
                     ]) />
                   })
                   <div className=css([A("padding-top", "8px"), Sub("p", [("padding-bottom", "8px")])])>
@@ -164,7 +168,8 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                   </div>
                 | Some(src) =>
                   <img alt=title src className=css([
-                    A("max-width", "100%"),
+                    A("max-width", "min(400px, 100%)"),
+                    A("max-height", "300px"),
                     /* A("margin", "8px"), */
                     A("box-shadow", "0 0 5px #aaa"),
                   ])/>

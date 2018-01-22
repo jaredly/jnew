@@ -1,7 +1,9 @@
 title: RxVision
 description: Show the data flow of values through your observable chains
 status: retired
+github: rxvision
 tags: tool, javascript, rx
+screenshot: https://camo.githubusercontent.com/f73ee9b2e38d9324124d817b15b16ee16a4e45ae/687474703a2f2f6a617265646c792e6769746875622e696f2f696d616765732f7061737465642d31362e706e67
 
 ---
 date: 2015-3-9

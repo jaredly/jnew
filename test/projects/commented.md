@@ -1,6 +1,8 @@
 title: Commented
 description: A firebase-backed open-source commenting system
 status: retired
+github: https://github.com/commented/commented
+screenshot: /images/projects/commented.png
 tags: firebase
 
 ---

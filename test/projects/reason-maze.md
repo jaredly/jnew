@@ -3,6 +3,7 @@ description: This is a maze I made in reason
 screenshot: /images/projects/reason-maze.png
 tags: art, toy, reason
 status: released
+screenshot: https://reasonml.github.io/img/examples/maze.png
 
 ---
 date: 2017-6-26

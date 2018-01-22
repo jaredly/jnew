@@ -10,7 +10,6 @@ _release
 *.native
 esy-reason-project.install
 .DS_Store
-test/posts
 test/pages
 my-website.install
 .tweet-cache

@@ -2,6 +2,7 @@ title: Foood
 tags: firebase, website, reason
 link: https://foood.jaredforsyth.com
 description: A recipe manager website, written in reason
+screenshot: /images/projects/foood.png
 status: alpha
 
 ---
