@@ -29,7 +29,7 @@ let updateText = updates => switch updates {
 let px = n => string_of_int(n) ++ "px";
 
 let module Consts = {
-  let colPadding = 24;
+  let colPadding = 32;
   let jaredSize = 36;
   let titleSize = 24;
   let statusSize = 20;
@@ -38,6 +38,13 @@ let module Consts = {
   let smallSpace = 8;
   let medSpace = 16;
   let bigSpace = 32;
+  let bigSpace = 40;
+
+  let module Media = {
+    let oneCol = 675;
+    let twoCol = 1015;
+    let threeCol = 1340;
+  };
 };
 
 
@@ -48,10 +55,17 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
   open Html;
   open Css;
 
+  let colPaddingRules = [
+    A("padding", px(Consts.colPadding)),
+    Media("max-width: " ++ px(Consts.Media.oneCol), [
+      ("padding", px(Consts.colPadding / 2))
+    ])
+  ];
+
   let column = [
     A("flex", "1"),
-    A("padding", px(Consts.colPadding)),
     A("min-width", "300px"),
+    ...colPaddingRules
   ];
 
   let statusText = [
@@ -80,7 +94,10 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
         A("color", Shared.Colors.green),
         Hover([("text-decoration", "underline")]),
       ])>
-        <h1 className=css([A("margin-top", "0")])>title</h1>
+        <h1 className=css([
+          A("margin-top", "0"),
+          A("font-size", px(Consts.jaredSize))
+        ])>title</h1>
       </a>
     ;
   };
@@ -88,15 +105,21 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
   let body = <body className=css([
     A("font-family", "Linux Libertine"),
     A("color", Shared.Colors.text),
+    A("margin", "0"),
+    A("padding", "0")
   ]) lang="en">
     <div className=css([
       A("flex-direction", "row"),
+      A("padding", px(Consts.colPadding / 2)),
       A("display", "flex"),
       A("justify-content", "center"),
       A("align-items", "stretch"),
       A("flex-wrap", "wrap"),
+      Media("max-width: " ++ px(Consts.Media.oneCol), [
+        ("padding", px(Consts.colPadding / 4))
+      ])
     ])>
-      <div className=css([Media("max-width: 675px", [("order", "1")]), ...column])>
+      <div className=css([Media("max-width: " ++ px(Consts.Media.oneCol), [("order", "1")]), ...column])>
         <Header href="/posts/" css title="Blog posts" />
         <div>
           (List.map(
@@ -132,7 +155,7 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
         </div>
       </div>
 
-      <div className=css([Media("max-width: 1015px", [("order", "1")]),
+      <div className=css([Media("max-width: " ++ px(Consts.Media.twoCol), [("order", "1")]),
         A("max-width", "500px"), ...column])>
         <Header href="/projects/" css title="Projects" />
         <div>
@@ -191,16 +214,16 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
               </div>
             },
             projects
-          ) |> String.concat("\n" ++ Shared.hspace(Consts.medSpace)))
+          ) |> String.concat("\n" ++ Shared.hspace(Consts.bigSpace)))
         </div>
       </div>
 
 
       <div className=css([A("display", "flex"), A("flex-direction", "column"), ...column] @ [
         A("padding", "0"),
-        Media("min-width: 1341px", [("flex", "2"), ("flex-direction", "row"), ("min-width", "600px")])
+        Media("min-width: " ++ px(Consts.Media.threeCol + 1), [("flex", "2"), ("flex-direction", "row"), ("min-width", "600px")])
       ])>
-        <div className=css([Media("max-width: 1340px", [("order", "1")]), A("flex", "1"), A("padding", px(Consts.colPadding))])>
+        <div className=css([Media("max-width: " ++ px(Consts.Media.threeCol), [("order", "1")]), A("flex", "1"), ...colPaddingRules])>
           <Header href="/" css title="Talks" />
           (List.map(
             ({Talk.title, image, slides, venues}) => {
@@ -226,7 +249,14 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                     main
                   </a>
                 })
-                <ul className=css([A("font-size", px(Consts.githubSize))])>
+                (Shared.hspace(Consts.smallSpace))
+                <ul className=css([
+                  A("font-size", px(Consts.githubSize)),
+                  A("padding", "0"),
+                  /* A("padding-left", "32px"), */
+                  A("list-style", "none"),
+                  A("margin", "0")
+                ])>
                 (List.map(
                   ({Talk.where, date, video}) => {
                     <li>
@@ -242,12 +272,14 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
               </div>
             },
             talks
-          ) |> String.concat("\n" ++ Shared.hspace(Consts.medSpace)))
+          ) |> String.concat("\n" ++ Shared.hspace(Consts.bigSpace + Consts.smallSpace)))
         </div>
 
         <div className=css([
-          A("padding", px(Consts.colPadding)),
-          Media("min-width: 1341px", [("flex", "1")]), A("text-align", "center")])>
+          Media("min-width: " ++ px(Consts.Media.threeCol + 1), [("flex", "1")]),
+          A("text-align", "center"),
+          ...colPaddingRules
+        ])>
           (Shared.myBigFaceStatic(css))
           (Shared.hspace(Consts.bigSpace))
           <div className=css([A("font-size", px(Consts.jaredSize))])>
