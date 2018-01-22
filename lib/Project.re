@@ -4,7 +4,7 @@ let (|?>) = (x, f) => switch x { | None => None | Some(x) => f(x) };
 let (|?>>) = (x, f) => switch x { | None => None | Some(x) => Some(f(x)) };
 let (|!) = (x, y) => switch x { | None => failwith(y) | Some(x) => x };
 
-let status = s => switch s {
+let statusSymbol = s => switch s {
 | "semi-retired" => Some("🛌")
 | "retired" => Some("🛌")
 | "alpha" => Some("α")
@@ -58,6 +58,8 @@ let updateText = (~num=true, updates) => switch updates {
 };
 
 let metaText = Css.([
+  A("display", "flex"),
+  A("flex-direction", "row"),
   A("font-size", "16px"),
   A("color", Shared.Colors.lightText),
   A("font-family", "Open sans"),
@@ -76,7 +78,7 @@ let renderUpdate = (css, ((year, month, day), screenshot, content)) => {
   </div>
 };
 
-let render = ({title: contentTitle, description, github, longDescription, status, screenshot, updates}) => {
+let render = ({title: contentTitle, tags, description, github, longDescription, status, screenshot, updates}) => {
   let (css, inlineCss) = Css.startPage();
   open Html;
   open Css;
@@ -99,6 +101,9 @@ let render = ({title: contentTitle, description, github, longDescription, status
               ])
             >status</span>
           })
+          (tags != [] ? Shared.spacer(8) ++ "·" ++ Shared.spacer(8) : "")
+          (tags |> List.map(tag => <a className=css([A("text-decoration", "none")]) href=("/projects/tags/" ++ tag ++ "/")> tag </a>) |> String.concat("," ++ Shared.vspace(4)))
+
           <div style="flex: 1" />
           (switch github {
           | None => ""
@@ -200,7 +205,7 @@ let renderList = (projects, contentTitle) => {
     )
     middle=(
       List.map(
-        ({title, description, longDescription, screenshot, wip, fileName, updates}) => {
+        ({title, tags, status, description, longDescription, screenshot, wip, fileName, updates}) => {
           open Types;
           let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
           let numUpdates = List.length(updates);
@@ -213,11 +218,26 @@ let renderList = (projects, contentTitle) => {
               <h2 className=css([
                 A("margin", "0"),
                 A("padding", "0"),
-              ])>(title)</h2>
+              ])>
+              (title)
+                  (switch (status, status |?> statusSymbol) {
+                  | (Some(status), Some(text)) => <span title=status
+                    className=css([
+                      A("padding-left", "8px"),
+                      A("font-size", "24px"),
+                      A("color", Shared.Colors.red)
+                      /* ...statusText */
+                    ])
+                    >text</span>
+                  | _ => ""
+                  })
+              </h2>
             </a>
             (Shared.hspace(8))
             <div className=css(metaText)>
               (updateText(~num=false, updates))
+              (tags != [] ? Shared.spacer(8) ++ "·" ++ Shared.spacer(8) : "")
+              (tags |> List.map(tag => <a className=css([A("text-decoration", "none")]) href=("/projects/tags/" ++ tag ++ "/")> tag </a>) |> String.concat("," ++ Shared.vspace(4)))
             </div>
             (Shared.hspace(16))
             (switch screenshot {

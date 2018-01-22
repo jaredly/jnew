@@ -61,6 +61,11 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
     Hover([("text-decoration", "underline")]),
   ];
 
+  /* let hiddenLink = [
+    A("text-decoration", "none"),
+    A("color", "currentColor"),
+  ]; */
+
   let module Header = {
     open Html;
     open Css;
@@ -136,19 +141,30 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
         <Header href="/projects/" css title="Projects" />
         <div>
           (List.map(
-            ({Project.title, fileName, description, screenshot, github, updates, status}) => {
+            ({Project.title, fileName, description, screenshot, github, updates, status, tags}) => {
               let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
               <div>
                 <div
-                  className=css([A("font-size", px(Consts.titleSize))])
+                  className=css([
+                    A("font-size", px(Consts.titleSize)),
+                    A("display", "flex"),
+                    A("flex-direction", "row"),
+                    A("align-items", "center"),
+                  ])
                 >
-                  <a href className=css(subtleLink)>title</a>
-                  (switch (status, status |?> Project.status) {
+                  <a href className=css([A("flex", "1"), ...subtleLink])>
+                  title
+                  (switch (status, status |?> Project.statusSymbol) {
                   | (Some(status), Some(text)) => <span title=status
-                    className=css(statusText)
+                    className=css([
+                      A("padding-left", px(Consts.smallSpace)),
+                      ...statusText
+                    ])
                     >text</span>
                   | _ => ""
                   })
+                  </a>
+                  /* <div style="flex: 1"/> */
                   (switch github {
                   | None => ""
                   | Some(href) => <a target="_blank" href className=css([
@@ -156,13 +172,13 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                     ])>"github"</a>
                   })
                 </div>
-                <a
+                /* <a
                   href
                   className=css([
                     A("display", "block"),
-                    ...subtleLink
+                    ...hiddenLink
                   ])
-                >
+                > */
                   (switch screenshot {
                   | None => ""
                   | Some(src) => <img src alt=(title ++ " screenshot") className=css([
@@ -182,11 +198,15 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
                   <div className=css([
                     A("color", Shared.Colors.lightText),
                     A("font-family", "Open sans"),
-                    A("font-size", px(Consts.updatesSize))
+                    A("font-size", px(Consts.updatesSize)),
+                    A("display", "flex"),
+                    A("flex-direction", "row")
                   ])>
                     (Project.updateText(updates))
+                    (tags != [] ? Shared.spacer(8) ++ "·" ++ Shared.spacer(8) : "")
+                    (tags |> List.map(tag => <a className=css([A("text-decoration", "none")]) href=("/projects/tags/" ++ tag ++ "/")> tag </a>) |> String.concat("," ++ Shared.vspace(4)))
                   </div>
-                </a>
+                /* </a> */
               </div>
             },
             projects
