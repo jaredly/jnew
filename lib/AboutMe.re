@@ -41,7 +41,7 @@ let column = (~nav=false, ~contents=?, css) => Html.(Css.(
           <a href="/" > "home" </a>
           <a href="/posts/" > "posts" </a>
           <a href="/projects/" > "projects" </a>
-          <a href="/" > "talks" </a>
+          <a href="/talks/" > "talks" </a>
         </div>
       } else {
         ""

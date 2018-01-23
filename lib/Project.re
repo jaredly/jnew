@@ -243,13 +243,30 @@ let renderList = (tags, projects, contentTitle) => {
           ...Shared.Styles.title
         ])>contentTitle</h1>
       </div>
+      (Shared.hspace(32))
+      <div className=css([
+        A("justify-content", "center"),
+        A("font-size", "20px"),
+        ...Shared.Styles.row])>
+        "α - alpha"
+        (Shared.vspace(16))
+        "β - beta"
+        (Shared.vspace(16))
+        "🚀 - done"
+        (Shared.vspace(16))
+        "🛌 - retired"
+      </div>
       (Shared.hspace(64))
       (List.map(
-        ({title, tags, status, description, longDescription, screenshot, wip, fileName, updates}) => {
+        ({title, tags, status, github, description, longDescription, screenshot, wip, fileName, updates}) => {
           open Types;
           let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
           let numUpdates = List.length(updates);
           <div>
+            <div className=css([
+              A("align-items", "flex-end"),
+              ...Shared.Styles.row
+            ])>
             <a href className=css([
                 A("color", "currentColor"),
                 A("text-decoration", "none")
@@ -273,6 +290,9 @@ let renderList = (tags, projects, contentTitle) => {
                   })
               </h2>
             </a>
+              <div style="flex: 1"/>
+              (github |?>> githubLink(css) |? "")
+            </div>
             (Shared.hspace(8))
             <div className=css(metaText)>
               (updateText(~num=false, updates))

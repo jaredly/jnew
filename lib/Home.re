@@ -94,7 +94,7 @@ let talksColumn = (css, talks) => {
   open Styles;
 
   <fragment>
-  <Header href="/" css title="Talks" />
+  <Header href="/talks/" css title="Talks" />
   (List.map(
     ({Talk.title, image, slides, venues}) => {
       let main = switch image {

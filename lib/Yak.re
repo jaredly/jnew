@@ -143,6 +143,13 @@ let run = () => {
   let html = Project.renderList(projectTagCounts, projects, "All projects");
   Files.writeFile("./test/pages/projects/index.html", html) |> ignore;
 
+  StrMap.iter((tag, posts) => {
+    let dest = Filename.concat("./test/pages/projects/tags", tag);
+    Files.mkdirp(dest);
+    let html = Project.renderList(projectTagCounts, List.sort(sortProjectsByDate, posts), "Tag: " ++ tag);
+    Files.writeFile(Filename.concat(dest, "index.html"), html) |> ignore;
+  }, projectTags);
+
   /* Posts */
   let fullPosts = collectPages("posts", Post.parse);
   let posts = List.map(snd, fullPosts) |> List.sort(sortPostsByDate);
@@ -164,6 +171,9 @@ let run = () => {
 
   /* Talks */
   let talks = Talk.collect("./test/talks.json");
+  let html = Talk.renderList(talks, "Talks");
+  Files.mkdirp("./test/pages/talks/");
+  Files.writeFile("./test/pages/talks/index.html", html) |> Util.expectTrue("Unable to write talks page");
 
   /* Home page */
   Files.writeFile("./test/pages/index.html", Home.render(~projects, ~posts, ~tags, ~talks)) |> ignore;
