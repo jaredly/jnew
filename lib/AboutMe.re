@@ -7,11 +7,18 @@ let column = (~nav=false, ~contents=?, css) => Html.(Css.(
   <div className=css([
     Media("min-width: " ++ px(Consts.Media.oneCol), [
       ("position", "sticky"),
-      ("top", px(Consts.colPadding / 2)),
+      /* ("top", px(Consts.colPadding / 2)), */
       ("height", "calc(100vh - " ++ px(Consts.colPadding) ++ ")"),
       ("display", "flex"),
       ("flex-wrap", "nowrap"),
       ("flex-direction", "column"),
+    ]),
+    A("top", px(Consts.colPadding)),
+    Media("max-width: " ++ px(Consts.Media.skinnyFourCol), [
+      ("top", px(Consts.colPadding / 2))
+    ]),
+    Media("max-width: " ++ px(Consts.Media.oneCol), [
+      ("top", px(Consts.colPaddingSmall))
     ])
   ])>
     (Shared.myBigFaceStatic(css))
@@ -52,7 +59,7 @@ let column = (~nav=false, ~contents=?, css) => Html.(Css.(
         "I’m an idealist with strong opinions, but I'm happy to learn where I'm wrong. We all need more empathy & compassion. The most important aspect of my life is my connection to God."
         </p>
         <p>
-        "I’m currently a mobile & web developer for Khan Academy, where we’re working to bring a free, world-class education to anyone anywhere. If you want to help, get in touch!"
+        "I’m currently a mobile & web developer for Khan Academy, where we’re working to bring a free, world-class education to anyone anywhere."
         </p>
       </fragment>)
       <div style="text-align:center" className=css([
