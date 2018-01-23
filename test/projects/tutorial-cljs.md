@@ -1,6 +1,8 @@
 title: Tutorial CLJS
 description: An interactive quil playground
 tags: clojurescript, website, tool
+status: retired
+github: tutorial-cljs
 
 ---
 date: 2016-1-25

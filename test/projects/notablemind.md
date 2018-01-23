@@ -2,6 +2,7 @@ title: NotableMind
 description: All your mind, all your notes.
 tags: app, desktop, javascript
 github: https://github.com/notablemind/new
+status: beta
 
 ---
 This project is like my ultimate yak shave. I've rewritten it at least 3 times over the past 5 years, and have yet to release 😅 it works for me, a few of my family members use it... but I really hope to release it to the wild eventually.

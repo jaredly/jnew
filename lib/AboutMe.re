@@ -54,14 +54,14 @@ let column = (~nav=false, ~contents=?, css) => Html.(Css.(
         ""
       })
       (contents |?
-      <fragment>
+      <div className=css([A("flex-shrink", "1"), A("overflow", "auto")])>
         <p>
         "I’m an idealist with strong opinions, but I'm happy to learn where I'm wrong. We all need more empathy & compassion. The most important aspect of my life is my connection to God."
         </p>
         <p>
         "I’m currently a mobile & web developer for Khan Academy, where we’re working to bring a free, world-class education to anyone anywhere."
         </p>
-      </fragment>)
+      </div>)
       <div style="text-align:center" className=css([
         Sub("a", [(
           ("text-decoration", "none"),

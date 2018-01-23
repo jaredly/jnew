@@ -1,7 +1,7 @@
 title: Track Js in CSS
 description: A tool for static analysis, pre-evaluating aphrodite/glamor styles for visualization & tooling
-github: TODO
 tags: javascript, react, tool
+status: alpha
 
 ---
 date: 2017-9-23
