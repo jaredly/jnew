@@ -25,15 +25,15 @@ let splitTopYaml = (text) => {
 let collectPages = (inputDir, outputDir, baseDir, parse) => {
   let base = inputDir /+ baseDir;
   Files.readDirectory(base)
-  |> List.filter(f => Filename.check_suffix(f, ".md")) /* TODO .html suffix too */
+  |> List.filter(f => Filename.check_suffix(f, ".md") || Filename.check_suffix(f, ".html")) /* TODO .html suffix too */
   |> List.map((fileName) => {
     let fullName = base /+ fileName;
     let contents = Files.readFile(fullName) |> unwrap("Cannot read file");
     let (opts, body) = splitTopYaml(contents);
-    /* print_endline(String.escaped(body)); */
+    let result = parse(baseDir /+ fileName, opts, body);
+
     let dest = outputDir /+ baseDir /+ Filename.chop_extension(fileName);
     Files.mkdirp(dest);
-    let result = parse(baseDir /+ fileName, opts, body);
     let fullDest = dest /+ "index.html";
     (fullDest, result)
   });

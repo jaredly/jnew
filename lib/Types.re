@@ -10,5 +10,5 @@ type config = {
   thumbnail: option(string),
   featured: bool,
   fileName: string,
-  wordCount: int
+  wordCount: option(int)
 };

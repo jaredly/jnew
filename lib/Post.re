@@ -48,10 +48,11 @@ let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
 let pageWithTopAndBottom = Shared.pageWithTopAndBottom;
 let pageHead = Shared.pageHead;
 
-let render = (posts, ({Types.title: contentTitle, description, date, tags, thumbnail}, _, rawBody)) => {
+let render = (posts, ({Types.title: contentTitle, fileName, description, date, tags, thumbnail}, _, rawBody)) => {
   let (css, inlineCss) = Css.startPage();
   open Html;
   open Css;
+  let isMarkdown = Filename.check_suffix(fileName, ".md");
 
   let main = AboutMe.bodyWithSmallAboutMeColumn;
   let body = <main css toc=(
@@ -85,7 +86,7 @@ let render = (posts, ({Types.title: contentTitle, description, date, tags, thumb
     <postAbout css date tags />
     (Shared.hspace(32))
     <div className=css(Shared.Styles.bodyText)>
-      (MarkdownParser.parse(rawBody))
+      (isMarkdown ? MarkdownParser.parse(rawBody) : rawBody)
     </div>
   </main>;
 
@@ -120,6 +121,7 @@ let postList = (posts, tags, contentTitle) => {
             <a href=("/tags/" ++ tag ++ "/") className=css([
                 A("color", "currentColor"),
                 A("white-space", "nowrap"),
+                A("margin-right", "8px"),
                 ...Shared.Styles.hoverUnderline
               ])
             >
@@ -129,7 +131,7 @@ let postList = (posts, tags, contentTitle) => {
             <a className=css([A("font-size", "24px")]) href>readTime</a> */
         },
         tags
-      ) |> String.concat("\n<span style='display: inline-block; width: 8px'></span>\n"))
+      ) |> String.concat("\n"))
     </div>
   )>
     <div className=css([A("flex", "3"), A("padding", "32px")])>
@@ -191,7 +193,7 @@ let defaultConfig = fileName => {
   description: None,
   thumbnail: None,
   featured: false,
-  wordCount: 0
+  wordCount: None
 };
 
 let check = (opt, base, fn) => switch opt {
@@ -224,7 +226,8 @@ let parse = (fileName, opts, content) => {
   let opts = opts |! "No options for post " ++ fileName;
   let config = parseConfig(fileName, opts);
   let intro = getIntro(content);
-  let wordCount = Str.split(Str.regexp("[^a-zA-Z0-9-]+"), content) |> List.length;
+  let isMarkdown = Filename.check_suffix(fileName, ".md");
+  let wordCount = isMarkdown ? Some(Str.split(Str.regexp("[^a-zA-Z0-9-]+"), content) |> List.length) : None;
   let config = {...config, wordCount};
 
   (config, intro, content)

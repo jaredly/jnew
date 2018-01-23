@@ -492,6 +492,7 @@ let module Header = {
 
 let minuteRead = wordCount => wordCount / 225;
 
-let minuteReadText = wordCount => wordCount > 0
-  ? string_of_int(minuteRead(wordCount)) ++ " minute read"
-  : "Read more";
+let minuteReadText = wordCount => switch wordCount {
+| Some(wordCount) => string_of_int(minuteRead(wordCount)) ++ " minute read"
+| None => "Read more"
+};
