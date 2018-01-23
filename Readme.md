@@ -18,3 +18,9 @@ Very WIP.
 ## Make an index page
 
 ## Style all the things
+
+
+# License
+
+everything outside of /test is in the public domain (licensed [CC0 - Creative Commons Zero](https://creativecommons.org/publicdomain/zero/1.0/)).
+Content inside of test is licensed [CC-BY-NC](https://creativecommons.org/licenses/by-nc/4.0/legalcode) - Creative Commons Attribution-NonCommercial.
