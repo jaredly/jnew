@@ -79,10 +79,8 @@ let assembleProjectTags = projects => {
 };
 
 
-let run = () => {
-  let outputDir = "./test/pages/";
-  let inputDir = "./test";
 
+let processProjects = (inputDir, outputDir) => {
   /* Project pages */
   let projects = collectPages(inputDir, outputDir, "projects", Project.parse) |> renderPages(Project.render) |> List.sort(sortProjectsByDate);
   let projectTags = assembleProjectTags(projects);
@@ -99,6 +97,11 @@ let run = () => {
     Files.writeFile(dest /+ "index.html", html) |> ignore;
   }, projectTags);
 
+  projects
+};
+
+
+let processBlog = (inputDir, outputDir) => {
   /* Posts */
   let fullPosts = collectPages(inputDir, outputDir, "posts", Post.parse);
   let posts = List.map(snd, fullPosts) |> List.sort(sortPostsByDate);
@@ -118,14 +121,51 @@ let run = () => {
     Files.writeFile(dest /+ "index.html", html) |> ignore;
   }, tags);
 
+  posts
+};
+
+let processTalks = (inputDir, outputDir) => {
   /* Talks */
   let talks = Talk.collect(inputDir /+ "talks.json");
   let html = Talk.renderList(talks, "Talks");
   Files.mkdirp(outputDir /+ "talks/");
   Files.writeFile(outputDir /+ "talks/index.html", html) |> Util.expectTrue("Unable to write talks page");
+  talks
+};
+
+let redirect = url => {|<!doctype html>
+  <meta http-equiv="refresh" content="0; URL='|} ++ url ++ {|'" />
+  <title>Redirecting to |} ++ url ++ {|</title>
+  <body> This page has moved to |} ++ url ++ {| </body>|};
+
+let setupRedirectsForOldPosts = (outputDir, posts) => {
+  let oldPosts = posts |> List.filter(
+    (({Types.date}, _, _)) => Shared.dateSort(date, (2018, 1, 14)) < 0
+  );
+  oldPosts |> List.iter((({Types.title, fileName, date: (year, month, day)}, _, _)) => {
+    let slug = Filename.basename(fileName) |> Filename.chop_extension;
+    let path = Printf.sprintf("%04d/%02d/%02d/%s/", year, month, day, slug);
+    let fullPath = outputDir /+ path;
+    let realPath = "/posts" /+ slug;
+    /* print_endline(fullPath); */
+    Files.mkdirp(fullPath);
+    Files.writeFile(fullPath /+ "index.html", redirect(realPath)) |> Util.expectTrue("Unable to write redirect " ++ fullPath)
+  });
+};
+
+
+let run = () => {
+  let outputDir = "./test/pages/";
+  let inputDir = "./test";
+
+  let projects = processProjects(inputDir, outputDir);
+  let posts = processBlog(inputDir, outputDir);
+  let talks = processTalks(inputDir, outputDir);
+
+  setupRedirectsForOldPosts(outputDir, posts);
 
   /* Home page */
-  Files.writeFile(outputDir /+ "index.html", Home.render(~projects, ~posts, ~tags, ~talks)) |> ignore;
+  Files.writeFile(outputDir /+ "index.html", Home.render(~projects, ~posts, ~talks)) |> ignore;
 
   MarkdownParser.saveTwitterCache();
   print_endline("Finished!");

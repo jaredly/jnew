@@ -178,7 +178,7 @@ let blogColumn = (css, posts) => {
   </fragment>
 };
 
-let render = (~projects, ~posts, ~tags, ~talks) => {
+let render = (~projects, ~posts, ~talks) => {
   open Html;
   open Css;
   let (css, inlineCss) = Css.startPage();
