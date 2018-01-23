@@ -1,5 +1,11 @@
 
-let (|?) = (x, y) => switch x { | None => y | Some(x) => x };
+let module Infix = {
+  let (|?) = (x, y) => switch x { | None => y | Some(x) => x };
+  let (|?>) = (x, f) => switch x { | None => None | Some(x) => f(x) };
+  let (|?>>) = (x, f) => switch x { | None => None | Some(x) => Some(f(x)) };
+  let (|!) = (x, y) => switch x { | None => failwith(y) | Some(x) => x };
+};
+open Infix;
 
 let module Colors = {
   let text = "#333";
@@ -9,6 +15,7 @@ let module Colors = {
   let darkGreen = "#147429";
   let green = "#1fad3e";
 };
+
 
 let userPic = (~css, ~children, ()) => Css.(Html.(
   <div className=css([
@@ -20,6 +27,29 @@ let userPic = (~css, ~children, ()) => Css.(Html.(
     A("border-radius", "50%")
   ]) />
 ));
+
+let px = n => string_of_int(n) ++ "px";
+
+let module Consts = {
+  let colPadding = 40;
+  let colPaddingSmall = 16;
+  let jaredSize = 36;
+  let titleSize = 24;
+  let statusSize = 20;
+  let githubSize = 16;
+  let updatesSize = 14;
+  let smallSpace = 8;
+  let medSpace = 16;
+  let bigSpace = 32;
+  let bigSpace = 40;
+
+  let module Media = {
+    let oneCol = 835;
+    let twoCol = 1239;
+    let threeCol = 1400;
+    let skinnyFourCol = 1650;
+  };
+};
 
 let twitter = (~contentTitle, ~description, ~thumbnail, ~children, ()) => {
   open Html;
@@ -67,10 +97,10 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
     <link rel="shortcut icon" href="/images/logo/JF_black_32.png"/>
 
     /* TODO audit these */
-    <link rel="stylesheet" href="/js/styles/obsidian.css"/>
+    /* <link rel="stylesheet" href="/js/styles/obsidian.css"/> */
     <link rel="stylesheet" href="//brick.a.ssl.fastly.net/Linux+Libertine:400,400i,700,700i/Open+Sans:400,400i,700,700i"/>
     <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet"/>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
+    /* <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/> */
 
     <link rel="stylesheet" media="screen" href="/css/main.css" />
     <link rel="stylesheet" media="print" href="/css/print.css" />
@@ -82,6 +112,9 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
       div {
         flex-shrink: 0;
         flex-wrap: wrap;
+        box-sizing: border-box;
+      }
+      span {
         box-sizing: border-box;
       }
       pre {
@@ -360,6 +393,93 @@ let module Styles = {
     ])
   ];
 
+  let colPaddingRules = [
+    A("padding", px(Consts.colPadding)),
+    Media("max-width: " ++ px(Consts.Media.skinnyFourCol), [
+      ("padding", px(Consts.colPadding / 2))
+    ]),
+    Media("max-width: " ++ px(Consts.Media.oneCol), [
+      ("padding", px(Consts.colPaddingSmall))
+    ])
+  ];
+
+  let row = [
+    A("display", "flex"),
+    A("flex-direction", "row"),
+  ];
+
+  let column = [
+    A("flex", "1"),
+    A("min-width", "300px"),
+    Media("max-width: " ++ px(Consts.Media.oneCol), [
+      ("min-width", "300px"),
+    ]),
+    ...colPaddingRules
+  ];
+
+  let statusText = [
+    A("font-size", px(Consts.statusSize)),
+    A("color", Colors.red)
+  ];
+
+  let metaText = [
+    A("font-family", "Open sans, sans-serif"),
+    A("color", Colors.lightText),
+    A("font-size", px(Consts.updatesSize)),
+  ];
+
+  let hoverUnderline = [
+    A("text-decoration", "none"),
+    Hover([("text-decoration", "underline")]),
+  ];
+
+  let subtleLink = [
+    A("color", "currentColor"),
+    ...hoverUnderline
+  ];
+
+  let basicImage = [
+    /* A("box-shadow", "0 0 5px #aaa"), */
+    A("border", "1px solid #ddd"),
+    A("width", "100%"),
+    A("object-fit", "cover"),
+  ];
+
+  let columnWrapper = [
+    A("flex-direction", "row"),
+    A("padding", px(Consts.colPadding / 2)),
+    A("padding-top", "0"),
+    A("display", "flex"),
+    A("justify-content", "center"),
+    A("align-items", "stretch"),
+    A("flex-wrap", "wrap"),
+    Media("max-width: " ++ px(Consts.Media.oneCol), [
+      ("padding", px(Consts.colPaddingSmall / 2))
+    ])
+  ];
+
+  let fullBody = [
+    A("font-family", "Linux Libertine"),
+    A("color", Colors.text),
+    A("margin", "0"),
+    A("padding", "0")
+  ];
+};
+
+let module Header = {
+  open Html;
+  open Css;
+  let createElement = (~css, ~href, ~title, ~children, ()) =>
+    <a href className=css([
+      A("color", Colors.darkGreen),
+      ...Styles.hoverUnderline
+    ])>
+      <h1 className=css([
+        A("margin-top", "0"),
+        A("font-size", px(Consts.jaredSize))
+      ])>title</h1>
+    </a>
+  ;
 };
 
 let minuteRead = wordCount => wordCount / 225;
