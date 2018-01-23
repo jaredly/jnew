@@ -292,10 +292,12 @@ let monthName = month => switch month {
 | _ => failwith("Invalid month")
 };
 
-let showDate = (~date as (year, month, _), ~children, ()) => {
+let showDate = (~date as (year, month, day), ~children, ()) => {
   open Html;
   <fragment>
     (monthName(month))
+    (spacer(4))
+    (string_of_int(day) ++ ",")
     (spacer(4))
     (string_of_int(year))
   </fragment>

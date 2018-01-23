@@ -83,6 +83,7 @@ let render = (posts, ({Types.title: contentTitle, description, date, tags, thumb
 
     <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>
     <postAbout css date tags />
+    (Shared.hspace(32))
     <div className=css(Shared.Styles.bodyText)>
       (MarkdownParser.parse(rawBody))
     </div>
