@@ -89,7 +89,11 @@ let bodyWithAboutMeColumn = (~css, ~children, ()) => {
   let body = <body className=css(Styles.fullBody) lang="en">
     <div className=css(Styles.columnWrapper)>
 
-      <div className=css([A("background-color", Shared.Colors.lightOrange), ...Styles.column])>
+      <div className=css([
+        Media("min-width: " ++ px(Shared.Consts.Media.oneCol), [
+          ("max-width", "400px"),
+        ]),
+        A("background-color", Shared.Colors.lightOrange), ...Styles.column])>
         (column(css))
       </div>
 
