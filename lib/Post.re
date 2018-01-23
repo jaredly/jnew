@@ -48,26 +48,45 @@ let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
 let pageWithTopAndBottom = Shared.pageWithTopAndBottom;
 let pageHead = Shared.pageHead;
 
-let renderPost = ({Types.title: contentTitle, description, date, tags, thumbnail}, rawBody) => {
+let render = (posts, ({Types.title: contentTitle, description, date, tags, thumbnail}, _, rawBody)) => {
   let (css, inlineCss) = Css.startPage();
   open Html;
   open Css;
 
-  let body = <pageWithTopAndBottom
-    css
-    top={
-      <fragment>
-        <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>
-        <postAbout css date tags />
-      </fragment>
-    }
-    middle=(
-      <div className=css(Shared.Styles.bodyText)>
-        (MarkdownParser.parse(rawBody))
+  let main = AboutMe.bodyWithSmallAboutMeColumn;
+  let body = <main css toc=(
+    <div className=css([A("padding", "0 16px")])>
+      <div className=css([])>
+        "Recent posts"
       </div>
-    )
-    bottom=("This is the personal site of Jared Forsyth")
-  />;
+      (Shared.hspace(8))
+      (List.mapi(
+        (i, ({Types.title, date, fileName}, _, _)) => {
+          let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
+          i < 5 ? <a
+            href
+            className=css([
+            A("font-size", "16px"),
+            A("margin-bottom", "8px"),
+            A("display", "block"),
+            A("line-height", "20px"),
+            ...Shared.Styles.subtleLink
+          ])>
+            title
+          </a> : ""
+        },
+        posts
+      ) |> String.concat("\n"))
+      (Shared.hspace(32))
+    </div>
+  )>
+
+    <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>
+    <postAbout css date tags />
+    <div className=css(Shared.Styles.bodyText)>
+      (MarkdownParser.parse(rawBody))
+    </div>
+  </main>;
 
   <html>
     <pageHead
@@ -82,24 +101,45 @@ let renderPost = ({Types.title: contentTitle, description, date, tags, thumbnail
   </html>
 };
 
-let postList = (posts, contentTitle) => {
+let postList = (posts, tags, contentTitle) => {
   open Html;
   let (css, inlineCss) = Css.startPage();
   /* let contentTitle = "All posts"; */
-  let body = <pageWithTopAndBottom
-    css
-    backgroundImage="/images/trees.jpg"
-    top=(
+  let main = AboutMe.bodyWithSmallAboutMeColumn;
+
+  let body = <main css toc=(
+    <div className=css([
+      A("font-size", "16px"),
+      A("line-height", "20px"),
+      A("margin-bottom", "32px"),
+    ])>
+      (List.map(
+        ((tag, count)) => {
+          open Types;
+            <a href=("/tags/" ++ tag ++ "/") className=css([
+                A("color", "currentColor"),
+                A("white-space", "nowrap"),
+                ...Shared.Styles.hoverUnderline
+              ])
+            >
+              tag ("" ++ string_of_int(count) ++ "")
+            </a>
+            /* <postAbout css date=config.date tags=config.tags withPic=false />
+            <a className=css([A("font-size", "24px")]) href>readTime</a> */
+        },
+        tags
+      ) |> String.concat("\n<span style='display: inline-block; width: 8px'></span>\n"))
+    </div>
+  )>
+    <div className=css([A("flex", "3"), A("padding", "32px")])>
       <div className=css([A("padding", "1px"), A("position", "relative")])>
-        (Shared.myBigFace(css))
+        /* (Shared.myBigFace(css)) */
         <h1 className=css([
           A("text-align", "center"),
           ...Shared.Styles.title
         ])>contentTitle</h1>
       </div>
-    )
-    middle=(
-      List.map(
+      (List.map(
         ((config, teaser, _)) => {
           open Types;
           let href = ("/" ++ Filename.chop_extension(config.Types.fileName) ++ "/");
@@ -124,10 +164,10 @@ let postList = (posts, contentTitle) => {
           </div>
         },
         posts
-      ) |> String.concat("\n<div style='height: 32px'></div>\n")
-    )
-    bottom=("This is the personal site of Jared Forsyth")
-  />;
+      ) |> String.concat("\n<div style='height: 32px'></div>\n"))
+      </div>
+  </main>;
+
   <html>
     <pageHead
       title=contentTitle
@@ -138,7 +178,6 @@ let postList = (posts, contentTitle) => {
     body
   </html>
 };
-
 
 
 open Types;
@@ -180,12 +219,12 @@ let getIntro = body => switch (Str.split(Str.regexp("<!-- more -->"), body)) {
 | [top, ...rest] => Some(top)
 };
 
-let render = (fileName, opts, content) => {
+let parse = (fileName, opts, content) => {
   let opts = opts |! "No options for post " ++ fileName;
   let config = parseConfig(fileName, opts);
   let intro = getIntro(content);
   let wordCount = Str.split(Str.regexp("[^a-zA-Z0-9-]+"), content) |> List.length;
   let config = {...config, wordCount};
 
-  (renderPost(config, content), (config, intro, content))
+  (config, intro, content)
 };

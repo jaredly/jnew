@@ -7,3 +7,4 @@ let splitFirst = (needle, haystack) => {
   | [first, ...rest] => (Some(first), String.concat(needle, rest))
   }
 };
+let expectTrue = (message, result) => if (!result) {failwith(message)} else {()};

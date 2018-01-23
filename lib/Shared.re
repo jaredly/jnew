@@ -106,13 +106,14 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
     <link rel="stylesheet" media="print" href="/css/print.css" />
     <link rel="stylesheet" media="screen" href="/css/solarized-dark.css" />
 
-    <asyncScript src="//platform.twitter.com/widgets.js" />
+    /* <asyncScript src="//platform.twitter.com/widgets.js" /> */
     <style>
       ({|
       div {
         flex-shrink: 0;
         flex-wrap: wrap;
         box-sizing: border-box;
+        min-height: 0;
       }
       span {
         box-sizing: border-box;
@@ -447,8 +448,7 @@ let module Styles = {
 
   let columnWrapper = [
     A("flex-direction", "row"),
-    A("padding", px(Consts.colPadding / 2)),
-    A("padding-top", "0"),
+    A("padding", "0 " ++ px(Consts.colPadding / 2)),
     A("display", "flex"),
     A("justify-content", "center"),
     A("align-items", "stretch"),

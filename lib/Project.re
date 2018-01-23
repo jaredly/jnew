@@ -164,7 +164,7 @@ let fullGithub = text => if (Str.string_match(Str.regexp("^[^/]+$"), text, 0)) {
 
 let splitTags = text => Str.split(Str.regexp(","), text) |> List.map(String.trim);
 
-let render = (fileName, opts, rawBody) => {
+let parse = (fileName, opts, rawBody) => {
   let opts = opts |! "No options for static file " ++ fileName;
   let title = Toml.string("title", opts) |! "No title for static page " ++ fileName;
   let description = Toml.string("description", opts) |! "No description for static page " ++ fileName;
@@ -188,7 +188,7 @@ let render = (fileName, opts, rawBody) => {
       (date, screenshot, content)
     }
   ) |> List.sort(((date, _, _), (date2, _, _)) => Shared.dateSort(date2, date));
-  let config = {
+  {
     title,
     id: Filename.basename(fileName) |> Filename.chop_extension,
     github,
@@ -202,8 +202,12 @@ let render = (fileName, opts, rawBody) => {
     wip,
     updates
   };
-  (render(config), config)
+
 };
+
+/* let render = (fileName, opts, rawBody) => {
+  (render(config), config)
+}; */
 
 let renderList = (projects, contentTitle) => {
   open Html;

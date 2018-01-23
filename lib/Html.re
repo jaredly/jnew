@@ -14,7 +14,12 @@ let normal = (name, preattrs, ~attrs=[], ~children, ()) => {
   if (children == []) {
     "<" ++ head ++ (selfClosing(name) ? "/>" : "></" ++ name ++ ">")
   } else {
-    "<" ++ head ++ ">\n" ++ String.concat("\n", children) ++ "\n</" ++ name ++ ">"
+    let children = String.concat("\n", children);
+    if (String.contains(children, '\n')) {
+      "<" ++ head ++ ">\n" ++ children ++ "\n</" ++ name ++ ">"
+    } else {
+      "<" ++ head ++ ">" ++ children ++ "</" ++ name ++ ">"
+    }
   }
 };
 

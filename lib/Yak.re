@@ -75,6 +75,34 @@ let collectPages = (baseDir, render) => {
   posts
 };
 
+let collectPages = (baseDir, parse) => {
+  let base = Filename.concat(base, baseDir);
+  Files.readDirectory(base)
+  |> List.filter(f => Filename.check_suffix(f, ".md")) /* TODO .html suffix too */
+  |> List.map((fileName) => {
+    let fullName = Filename.concat(base, fileName);
+    let contents = Files.readFile(fullName) |> unwrap("Cannot read file");
+    let (opts, body) = splitTopYaml(contents);
+    /* print_endline(String.escaped(body)); */
+    let dest = Filename.concat(Filename.concat("./test/pages/", baseDir), Filename.chop_extension(fileName));
+    Files.mkdirp(dest);
+    let result = parse(Filename.concat(baseDir, fileName), opts, body);
+    let fullDest = Filename.concat(dest, "index.html");
+    (fullDest, result)
+  });
+};
+
+let renderPages = (render, pages) => {
+  List.map(
+    ((dest, config)) => {
+      let html = render(config);
+      Files.writeFile(dest, html) |> Util.expectTrue("Failed to write file " ++ dest);
+      config
+    },
+    pages
+  )
+};
+
 let assembleTags = posts => {
   posts |> List.fold_left((byTag, (config, intro, body)) => {
     let byTag = List.fold_left(
@@ -91,21 +119,28 @@ let assembleTags = posts => {
 
 let run = () => {
   /* Static pages */
-  collectPages("static", Static.render) |> ignore;
+  /* let statics = collectPages("static", Static.render) |> ignore; */
   /* Project pages */
-  let projects = collectPages("projects", Project.render) |> List.sort(sortProjectsByDate);
+  let projects = collectPages("projects", Project.parse) |> renderPages(Project.render) |> List.sort(sortProjectsByDate);
   let html = Project.renderList(projects, "All projects");
   Files.writeFile("./test/pages/projects/index.html", html) |> ignore;
+
   /* Posts */
-  let posts = collectPages("posts", Post.render) |> List.sort(sortPostsByDate);
-  let html = Post.postList(posts, "All posts");
-  Files.writeFile("./test/pages/posts/index.html", html) |> ignore;
+  let fullPosts = collectPages("posts", Post.parse);
+  let posts = List.map(snd, fullPosts) |> List.sort(sortPostsByDate);
+  renderPages(Post.render(posts), fullPosts) |> ignore;
 
   let tags = assembleTags(posts);
+  let tagCounts = StrMap.fold((key, value, res) => [(key, List.length(value)), ...res], tags, [])
+  |> List.sort(((k, n), (v, n2)) => n2 - n)
+  ;
+  let html = Post.postList(posts, tagCounts, "All posts");
+  Files.writeFile("./test/pages/posts/index.html", html) |> ignore;
+
   StrMap.iter((tag, posts) => {
     let dest = Filename.concat("./test/pages/tags", tag);
     Files.mkdirp(dest);
-    let html = Post.postList(List.sort(sortPostsByDate, posts), "Tag: " ++ tag);
+    let html = Post.postList(List.sort(sortPostsByDate, posts), tagCounts, "Tag: " ++ tag);
     Files.writeFile(Filename.concat(dest, "index.html"), html) |> ignore;
   }, tags);
 
