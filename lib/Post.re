@@ -5,7 +5,6 @@ let (|?>>) = (x, f) => switch x { | None => None | Some(x) => Some(f(x)) };
 let (|!) = (x, y) => switch x { | None => failwith(y) | Some(x) => x };
 
 let spacer = Shared.spacer;
-let userPic = Shared.userPic;
 let showDate = Shared.showDate;
 
 let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
@@ -20,20 +19,6 @@ let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
     A("align-items", "center"),
     A("justify-content", "flex-start"),
   ])>
-    (withPic
-      ? <fragment>
-        <userPic css />
-        (spacer(12))
-        <a href="/about" className=css([
-          A("color", "currentColor"),
-          A("text-decoration", "none"),
-          A("font-weight", "bold")
-        ])>"Jared Forsyth"</a>
-        (spacer(4))
-        " · "
-        (spacer(4))
-      </fragment>
-      : "")
     <showDate date />
     (spacer(8))
     " · "
@@ -56,24 +41,34 @@ let render = (posts, ({Types.title: contentTitle, fileName, description, date, t
 
   let main = AboutMe.bodyWithSmallAboutMeColumn;
   let body = <main css toc=(
-    <div className=css([A("padding", "0 16px")])>
+    <div className=css([A("padding", "0 16px"), A("flex-shrink", "1"), A("overflow", "auto")])>
       <div className=css([])>
         "Recent posts"
       </div>
       (Shared.hspace(8))
       (List.mapi(
-        (i, ({Types.title, date, fileName}, _, _)) => {
+        (i, ({Types.title, date: (year, month, day), fileName}, _, _)) => {
           let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
           i < 5 ? <a
             href
             className=css([
             A("font-size", "16px"),
-            A("margin-bottom", "8px"),
+            A("margin-bottom", "16px"),
             A("display", "block"),
             A("line-height", "20px"),
             ...Shared.Styles.subtleLink
           ])>
+            <div>
             title
+            </div>
+            <div className=css([
+              A("color", Shared.Colors.lightText),
+              ...Shared.Styles.row
+            ])>
+            (string_of_int(year))
+            (Shared.monthName(month))
+            (string_of_int(day))
+            </div>
           </a> : ""
         },
         posts
@@ -136,7 +131,6 @@ let postList = (posts, tags, contentTitle) => {
   )>
     <div className=css([A("flex", "3"), A("padding", "32px")])>
       <div className=css([A("padding", "1px"), A("position", "relative")])>
-        /* (Shared.myBigFace(css)) */
         <h1 className=css([
           A("text-align", "center"),
           ...Shared.Styles.title

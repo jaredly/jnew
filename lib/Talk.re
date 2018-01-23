@@ -89,7 +89,7 @@ let renderList = (talks, contentTitle) => {
         A("line-height", "20px"), */
         A("margin-bottom", "32px"),
       ])>
-        "If you want to speak at conferences, contact me on twitter and I'd be happy to give you guidance on applying."
+        "If you want to speak at conferences, contact me on twitter and I'd be happy to give you guidance on applying 👋"
       </div>
     )>
 

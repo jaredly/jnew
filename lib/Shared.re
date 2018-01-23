@@ -17,7 +17,7 @@ let module Colors = {
 };
 
 
-let userPic = (~css, ~children, ()) => Css.(Html.(
+/* let userPic = (~css, ~children, ()) => Css.(Html.(
   <div className=css([
     A("background-image", "url(https://www.gravatar.com/avatar/313878fc8f316fc3fe4443b13913d0a4.png?s=30)"),
     A("background-size", "cover"),
@@ -26,7 +26,7 @@ let userPic = (~css, ~children, ()) => Css.(Html.(
     A("height", "30px"),
     A("border-radius", "50%")
   ]) />
-));
+)); */
 
 let px = n => string_of_int(n) ++ "px";
 
