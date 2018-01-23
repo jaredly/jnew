@@ -117,12 +117,30 @@ let assembleTags = posts => {
   }, StrMap.empty);
 };
 
+let assembleProjectTags = projects => {
+  projects |> List.fold_left((byTag, config) => {
+    let byTag = List.fold_left(
+      (byTag, tag) => StrMap.add(tag, switch (StrMap.find(tag, byTag)) {
+      | exception Not_found => [config]
+      | items => [config, ...items]
+      }, byTag),
+      byTag,
+      config.Project.tags
+    );
+    byTag
+  }, StrMap.empty);
+};
+
 let run = () => {
   /* Static pages */
   /* let statics = collectPages("static", Static.render) |> ignore; */
   /* Project pages */
   let projects = collectPages("projects", Project.parse) |> renderPages(Project.render) |> List.sort(sortProjectsByDate);
-  let html = Project.renderList(projects, "All projects");
+  let projectTags = assembleProjectTags(projects);
+  let projectTagCounts = StrMap.fold((key, value, res) => [(key, List.length(value)), ...res], projectTags, [])
+  |> List.sort(((k, n), (v, n2)) => n2 - n)
+  ;
+  let html = Project.renderList(projectTagCounts, projects, "All projects");
   Files.writeFile("./test/pages/projects/index.html", html) |> ignore;
 
   /* Posts */

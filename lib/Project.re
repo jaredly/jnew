@@ -100,53 +100,52 @@ let render = ({title: contentTitle, tags, description, github, longDescription, 
   open Html;
   open Css;
 
-  let body = <pageWithTopAndBottom
+  let main = AboutMe.bodyWithSmallAboutMeColumn;
+  let body = <main
     css
-    top={ <fragment>
-      <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>
-      <div className=css(Shared.Styles.bodyText)>
-        (MarkdownParser.parse(description))
-        <div className=css([
-                A("font-family", "Open sans, sans-serif"),
-                A("font-size", "16px"),
-          A("display", "flex"), A("flex-direction", "row")
-        ])>
-          (switch status {
-          | None => ""
-          | Some(status) => <span
-              className=css([
-              ])
-            >status</span>
-          })
-          (tags != [] ? Shared.spacer(8) ++ "·" ++ Shared.spacer(8) : "")
-          (tags |> List.map(tag => <a className=css([A("text-decoration", "none")]) href=("/projects/tags/" ++ tag ++ "/")> tag </a>) |> String.concat("," ++ Shared.vspace(4)))
+    toc=""
+  >
+    <asyncScript src="//platform.twitter.com/widgets.js" />
+    <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>
+    <div className=css(Shared.Styles.bodyText)>
+      (MarkdownParser.parse(description))
+      <div className=css([
+              A("font-family", "Open sans, sans-serif"),
+              A("font-size", "16px"),
+        A("display", "flex"), A("flex-direction", "row")
+      ])>
+        (switch status {
+        | None => ""
+        | Some(status) => <span
+            className=css([
+            ])
+          >status</span>
+        })
+        (tags != [] ? Shared.spacer(8) ++ "·" ++ Shared.spacer(8) : "")
+        (tags |> List.map(tag => <a className=css([A("text-decoration", "none")]) href=("/projects/tags/" ++ tag ++ "/")> tag </a>) |> String.concat("," ++ Shared.vspace(4)))
 
-          <div style="flex: 1" />
-          (switch github {
-          | None => ""
-          | Some(href) => <a href target="_blank">href</a>
-          })
-        </div>
-      </div>
-    </fragment>}
-    middle=(
-      <div className=css(Shared.Styles.bodyText)>
-        (switch screenshot {
+        <div style="flex: 1" />
+        (switch github {
         | None => ""
-        | Some(src) => <img src alt=(contentTitle ++ " screenshot") className=css([
-            A("width", "100%")
-          ]) />
+        | Some(href) => <a href target="_blank">href</a>
         })
-        (switch longDescription {
-        | None => ""
-        | Some(text) => <div style="padding: 16px 0">(MarkdownParser.parse(text))</div>
-        })
-        <div style="height: 32px"/>
-        (List.map(renderUpdate(css), updates) |> String.concat("\n"))
       </div>
-    )
-    bottom=("This is the personal site of Jared Forsyth")
-  />;
+    </div>
+    <div className=css(Shared.Styles.bodyText)>
+      (switch screenshot {
+      | None => ""
+      | Some(src) => <img src alt=(contentTitle ++ " screenshot") className=css([
+          A("width", "100%")
+        ]) />
+      })
+      (switch longDescription {
+      | None => ""
+      | Some(text) => <div style="padding: 16px 0">(MarkdownParser.parse(text))</div>
+      })
+      <div style="height: 32px"/>
+      (List.map(renderUpdate(css), updates) |> String.concat("\n"))
+    </div>
+  </main>;
 
   <html>
     <pageHead title=contentTitle description>
@@ -209,23 +208,43 @@ let parse = (fileName, opts, rawBody) => {
   (render(config), config)
 }; */
 
-let renderList = (projects, contentTitle) => {
+let renderList = (tags, projects, contentTitle) => {
   open Html;
   let (css, inlineCss) = Css.startPage();
-  let body = <pageWithTopAndBottom
+  let main = AboutMe.bodyWithSmallAboutMeColumn;
+  let body = <main
     css
-    backgroundImage="/images/trees.jpg"
-    top=(
+    toc=(
+      <div className=css([
+        A("font-size", "16px"),
+        A("line-height", "20px"),
+        A("margin-bottom", "32px"),
+      ])>
+        (List.map(
+          ((tag, count)) => {
+            open Types;
+              <a href=("/projects/tags/" ++ tag ++ "/") className=css([
+                  A("color", "currentColor"),
+                  A("white-space", "nowrap"),
+                  ...Shared.Styles.hoverUnderline
+                ])
+              >
+                tag ("" ++ string_of_int(count) ++ "")
+              </a>
+          },
+          tags
+        ) |> String.concat("\n<span style='display: inline-block; width: 8px'></span>\n"))
+      </div>
+    )>
+
       <div className=css([A("padding", "1px"), A("position", "relative")])>
-        (Shared.myBigFace(css))
         <h1 className=css([
           A("text-align", "center"),
           ...Shared.Styles.title
         ])>contentTitle</h1>
       </div>
-    )
-    middle=(
-      List.map(
+      (Shared.hspace(64))
+      (List.map(
         ({title, tags, status, description, longDescription, screenshot, wip, fileName, updates}) => {
           open Types;
           let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
@@ -266,9 +285,7 @@ let renderList = (projects, contentTitle) => {
             | Some(src) => <img src alt="Screenshot" className=css([
               A("margin-bottom", "16px"),
               A("max-height", "300px"),
-              A("width", "100%"),
-              A("object-fit", "cover"),
-              A("box-shadow", "0 0 5px #aaa")
+              ...Shared.Styles.basicImage
             ]) />
             })
             <div className=css([
@@ -290,10 +307,15 @@ let renderList = (projects, contentTitle) => {
           </div>
         },
         projects
-      ) |> String.concat("\n" ++ Shared.hspace(40))
-    )
-    bottom=("This is the personal site of Jared Forsyth")
-  />;
+      ) |> String.concat(
+        "\n" ++ <fragment>
+          (Shared.hspace(40))
+          <div className=css(Shared.Styles.pinkDivider)/>
+          (Shared.hspace(40))
+        </fragment>
+      ))
+  </main>;
+
   <html>
     <pageHead
       title=contentTitle

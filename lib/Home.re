@@ -37,8 +37,8 @@ let projectColumn = (css, projects) => {
                 A("align-items", "flex-end"),
               ])
             >
-              title
               <a href className=css([A("flex", "1"), ...Styles.subtleLink])>
+              title
               (switch (status, status |?> Project.statusSymbol) {
               | (Some(status), Some(text)) => <span title=status
                 className=css([

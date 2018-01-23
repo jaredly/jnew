@@ -317,7 +317,7 @@ let myBigFaceStatic = css => {
   let size = 160;
   let ssize = string_of_int(size) ++ "px";
   <a
-    href="/about/"
+    href="/"
     className=css([
       A("margin", "0 auto"),
       A("width", ssize),
@@ -344,7 +344,7 @@ let myBigFaceStatic = css => {
 
 let myBigFace = css => Css.(Html.(
   <a
-    href="/about/"
+    href="/"
     style="background-image: url(https://www.gravatar.com/avatar/313878fc8f316fc3fe4443b13913d0a4.png?s=200)"
     className=css([
       A("width", "120px"),
@@ -463,6 +463,12 @@ let module Styles = {
     A("color", Colors.text),
     A("margin", "0"),
     A("padding", "0")
+  ];
+
+  let pinkDivider = [
+    A("height", "3px"),
+    A("background-color", Colors.lightOrange),
+    A("box-shadow", "0 0.5px 1px #c2c2c2"),
   ];
 };
 
