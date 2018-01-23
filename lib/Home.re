@@ -185,27 +185,20 @@ let render = (~projects, ~posts, ~tags, ~talks) => {
 
   open Styles;
 
-  let body = <body className=css(Styles.fullBody) lang="en">
-    <div className=css(Styles.columnWrapper)>
-
-      <div className=css([A("background-color", Shared.Colors.lightOrange), ...column])>
-        (AboutMe.column(css))
-      </div>
-
-      <div className=css(column)>
-        (blogColumn(css, posts))
-      </div>
-
-      <div className=css(column)>
-        (talksColumn(css, talks))
-      </div>
-
-      <div className=css([A("max-width", "700px"), ...column])>
-        (projectColumn(css, projects))
-      </div>
-
+  let main = AboutMe.bodyWithAboutMeColumn;
+  let body = <main css>
+    <div className=css(column)>
+      (blogColumn(css, posts))
     </div>
-  </body>;
+
+    <div className=css(column)>
+      (talksColumn(css, talks))
+    </div>
+
+    <div className=css([A("max-width", "700px"), ...column])>
+      (projectColumn(css, projects))
+    </div>
+  </main>;
 
   <html>
     <pageHead title="Jared Forsyth.com" description="My website">

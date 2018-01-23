@@ -40,3 +40,23 @@ let column = css => Html.(Css.(
     </div>
   </div>
 ));
+
+let bodyWithAboutMeColumn = (~css, ~children, ()) => {
+  open Html;
+  open Css;
+
+  let module Styles = Shared.Styles;
+
+  let body = <body className=css(Styles.fullBody) lang="en">
+    <div className=css(Styles.columnWrapper)>
+
+      <div className=css([A("background-color", Shared.Colors.lightOrange), ...Styles.column])>
+        (column(css))
+      </div>
+
+      (children |> String.concat("\n"))
+    </div>
+  </body>;
+
+  body
+};
