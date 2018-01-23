@@ -107,9 +107,9 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
     <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet"/>
     /* <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/> */
 
-    <link rel="stylesheet" media="screen" href="/css/main.css" />
+    /* <link rel="stylesheet" media="screen" href="/css/main.css" />
     <link rel="stylesheet" media="print" href="/css/print.css" />
-    <link rel="stylesheet" media="screen" href="/css/solarized-dark.css" />
+    <link rel="stylesheet" media="screen" href="/css/solarized-dark.css" /> */
 
     /* <asyncScript src="//platform.twitter.com/widgets.js" /> */
     <style>

@@ -1,0 +1,14 @@
+
+/* I can't get ocamlrss to install via esy for some reason
+   https://github.com/esy/esy/issues/131
+ */
+
+let dump = (~dest, ~posts) => {
+  let channel = Ocamlrss.channel(
+    ~title="Jared Forsyth.com",
+    ~link="https://jaredforsyth.com/posts/",
+    ~desc="Thoughts about programming, mostly"
+
+  )
+};
+
