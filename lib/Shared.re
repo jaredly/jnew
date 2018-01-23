@@ -71,6 +71,26 @@ let mobileMeta = (~children, ()) => Html.(<fragment>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 </fragment>);
 
+let metaHead = (~title as contentTitle, ~description, ~thumbnail=?, ~children, ()) => {
+  open Html;
+  <fragment>
+    {Meta.charset("utf8")}
+
+    <meta name="description" content=description />
+
+    <mobileMeta />
+    <twitter contentTitle description thumbnail />
+
+    <pmeta property="og:type" content="article"/>
+    <pmeta property="og:title" content=contentTitle/>
+    <pmeta property="og:description" content=description/>
+
+    <link rel="shortcut icon" href="/images/logo/JF_black_32.png"/>
+
+    <title>{contentTitle}</title>
+  </fragment>
+};
+
 let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead="", ~children, ()) => {
   let contentTitle = contentTitle ++ " | Jared Forsyth.com";
   let description = switch (description) {
@@ -78,23 +98,8 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
   | None => "Thoughts about programming, mostly"
   };
   open Html;
-  <head>
-    {Meta.charset("utf8")}
-
-    <meta name="description" content=description />
-
-    <mobileMeta />
-    <twitter
-      contentTitle
-      description
-      thumbnail
-    />
-
-    <pmeta property="og:type" content="article"/>
-    <pmeta property="og:title" content=contentTitle/>
-    <pmeta property="og:description" content=description/>
-
-    <link rel="shortcut icon" href="/images/logo/JF_black_32.png"/>
+<head>
+    <metaHead title=contentTitle description ?thumbnail />
 
     /* TODO audit these */
     /* <link rel="stylesheet" href="/js/styles/obsidian.css"/> */
@@ -195,7 +200,6 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
       |})
     </style>
 
-    <title>{contentTitle}</title>
     (String.concat("\n", children))
   </head>
 };

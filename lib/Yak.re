@@ -2,6 +2,7 @@
 let unwrap = (message, x) => switch x { | None => failwith(message) | Some(x) => x };
 let (/+) = Filename.concat;
 
+open Shared.Infix;
 open Types;
 
 let sortPostsByDate = (({date: date1}, _, _), ({date: date2}, _, _)) => Shared.dateSort(date2, date1);
@@ -133,23 +134,37 @@ let processTalks = (inputDir, outputDir) => {
   talks
 };
 
-let redirect = url => {|<!doctype html>
+let redirect = (url, contentTitle, description) => {
+  open Html;
+  let metaHead = Shared.metaHead;
+
+  <html>
+    <head>
+      <metaHead title=contentTitle description />
+      ({|<meta http-equiv="refresh" content="0; URL='|} ++ url ++ {|'" />|})
+    </head>
+    <body>
+      ("This page has moved to " ++ url)
+    </body>
+  </html>;
+  /* {|<!doctype html>
   <meta http-equiv="refresh" content="0; URL='|} ++ url ++ {|'" />
   <title>Redirecting to |} ++ url ++ {|</title>
-  <body> This page has moved to |} ++ url ++ {| </body>|};
+  <body> This page has moved to |} ++ url ++ {| </body>|}; */
+};
 
 let setupRedirectsForOldPosts = (outputDir, posts) => {
   let oldPosts = posts |> List.filter(
     (({Types.date}, _, _)) => Shared.dateSort(date, (2018, 1, 14)) < 0
   );
-  oldPosts |> List.iter((({Types.title, fileName, date: (year, month, day)}, _, _)) => {
+  oldPosts |> List.iter((({Types.title, description, fileName, date: (year, month, day)}, _, _)) => {
     let slug = Filename.basename(fileName) |> Filename.chop_extension;
     let path = Printf.sprintf("%04d/%02d/%02d/%s/", year, month, day, slug);
     let fullPath = outputDir /+ path;
     let realPath = "/posts" /+ slug;
     /* print_endline(fullPath); */
     Files.mkdirp(fullPath);
-    Files.writeFile(fullPath /+ "index.html", redirect(realPath)) |> Util.expectTrue("Unable to write redirect " ++ fullPath)
+    Files.writeFile(fullPath /+ "index.html", redirect(realPath, title, description |? "Thoughts about programming, mostly")) |> Util.expectTrue("Unable to write redirect " ++ fullPath)
   });
 };
 
