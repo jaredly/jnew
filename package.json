@@ -26,7 +26,7 @@
     "@opam/reason": "^3.0.0",
     "@opam/yojson": "*",
     "@opam/ocurl": "*",
-    "omd": "link:../omd",
+    "omd": "https://github.com/jaredly/omd",
     "refmterr": "^3.0.4"
   },
   "peerDependencies": {

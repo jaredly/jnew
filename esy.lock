@@ -526,9 +526,16 @@ ocaml@~4.6.0:
   version "4.6.1"
   resolved "https://registry.yarnpkg.com/ocaml/-/ocaml-4.6.1.tgz#8babea2c41a9f734313b4fc1841ec0963c9d7a07"
 
-"omd@link:../omd":
-  version "0.0.0"
-  uid ""
+"omd@https://github.com/jaredly/omd":
+  version "1.0.0"
+  resolved "https://github.com/jaredly/omd#5acd16f1b6d43feafc707215ea2cbc6cd37ce478"
+  dependencies:
+    "@esy-ocaml/esy-installer" "^0.0.0"
+    "@opam/base-bigarray" "*"
+    "@opam/jbuilder" "^1.0.0-beta14"
+    "@opam/ocamlbuild" "*"
+  peerDependencies:
+    ocaml "~4.6.0"
 
 refmterr@^3.0.4:
   version "3.0.6"
