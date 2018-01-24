@@ -119,6 +119,7 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
         flex-wrap: wrap;
         box-sizing: border-box;
         min-height: 0;
+        min-width: 0;
       }
       span {
         box-sizing: border-box;
@@ -142,12 +143,14 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
         max-width: 100%;
       }
       li > code,
+      a > code,
       p > code {
         font-size: 90%;
         padding: 4px;
         background-color: #ffede4;
         color: #692900;
         border-radius: 4px;
+        hyphens: none;
       }
       blockquote {
           margin: 0;

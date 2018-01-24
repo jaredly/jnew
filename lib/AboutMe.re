@@ -139,9 +139,17 @@ let bodyWithSmallAboutMeColumn = (~css, ~toc, ~children, ()) => {
         className=css([ Media("max-width: " ++ "1060px", [ ("display", "none"), ]), ])
       />
       <div className=css([
-        A("max-width", "700px")
+        A("max-width", "700px"),
+        Media("max-width: " ++ "1060px", [
+          ("flex-shrink", "1"),
+          ("min-width", "0"),
+        ]),
       ])>
+      <main role="main">
+        <article>
       (children |> String.concat("\n"))
+        </article>
+      </main>
       <div style="height: 128px"/>
       </div>
       <div

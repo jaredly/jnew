@@ -4,7 +4,8 @@
   "description": "My website",
   "scripts": {
     "test": "esy build && esy jbuilder exec Hello",
-    "start": "watchexec -w lib -w bin npm test"
+    "start": "watchexec -w lib -w bin npm test",
+    "publish": "esy jbuilder exec hello && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets"
   },
   "esy": {
     "build": [
@@ -26,6 +27,7 @@
     "@opam/reason": "^3.0.0",
     "@opam/yojson": "*",
     "@opam/ocurl": "*",
+    "@opam/ocamlrss": "*",
     "omd": "https://github.com/jaredly/omd",
     "refmterr": "^3.0.4"
   },

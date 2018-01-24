@@ -3,6 +3,8 @@ featured: true
 tags:
   - reason
   - game
+  - ios
+  - android
 date: 2018-1-13 13:08:00
 description: Targets web, native android, ios, and desktop!
 ---

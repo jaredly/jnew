@@ -346,6 +346,32 @@
   peerDependencies:
     ocaml " >= 3.12.0"
 
+"@opam/ocamlnet@ >= 3.6.0":
+  version "4.1.5"
+  uid "98e2c8adaab47a805f5b2b6f36950d50"
+  resolved "@opam/ocamlnet@4.1.5-98e2c8adaab47a805f5b2b6f36950d50.tgz"
+  dependencies:
+    "@esy-ocaml/esy-installer" "^0.0.0"
+    "@esy-ocaml/substs" "^0.0.1"
+    "@opam/base-bytes" "*"
+    "@opam/ocamlbuild" "*"
+    "@opam/ocamlfind" "*"
+  peerDependencies:
+    ocaml " >= 4.0.0"
+
+"@opam/ocamlrss@*":
+  version "2.2.2"
+  uid f45bd92e78ab872b42092d04c9cbbd24
+  resolved "@opam/ocamlrss@2.2.2-f45bd92e78ab872b42092d04c9cbbd24.tgz"
+  dependencies:
+    "@esy-ocaml/esy-installer" "^0.0.0"
+    "@esy-ocaml/substs" "^0.0.1"
+    "@opam/ocamlfind" "*"
+    "@opam/ocamlnet" " >= 3.6.0"
+    "@opam/xmlm" "*"
+  peerDependencies:
+    ocaml "*"
+
 "@opam/ocurl@*":
   version "0.8.0"
   uid ec8f6c4f09c599a49860a9e592b5d5cd
@@ -493,6 +519,19 @@
     "@opam/uchar" "*"
   peerDependencies:
     ocaml " >= 4.1.0"
+
+"@opam/xmlm@*":
+  version "1.3.0"
+  uid "303091c70f9b5fd6f7ad664384cb5151"
+  resolved "@opam/xmlm@1.3.0-303091c70f9b5fd6f7ad664384cb5151.tgz"
+  dependencies:
+    "@esy-ocaml/esy-installer" "^0.0.0"
+    "@esy-ocaml/substs" "^0.0.1"
+    "@opam/ocamlbuild" "*"
+    "@opam/ocamlfind" "*"
+    "@opam/topkg" " >= 0.9.0"
+  peerDependencies:
+    ocaml " >= 4.2.0"
 
 "@opam/yojson@*":
   version "1.4.0"
