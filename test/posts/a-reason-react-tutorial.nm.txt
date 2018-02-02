@@ -293,7 +293,7 @@
 
 # {"type":"normal"}
 
-    ~~Calling a function in Reason, like OCaml and Haskell, doesn't involve parenthesis or commas. `a b c` is akin to JavaScript's `a(b, c)`.~~ Starting with [Reason version 3](https://reasonml.github.io/community/blog/#reason-3), calling a function uses parentheses & commas just like JavaScript.
+    ~~Calling a function in Reason, like OCaml and Haskell, doesn't involve parenthesis or commas. `a b c` is akin to JavaScript's `a(b, c)`.~~ Starting with [Reason version 3](https://reasonml.github.io/blog/2017/10/27/reason3.html), calling a function uses parentheses & commas just like JavaScript.
 
 # {"type":"normal"}
 
@@ -347,7 +347,7 @@
 
 # {"type":"normal"}
 
-    In the `make` function, we're taking a `children` argument (but ignoring it), and returning a component definition. `ReasonReact.statelessComponent` returns a default component definition (as a [record](https://reasonml.github.io/guide/language/record)), with various lifecycle methods & other properties that you can override with the `...record spread` syntax, which is similar to es6 object spread. In this case, we only want to override the `render` function.
+    In the `make` function, we're taking a `children` argument (but ignoring it), and returning a component definition. `ReasonReact.statelessComponent` returns a default component definition (as a [record](https://reasonml.github.io/docs/en/record.html)), with various lifecycle methods & other properties that you can override with the `...record spread` syntax, which is similar to es6 object spread. In this case, we only want to override the `render` function.
 
 # {"type":"note"}
 
@@ -355,7 +355,7 @@
 
 # {"type":"normal"}
 
-    Our render function takes a single argument, `self` (here's [the type definition](https://github.com/reasonml/reason-react/blob/7a42ec9e5a1bde04ed9b630ba12ad34d82b963d1/src/reasonReact.rei#L84)). For reducer components, you can access the state via `self.state` and update it via `self.reduce`. As we're currently stateless, we don't use it at all.
+    Our render function takes a single argument, `self` (here's [the type definition](https://github.com/reasonml/reason-react/blob/7a42ec9e5a1bde04ed9b630ba12ad34d82b963d1/src/reasonReact.rei#L84)). For reducer components, you can access the state via `self.state` and update it via `self.send`. As we're currently stateless, we don't use it at all.
 
 # {"type":"normal"}
 
@@ -558,12 +558,12 @@
         switch action {
         | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
         },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <button onClick=(reduce((_evt) => AddItem))>
+            <button onClick=(_evt => send(AddItem))>
               (str("Add something"))
             </button>
           </div>
@@ -577,13 +577,11 @@
 
 # {"type":"normal"}
 
-    Then we can change the `onClick` handler to trigger that action. We do so
-    by calling `reduce` with a function that will transform the event argument
-    into an action. For this case, we can ignore the event argument, but in
-    other cases we would e.g. extract an input value or mouse coordinates from
-    it. `reduce` then returns the type that `onClick` expects, namely `evt =>
-    void`. So the type of `reduce` is `('a => action) => ('a => void)`, with
-    the side effect of kicking off a state transition.
+    Then we can change the `onClick` handler to trigger that action. We do so by
+    calling `send` with said action in the event callback. For this case, we can
+    ignore the event argument, but in other cases we would e.g. extract an input
+    value or mouse coordinates from it and put it into the action variant:
+    `send(AddItem(10)`. `send` kicks off a state transition.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
@@ -658,12 +656,12 @@
         | AddItem =>
           ReasonReact.Update({items: [newItem(), ...items]})
         },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <button onClick=(reduce((_evt) => AddItem))>
+            <button onClick=(_evt => send(AddItem))>
               (str("Add something"))
             </button>
           </div>
@@ -811,12 +809,12 @@
       reducer: (action, {items}) => switch action {
         | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
       },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <button onClick=(reduce((_evt) => AddItem))>
+            <button onClick=(_evt => send(AddItem))>
               (str("Add something"))
             </button>
           </div>
@@ -899,12 +897,12 @@
       reducer: (action, {items}) => switch action {
         | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
       },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <button onClick=(reduce((_evt) => AddItem))>
+            <button onClick=(_evt => send(AddItem))>
               (str("Add something"))
             </button>
           </div>
@@ -1011,12 +1009,12 @@
           );
           ReasonReact.Update({items: items})
       },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <button onClick=(reduce((_evt) => AddItem))>
+            <button onClick=(_evt => send(AddItem))>
               (str("Add something"))
             </button>
           </div>
@@ -1025,7 +1023,7 @@
               List.map(
                 (item) => <TodoItem
                   key=(string_of_int(item.id))
-                  onToggle=(reduce(() => ToggleItem(item.id)))
+                  onToggle=(() => send(ToggleItem(item.id)))
                   item
                 />, items
               )
@@ -1113,16 +1111,16 @@
         ...component,
         initialState: () => "",
         reducer: (newText, _text) => ReasonReact.Update(newText),
-        render: ({state: text, reduce}) =>
+        render: ({state: text, send}) =>
           <input
             value=text
             _type="text"
             placeholder="Write something to do"
-            onChange=(reduce((evt) => valueFromEvent(evt)))
+            onChange=(evt => send(valueFromEvent(evt)))
             onKeyDown=((evt) =>
               if (ReactEventRe.Keyboard.key(evt) == "Enter") {
                 onSubmit(text);
-                (reduce(() => ""))()
+                send("")
               }
             )
           />
@@ -1165,12 +1163,12 @@
             );
           ReasonReact.Update({items: items})
         },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <Input onSubmit=(reduce((text) => AddItem(text))) />
+            <Input onSubmit=(text => send(AddItem(text))) />
           </div>
           <div className="items">
             (
@@ -1178,7 +1176,7 @@
                 (item) =>
                   <TodoItem
                     key=(string_of_int(item.id))
-                    onToggle=(reduce(() => ToggleItem(item.id)))
+                    onToggle=(() => send(ToggleItem(item.id)))
                     item
                   />,
                 items
