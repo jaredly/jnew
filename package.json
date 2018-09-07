@@ -23,19 +23,18 @@
   "dependencies": {
     "@esy-ocaml/esy-installer": "^0.0.0",
     "@opam/ezjsonm": "*",
-    "@opam/jbuilder": "^1.0.0-beta14",
+    "@opam/jbuilder": "1.0+beta14",
     "@opam/reason": "^3.0.0",
     "@opam/yojson": "*",
     "@opam/ocurl": "*",
     "@opam/ocamlrss": "*",
-    "omd": "https://github.com/jaredly/omd",
+    "@jaredly/omd": "1.0.0",
     "refmterr": "^3.0.4"
   },
   "peerDependencies": {
     "ocaml": "~4.6.0"
   },
   "devDependencies": {
-    "@opam/merlin": "^3.0.3",
     "ocaml": "~4.6.0"
   }
 }

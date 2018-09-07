@@ -3,4 +3,4 @@
 (library
  ((name lib)
   (flags (-w -40 -w +26))
-  (libraries (lambda-term lwt yojson omd curl str))))
+  (libraries (yojson omd curl str))))
