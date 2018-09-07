@@ -12,6 +12,8 @@ I'm working on a new ReasonReact project that will need a stateful server, and I
 
 What did I end up with? **A 10mb docker image** with a server inside!
 
+<!-- more -->
+
 For the server code, I'm just taking cohttp's [example server](https://github.com/mirage/ocaml-cohttp/blob/master/examples/doc/server_lwt.ml). The full source for this example is [here](https://github.com/jaredly/reason-docker-server).
 
 ## Making the Docker image
@@ -87,4 +89,4 @@ This part is so easy it's almost not even worth mentioning. Once you've [install
 
 ## That's all, folks!
 
-With OCaml native deployment this easy, there's no excuse not to do it!
+With OCaml native deployment this easy, there's no excuse not to do it! Now all we need are some super-easy-to-use server libraries... 🤔 cohttp and httpaf are quite powerful, but are a far cry from express.js or rust's [rocket](https://rocket.rs/).
