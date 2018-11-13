@@ -6,7 +6,7 @@ tags:
   - ocaml
 categories:
   - reason
-description: A short tutorial aimed at JavaScript developers
+description: Some results of the survey
 date: 2018-11-10 09:51:00
 ---
 I'm planning to do some fancy social science analysis of the results, but first I'll just give you a dump of the summary data that came out of this.
