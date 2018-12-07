@@ -185,10 +185,10 @@
       "dependencies": {
         "react": "^15.4.2",
         "react-dom": "^15.4.2",
-        "reason-react": "0.2.4"
+        "reason-react": "0.5.3"
       },
       "devDependencies": {
-        "bs-platform": "^2.0.0",
+        "bs-platform": "4.0.8",
         "webpack": "^3.0.0"
       }
     }
@@ -329,10 +329,10 @@
       render: (self) =>
         <div className="app">
           <div className="title">
-            (ReasonReact.stringToElement("What to do"))
+            (ReasonReact.string("What to do"))
           </div>
           <div className="items">
-            (ReasonReact.stringToElement("Nothing"))
+            (ReasonReact.string("Nothing"))
           </div>
         </div>
     };
@@ -363,7 +363,7 @@
 
 # {"type":"normal"}
 
-    `ReasonReact.stringToElement` is required to satisfy the type system -- we can't drop in React elements and strings into the same array, we have to wrap the strings with this function first. In my code I often have an alias at the top of the file `let str = ReasonReact.stringToElement;` to make it less cumbersome.
+    `ReasonReact.string` is required to satisfy the type system -- we can't drop in React elements and strings into the same array, we have to wrap the strings with this function first. In my code I often have an alias at the top of the file `let str = ReasonReact.string;` to make it less cumbersome.
 
 # {"type":"header","children":3}
 
@@ -395,7 +395,7 @@
     let component = ReasonReact.reducerComponent("TodoApp");
 
     /* I've gone ahead and made a shortened name for converting strings to elements */
-    let str = ReasonReact.stringToElement;
+    let str = ReasonReact.string;
 
     let make = (children) => {
       ...component,
@@ -490,7 +490,7 @@
     let component = ReasonReact.reducerComponent("TodoApp");
     let newItem = () => {title: "Click a button", completed: true};
 
-    let str = ReasonReact.stringToElement;
+    let str = ReasonReact.string;
     let make = (children) => {
       ...component,
       initialState: () => {
@@ -545,7 +545,7 @@
 
     let newItem = () => {title: "Click a button", completed: true};
 
-    let str = ReasonReact.stringToElement;
+    let str = ReasonReact.string;
 
     let make = (children) => {
       ...component,
@@ -618,7 +618,7 @@
       completed: bool
     };
 
-    let str = ReasonReact.stringToElement;
+    let str = ReasonReact.string;
 
     module TodoItem = {
       let component = ReasonReact.statelessComponent("TodoItem");
@@ -669,7 +669,7 @@
           </div>
           <div className="items">
             (
-              ReasonReact.arrayToElement(Array.of_list(
+              ReasonReact.array(Array.of_list(
                   List.map((item) => <TodoItem item />, items)
               ))
             )
@@ -732,7 +732,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    ReasonReact.arrayToElement(Array.of_list(List.map(/*...*/ items)));
+    ReasonReact.array(Array.of_list(List.map(/*...*/ items)));
 
 # {"type":"normal"}
 
@@ -740,7 +740,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    List.map /*...*/ items |> Array.of_list |> ReasonReact.arrayToElement
+    List.map /*...*/ items |> Array.of_list |> ReasonReact.array
 
 # {"type":"normal"}
 
@@ -767,7 +767,7 @@
       completed: bool
     };
 
-    let str = ReasonReact.stringToElement;
+    let str = ReasonReact.string;
 
     module TodoItem = {
       let component = ReasonReact.statelessComponent("TodoItem");
@@ -821,7 +821,7 @@
             </button>
           </div>
           <div className="items">
-            (ReasonReact.arrayToElement(
+            (ReasonReact.array(
               Array.of_list(
                 List.map((item) => <TodoItem item />, items)
               )
@@ -855,7 +855,7 @@
       completed: bool
     };
 
-    let str = ReasonReact.stringToElement;
+    let str = ReasonReact.string;
 
     module TodoItem = {
       let component = ReasonReact.statelessComponent("TodoItem");
@@ -909,7 +909,7 @@
             </button>
           </div>
           <div className="items">
-            (ReasonReact.arrayToElement(Array.of_list(
+            (ReasonReact.array(Array.of_list(
               List.map(
                 (item) => <TodoItem
                   key=(string_of_int(item.id))
@@ -959,7 +959,7 @@
       completed: bool
     };
 
-    let str = ReasonReact.stringToElement;
+    let str = ReasonReact.string;
 
     module TodoItem = {
       let component = ReasonReact.statelessComponent("TodoItem");
@@ -1021,7 +1021,7 @@
             </button>
           </div>
           <div className="items">
-            (ReasonReact.arrayToElement(Array.of_list(
+            (ReasonReact.array(Array.of_list(
               List.map(
                 (item) => <TodoItem
                   key=(string_of_int(item.id))
@@ -1083,7 +1083,7 @@
       completed: bool
     };
 
-    let str = ReasonReact.stringToElement;
+    let str = ReasonReact.string;
 
     module TodoItem = {
       let component = ReasonReact.statelessComponent("TodoItem");
@@ -1174,7 +1174,7 @@
           </div>
           <div className="items">
             (
-              ReasonReact.arrayToElement(Array.of_list(List.map(
+              ReasonReact.array(Array.of_list(List.map(
                 (item) =>
                   <TodoItem
                     key=(string_of_int(item.id))
