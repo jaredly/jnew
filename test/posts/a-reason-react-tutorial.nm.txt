@@ -85,8 +85,7 @@
 
 # {"type":"note"}
 
-    This tutorial was updated on Nov 8, 2017 for the new "v3" syntax of
-    Reason.
+    This tutorial was updated on Dec 8, 2018 for reason-react version 0.5.3.
 
 # {"type":"normal"}
 
