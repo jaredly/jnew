@@ -173,13 +173,14 @@
 
     Our runtime dependencies include both `reason-react` *and* the npm libraries that `reason-react` code depends on, `react`, and `react-dom`.
 
-# {"type":"code","types":{"code":{"kernelId":null,"language":"json","lastRun":null}}}
+# {"type":"code","types":{"code":{"kernelId":null,"language":"json","lastRun":null}}, "name": "package.json"}
 
     {
       "name": "reason-to-do",
       "scripts": {
         "start": "bsb -make-world -w",
-        "build": "webpack -w",
+        "build": "bsb -make-world",
+        "bundle": "webpack",
         "clean": "bsb -clean-world"
       },
       "dependencies": {
