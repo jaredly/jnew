@@ -150,7 +150,7 @@
 # {"type":"code","types":{"code":{"kernelId":null,"language":"json","lastRun":null}}}
 
     {
-      "name" : "tic-tac-toe",
+      "name" : "a-reason-react-tutorial",
       "reason" : {"react-jsx" : 2},
       "refmt": 3,
       "bs-dependencies": ["reason-react"],
@@ -355,7 +355,7 @@
 
 # {"type":"normal"}
 
-    Our render function takes a single argument, `self` (here's [the type definition](https://github.com/reasonml/reason-react/blob/7a42ec9e5a1bde04ed9b630ba12ad34d82b963d1/src/reasonReact.rei#L84)). For reducer components, you can access the state via `self.state` and update it via `self.reduce`. As we're currently stateless, we don't use it at all.
+    Our render function takes a single argument, `self` (here's [the type definition](https://github.com/reasonml/reason-react/blob/7a42ec9e5a1bde04ed9b630ba12ad34d82b963d1/src/reasonReact.rei#L84)). For reducer components, you can access the state via `self.state` and update it via `self.send`. As we're currently stateless, we don't use it at all.
 
 # {"type":"normal"}
 
@@ -558,12 +558,12 @@
         switch action {
         | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
         },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <button onClick=(reduce((_evt) => AddItem))>
+            <button onClick=((_evt) => send(AddItem))>
               (str("Add something"))
             </button>
           </div>
@@ -578,12 +578,8 @@
 # {"type":"normal"}
 
     Then we can change the `onClick` handler to trigger that action. We do so
-    by calling `reduce` with a function that will transform the event argument
-    into an action. For this case, we can ignore the event argument, but in
-    other cases we would e.g. extract an input value or mouse coordinates from
-    it. `reduce` then returns the type that `onClick` expects, namely `evt =>
-    void`. So the type of `reduce` is `('a => action) => ('a => void)`, with
-    the side effect of kicking off a state transition.
+    by calling `send` with an action as the argument. If you've used redux,
+    you can think of `send` as equivalent to `dispatch()`.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
@@ -627,8 +623,8 @@
         render: (self) =>
           <div className="item">
             <input
-              _type="checkbox"
-              checked=(Js.Boolean.to_js_boolean(item.completed))
+              type_="checkbox"
+              checked=(item.completed)
               /* TODO make interactive */
             />
             (str(item.title))
@@ -658,12 +654,12 @@
         | AddItem =>
           ReasonReact.Update({items: [newItem(), ...items]})
         },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <button onClick=(reduce((_evt) => AddItem))>
+            <button onClick=((_evt) => send(AddItem))>
               (str("Add something"))
             </button>
           </div>
@@ -776,8 +772,8 @@
         render: (_) =>
           <div className="item">
             <input
-              _type="checkbox"
-              checked=(Js.Boolean.to_js_boolean(item.completed))
+              type_="checkbox"
+              checked=((item.completed))
               /* TODO make interactive */
             />
             (str(item.title))
@@ -811,12 +807,12 @@
       reducer: (action, {items}) => switch action {
         | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
       },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <button onClick=(reduce((_evt) => AddItem))>
+            <button onClick=((_evt) => send(AddItem))>
               (str("Add something"))
             </button>
           </div>
@@ -864,8 +860,8 @@
         render: (_) =>
           <div className="item">
             <input
-              _type="checkbox"
-              checked=(Js.Boolean.to_js_boolean(item.completed))
+              type_="checkbox"
+              checked=((item.completed))
               /* TODO make interactive */
             />
             (str(item.title))
@@ -899,12 +895,12 @@
       reducer: (action, {items}) => switch action {
         | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
       },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <button onClick=(reduce((_evt) => AddItem))>
+            <button onClick=((_evt) => send(AddItem))>
               (str("Add something"))
             </button>
           </div>
@@ -968,8 +964,8 @@
         render: (_) =>
           <div className="item" onClick=((_evt) => onToggle())>
             <input
-              _type="checkbox"
-              checked=(Js.Boolean.to_js_boolean(item.completed))
+              type_="checkbox"
+              checked=((item.completed))
             />
             (str(item.title))
           </div>
@@ -1011,12 +1007,12 @@
           );
           ReasonReact.Update({items: items})
       },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <button onClick=(reduce((_evt) => AddItem))>
+            <button onClick=((_evt) => send(AddItem))>
               (str("Add something"))
             </button>
           </div>
@@ -1025,7 +1021,7 @@
               List.map(
                 (item) => <TodoItem
                   key=(string_of_int(item.id))
-                  onToggle=(reduce(() => ToggleItem(item.id)))
+                  onToggle=(() => send(ToggleItem(item.id)))
                   item
                 />, items
               )
@@ -1092,8 +1088,8 @@
         render: (_) =>
           <div className="item" onClick=((evt) => onToggle())>
             <input
-              _type="checkbox"
-              checked=(Js.Boolean.to_js_boolean(item.completed))
+              type_="checkbox"
+              checked=((item.completed))
             />
             (str(item.title))
           </div>
@@ -1113,16 +1109,16 @@
         ...component,
         initialState: () => "",
         reducer: (newText, _text) => ReasonReact.Update(newText),
-        render: ({state: text, reduce}) =>
+        render: ({state: text, send}) =>
           <input
             value=text
-            _type="text"
+            type_="text"
             placeholder="Write something to do"
-            onChange=(reduce((evt) => valueFromEvent(evt)))
+            onChange=((evt) => send(valueFromEvent(evt)))
             onKeyDown=((evt) =>
               if (ReactEventRe.Keyboard.key(evt) == "Enter") {
                 onSubmit(text);
-                (reduce(() => ""))()
+                send("")
               }
             )
           />
@@ -1165,12 +1161,12 @@
             );
           ReasonReact.Update({items: items})
         },
-      render: ({state: {items}, reduce}) => {
+      render: ({state: {items}, send}) => {
         let numItems = List.length(items);
         <div className="app">
           <div className="title">
             (str("What to do"))
-            <Input onSubmit=(reduce((text) => AddItem(text))) />
+            <Input onSubmit=((text) => send(AddItem(text))) />
           </div>
           <div className="items">
             (
@@ -1178,7 +1174,7 @@
                 (item) =>
                   <TodoItem
                     key=(string_of_int(item.id))
-                    onToggle=(reduce(() => ToggleItem(item.id)))
+                    onToggle=(() => send(ToggleItem(item.id)))
                     item
                   />,
                 items
