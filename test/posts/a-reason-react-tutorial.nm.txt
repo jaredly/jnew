@@ -85,7 +85,7 @@
 
 # {"type":"note"}
 
-    This tutorial was updated on Dec 8, 2018 for reason-react version 0.5.3.
+    This tutorial was updated on April 20, 2019 for reason-react version 0.7.0.
 
 # {"type":"normal"}
 
@@ -185,10 +185,10 @@
       "dependencies": {
         "react": "^15.4.2",
         "react-dom": "^15.4.2",
-        "reason-react": "0.5.3"
+        "reason-react": "0.7.0"
       },
       "devDependencies": {
-        "bs-platform": "4.0.8",
+        "bs-platform": "5.0.3",
         "webpack": "^3.0.0"
       }
     }
@@ -249,17 +249,13 @@
 
     Here we have a single function call, which translates (roughly) to `ReactDOM.render(<TodoApp />, document.getElementById("root"))`.
 
-# {"type":"header","children":2}
+# {"type":"header","children":1}
 
     Inter-file dependencies
 
 # {"type":"normal"}
 
     One thing you'll notice is that there's no `require()` or `import` statement indicating where `TodoApp` came from. In OCaml, inter-file (and indeed inter-package) dependencies are all *inferred* from your code. Basically, the compiler sees `TodoApp` isn't defined anywhere in this file, so there must be a file `TodoApp.re` (or `.ml`) somewhere that this depends on.
-
-# {"type":"note"}
-
-    Currently, there is no distinction made between files in your own project and files in libraries you depend on -- meaning that if `ReasonReact` had a file called `Utils.re` inside of it, you wouldn't be able to have a file named `Utils.re` in your project. As you might imagine, this is something of a mess, and is being [actively worked on](https://github.com/BuckleScript/bucklescript/issues/1584).
 
 # {"type":"header","children":6}
 
@@ -321,9 +317,8 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* TodoApp.re :15 */
-    let component = ReasonReact.statelessComponent("TodoApp");
-
+    /* TodoApp.re :14 */
+    [@react.component]
     let make = (children) => {
       ...component,
       render: (self) =>
