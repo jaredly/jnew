@@ -85,7 +85,7 @@
 
 # {"type":"note"}
 
-    This tutorial was updated on April 20, 2019 for reason-react version 0.7.0, and React hooks!
+    This tutorial was updated on April 20, 2019 for reason-react version 0.7.0, and React hooks! If you want to see what it was like before hooks, [here's the previous version](http://web.archive.org/web/20190420064733/https://jaredforsyth.com/posts/a-reason-react-tutorial/)
 
 # {"type":"normal"}
 
@@ -215,13 +215,17 @@
       },
     };
 
-# {"type":"header","children":3}
+# {"type":"header","children":4}
 
     Building
 
 # {"type":"normal"}
 
     Open two terminals, and `npm install && npm start` in one, `npm run build` in the other. The one with `npm start` is bucklescript, which you'll want to keep an eye on -- that's the one that's going to show you error messages if you e.g. have a type error in your code. The webpack one you can pretty much ignore.
+
+# {"type":"note"}
+
+    If you're using VSCode and my [reason-vscode](https://marketplace.visualstudio.com/items?itemName=jaredly.reason-vscode) extension, you can skip the `npm start` bit -- the extension will run bucklescript for you & report errors inline.
 
 # {"type":"normal"}
 
@@ -303,7 +307,7 @@
 
     So we know that `TodoApp` needs to have a `make` function and a `makeProps` function. Let's take a look at it.
 
-# {"type":"header","children":7}
+# {"type":"header","children":6}
 
     Defining a component
 
@@ -1176,14 +1180,14 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* @show TodoApp_final.re 49:51 56:59 64:65 85:88 */
+    /* @show TodoApp_final.re 49:57 62:63 83:86 */
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
     /* @render */
     ReactDOMRe.renderToElementWithId(<TodoApp_final />, "root");
 
-# {"type":"header","children":4}
+# {"type":"header","children":3}
 
     And that's it!
 
@@ -1194,10 +1198,6 @@
 # {"type":"normal"}
 
     If there was anything confusing, let me know [on twitter](https://twitter.com/jaredforsyth) or open an issue [on github](https://github.com/jaredly/jaredly.github.io/issues). If you want to know more, come join our [reasonml channel on Discord](https://discord.gg/reasonml) or the [OCaml Discourse forum](https://discuss.ocaml.org/).
-
-# {"type":"normal"}
-
-    As you might be able to tell, there's lots of work to do on this language, but I think it's really promising! Contributions are quite welcome.
 
 # {"type":"list","children":4}
 
