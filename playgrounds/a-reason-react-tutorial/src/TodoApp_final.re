@@ -4,7 +4,7 @@ type item = {
   completed: bool
 };
 
-let str = ReasonReact.string;
+let str = React.string;
 
 module TodoItem = {
   [@react.component]
@@ -84,7 +84,7 @@ let make = () => {
       <Input onSubmit=((text) => dispatch(AddItem(text))) />
     </div>
     <div className="items">
-      (ReasonReact.array(Array.of_list(
+      (React.array(Array.of_list(
         List.map(
           (item) => <TodoItem
             key=(string_of_int(item.id))

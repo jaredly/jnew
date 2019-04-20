@@ -11,7 +11,7 @@ type state = {
 };
 
 // I've gone ahead and made a shortened name for converting strings to elements
-let str = ReasonReact.string;
+let str = React.string;
 
 [@react.component]
 let make = () => {

@@ -8,7 +8,7 @@ type state = {
 
 let newItem = () => {title: "Click a button", completed: true};
 
-let str = ReasonReact.string;
+let str = React.string;
 [@react.component]
 let make = () => {
   let ({items}, dispatch) = React.useReducer((state, action) => {

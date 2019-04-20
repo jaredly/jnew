@@ -322,10 +322,10 @@
     let make = (~title) => {
       <div className="app">
         <div className="title">
-          (ReasonReact.string(title))
+          (React.string(title))
         </div>
         <div className="items">
-          (ReasonReact.string("Nothing"))
+          (React.string("Nothing"))
         </div>
       </div>
     };
@@ -352,7 +352,7 @@
 
 # {"type":"normal"}
 
-    `ReasonReact.string` is required to satisfy the type system -- we can't drop in React elements and strings into the same array, we have to wrap the strings with this function first. In my code I often have an alias at the top of the file `let str = ReasonReact.string;` to make it less cumbersome.
+    `React.string` is required to satisfy the type system -- we can't drop in React elements and strings into the same array, we have to wrap the strings with this function first. In my code I often have an alias at the top of the file `let str = React.string;` to make it less cumbersome.
 
 # {"type":"header","children":3}
 
@@ -382,7 +382,7 @@
     };
 
     // I've gone ahead and made a shortened name for converting strings to elements
-    let str = ReasonReact.string;
+    let str = React.string;
 
     [@react.component]
     let make = () => {
@@ -476,7 +476,7 @@
 
     let newItem = () => {title: "Click a button", completed: true};
 
-    let str = ReasonReact.string;
+    let str = React.string;
     [@react.component]
     let make = () => {
       let ({items}, dispatch) = React.useReducer((state, action) => {
@@ -528,7 +528,7 @@
 
     let newItem = () => {title: "Click a button", completed: true};
 
-    let str = ReasonReact.string;
+    let str = React.string;
 
     [@react.component]
     let make = () => {
@@ -595,7 +595,7 @@
       completed: bool
     };
 
-    let str = ReasonReact.string;
+    let str = React.string;
 
     module TodoItem = {
       [@react.component]
@@ -640,7 +640,7 @@
         </div>
         <div className="items">
           (
-            ReasonReact.array(Array.of_list(
+            React.array(Array.of_list(
                 List.map((item) => <TodoItem item />, items)
             ))
           )
@@ -702,7 +702,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    ReasonReact.array(Array.of_list(List.map(/*...*/, items)));
+    React.array(Array.of_list(List.map(/*...*/, items)));
 
 # {"type":"normal"}
 
@@ -710,7 +710,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    List.map(/*...*/, items) |> Array.of_list |> ReasonReact.array
+    List.map(/*...*/, items) |> Array.of_list |> React.array
 
 # {"type":"normal"}
 
@@ -737,7 +737,7 @@
       completed: bool
     };
 
-    let str = ReasonReact.string;
+    let str = React.string;
 
     module TodoItem = {
       [@react.component]
@@ -787,7 +787,7 @@
         </div>
         <div className="items">
           (
-            ReasonReact.array(Array.of_list(
+            React.array(Array.of_list(
                 List.map((item) => <TodoItem item />, items)
             ))
           )
@@ -819,7 +819,7 @@
       completed: bool
     };
 
-    let str = ReasonReact.string;
+    let str = React.string;
 
     module TodoItem = {
       [@react.component]
@@ -869,7 +869,7 @@
           </button>
         </div>
         <div className="items">
-          (ReasonReact.array(Array.of_list(
+          (React.array(Array.of_list(
             List.map(
               (item) => <TodoItem
                 key=(string_of_int(item.id))
@@ -918,7 +918,7 @@
       completed: bool
     };
 
-    let str = ReasonReact.string;
+    let str = React.string;
 
     module TodoItem = {
       [@react.component]
@@ -978,7 +978,7 @@
           </button>
         </div>
         <div className="items">
-          (ReasonReact.array(Array.of_list(
+          (React.array(Array.of_list(
             List.map(
               (item) => <TodoItem
                 key=(string_of_int(item.id))
@@ -1038,7 +1038,7 @@
       completed: bool
     };
 
-    let str = ReasonReact.string;
+    let str = React.string;
 
     module TodoItem = {
       [@react.component]
@@ -1118,7 +1118,7 @@
           <Input onSubmit=((text) => dispatch(AddItem(text))) />
         </div>
         <div className="items">
-          (ReasonReact.array(Array.of_list(
+          (React.array(Array.of_list(
             List.map(
               (item) => <TodoItem
                 key=(string_of_int(item.id))

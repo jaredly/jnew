@@ -10,7 +10,7 @@ type action =
 
 let newItem = () => {title: "Click a button", completed: true};
 
-let str = ReasonReact.string;
+let str = React.string;
 
 [@react.component]
 let make = () => {

@@ -2,10 +2,10 @@
 let make = (~title) => {
   <div className="app">
     <div className="title">
-      (ReasonReact.string(title))
+      (React.string(title))
     </div>
     <div className="items">
-      (ReasonReact.string("Nothing"))
+      (React.string("Nothing"))
     </div>
   </div>
 };

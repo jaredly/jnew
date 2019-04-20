@@ -4,7 +4,7 @@ type item = {
   completed: bool
 };
 
-let str = ReasonReact.string;
+let str = React.string;
 
 module TodoItem = {
   [@react.component]
@@ -54,7 +54,7 @@ let make = () => {
     </div>
     <div className="items">
       (
-        ReasonReact.array(Array.of_list(
+        React.array(Array.of_list(
             List.map((item) => <TodoItem item />, items)
         ))
       )
