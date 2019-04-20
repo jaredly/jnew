@@ -1,8 +1,8 @@
 [@react.component]
-let make = (~children) => {
+let make = (~title) => {
   <div className="app">
     <div className="title">
-      (ReasonReact.string("What to do"))
+      (ReasonReact.string(title))
     </div>
     <div className="items">
       (ReasonReact.string("Nothing"))

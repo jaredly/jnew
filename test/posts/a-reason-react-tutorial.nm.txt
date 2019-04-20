@@ -183,8 +183,8 @@
         "clean": "bsb -clean-world"
       },
       "dependencies": {
-        "react": "^15.4.2",
-        "react-dom": "^15.4.2",
+        "react": "16.8.6",
+        "react-dom": "16.8.6",
         "reason-react": "0.7.0"
       },
       "devDependencies": {
@@ -230,7 +230,7 @@
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
     /* @render */
-    ReactDOMRe.renderToElementWithId(<TodoApp />, "root");
+    ReactDOMRe.renderToElementWithId(<TodoApp title="What to do" />, "root");
 
 # {"type":"header","children":7}
 
@@ -243,11 +243,11 @@
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
     /* Main.re */
-    ReactDOMRe.renderToElementWithId(<TodoApp />, "root");
+    ReactDOMRe.renderToElementWithId(<TodoApp title="What to do" />, "root");
 
 # {"type":"normal"}
 
-    Here we have a single function call, which translates (roughly) to `ReactDOM.render(<TodoApp />, document.getElementById("root"))`.
+    Here we have a single function call, which translates (roughly) to `ReactDOM.render(<TodoApp hello="world" />, document.getElementById("root"))`.
 
 # {"type":"header","children":1}
 
@@ -263,33 +263,29 @@
 
 # {"type":"normal"}
 
-    Let's look at what `<TodoApp />` desugars to in ReasonReact:
+    Let's look at what `<TodoApp title="What to do" />` desugars to in ReasonReact:
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    TodoApp.make([||]);
+    React.createElement(TodoApp.make, TodoApp.makeProps(~title="What to do", ()));
 
 # {"type":"normal"}
 
-    This means "call the `make` function in the `TodoApp` module with a single argument, an empty array".
+    So ReasonReact expects there to be a `make` function that's a React function component, and a `makeProps` function as well.
 
 # {"type":"normal"}
 
-    If there had been some props and some children, it would desugar like this:
+    If there had been more props and some children, it would desugar like this:
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
     <TodoApp some="thing" other=12> child1 child2 </TodoApp>;
-    /* becomes (approximately) */
-    TodoApp.make(~some="thing", ~other=12, [|child1, child2|]);
+    /* becomes */
+    React.createElement(TodoApp.make, TodoApp.makeProps(~some="thing", ~other=12, ~children=[|child1, child2|], ()));
 
-# {"type":"list","children":4}
+# {"type":"list","children":3}
 
     Some key points here
-
-# {"type":"normal"}
-
-    ~~Calling a function in Reason, like OCaml and Haskell, doesn't involve parenthesis or commas. `a b c` is akin to JavaScript's `a(b, c)`.~~ Starting with [Reason version 3](https://reasonml.github.io/community/blog/#reason-3), calling a function uses parentheses & commas just like JavaScript.
 
 # {"type":"normal"}
 
@@ -305,7 +301,7 @@
 
 # {"type":"normal"}
 
-    So we know that `TodoApp` needs to have a `make` function that takes an array of children. Let's take a look at it.
+    So we know that `TodoApp` needs to have a `make` function and a `makeProps` function. Let's take a look at it.
 
 # {"type":"header","children":7}
 
@@ -319,10 +315,10 @@
 
     /* TodoApp.re :12 */
     [@react.component]
-    let make = (~children) => {
+    let make = (~title) => {
       <div className="app">
         <div className="title">
-          (ReasonReact.string("What to do"))
+          (ReasonReact.string(title))
         </div>
         <div className="items">
           (ReasonReact.string("Nothing"))
@@ -336,11 +332,11 @@
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
     /* @render */
-    ReactDOMRe.renderToElementWithId(<TodoApp />, "root");
+    ReactDOMRe.renderToElementWithId(<TodoApp title="What to do" />, "root");
 
 # {"type":"normal"}
 
-    For our `TodoApp` component, the `make` function acts like very similar to a "function component" in ReactJS, where it takes props as arguments, only in Reason we used named arguments instead of a props object.
+    For our `TodoApp` component, the `make` function acts like very similar to a "function component" in ReactJS, where it takes props as arguments, only in Reason we used named function arguments instead of a props object. Then the `[@react.component]` decorator *automacigally* creates a `makeProps` function that will take those labelled arguments and turn them into a normal JavaScript props object that React can understand. It also modifies the `make` function so that it consumes that JavaScript object from React.
 
 # {"type":"note"}
 
@@ -348,7 +344,7 @@
 
 # {"type":"normal"}
 
-    And we return some virtual dom elements! Tags that start with lower-case letters (like `div`) are intepreted as DOM elements, and become straight `React.createElement` calls in the compiled JS.
+    And we return some virtual dom elements! Tags that start with lower-case letters (like `div`) are intepreted as DOM elements, just like in JavaScript.
 
 # {"type":"normal"}
 
@@ -424,7 +420,7 @@
 
 # {"type":"normal"}
 
-    Another important thing to note is that type names (and indeed variable names) *must* start with a lower-case letter. Variant (enum) cases and Module names must start with an upper-case letter.
+    Another important thing to note is that type names (and also variable names) *must* start with a lower-case letter. Variant (enum) cases and Module names must start with an upper-case letter.
 
 # {"type":"header","children":5}
 
@@ -445,7 +441,7 @@
 
 # {"type":"normal"}
 
-    `useReducer` acts the same as in ReactJS, taking a reducer function and an initial state, and returning the current state and a dispatch function. Here we're destructuring the current state, similar to JavaScript, so we have access to `items` immediately.
+    `useReducer` acts the same as in ReactJS, taking a reducer function and an initial state, and returning the current state and a dispatch function. Here we're destructuring the current state in the `let` binding, similar to JavaScript, so we have access to `items` immediately.
 
 # {"type":"normal"}
 
@@ -534,7 +530,7 @@
     let make = () => {
       let ({items}, dispatch) = React.useReducer((state, action) => {
         switch action {
-        | AddItem => {items: [newItem(), ...items]}
+        | AddItem => {items: [newItem(), ...state.items]}
         }
       }, {
         items: [{
@@ -622,7 +618,7 @@
     let make = () => {
       let ({items}, dispatch) = React.useReducer((state, action) => {
         switch action {
-        | AddItem => {items: [newItem(), ...items]}
+        | AddItem => {items: [newItem(), ...state.items]}
         }
       }, {
         items: [{
@@ -768,7 +764,7 @@
     let make = () => {
       let ({items}, dispatch) = React.useReducer((state, action) => {
         switch action {
-        | AddItem => {items: [newItem(), ...items]}
+        | AddItem => {items: [newItem(), ...state.items]}
         }
       }, {
         items: [{
@@ -812,7 +808,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* TodoApp_2_3.re 32:36 */
+    /* TodoApp_2_3.re 30:34 */
     type item = {
       id: int,
       title: string,
@@ -841,8 +837,6 @@
     type action =
       | AddItem;
 
-    let component = ReasonReact.reducerComponent("TodoApp");
-
     let lastId = ref(0);
     let newItem = () => {
       lastId := lastId^ + 1;
@@ -853,7 +847,7 @@
     let make = () => {
       let ({items}, dispatch) = React.useReducer((state, action) => {
         switch action {
-        | AddItem => {items: [newItem(), ...items]}
+        | AddItem => {items: [newItem(), ...state.items]}
         }
       }, {
         items: [{
@@ -892,7 +886,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* @show TodoApp_2_3.re 62:65 */
+    /* @show TodoApp_2_3.re 60:63 */
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
@@ -943,8 +937,6 @@
       | AddItem
       | ToggleItem(int);
 
-    let component = ReasonReact.reducerComponent("TodoApp");
-
     let lastId = ref(0);
     let newItem = () => {
       lastId := lastId^ + 1;
@@ -955,14 +947,14 @@
     let make = () => {
       let ({items}, dispatch) = React.useReducer((state, action) => {
         switch action {
-        | AddItem => {items: [newItem(), ...items]}
+        | AddItem => {items: [newItem(), ...state.items]}
         | ToggleItem(id) =>
           let items = List.map(
             (item) =>
               item.id === id
                 ? {...item, completed: !item.completed}
                 : item,
-            items
+            state.items
           );
           {items: items}
         }
@@ -1006,7 +998,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}, "children": 1}
 
-    /* @show TodoApp_3_1.re 27:29 42:53 72:76 */
+    /* @show TodoApp_3_1.re 27:29 40:51 70:74 */
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
@@ -1019,23 +1011,23 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* @show TodoApp_3_1.re 44:52 */
+    /* @show TodoApp_3_1.re 42:50 */
 
 # {"type":"normal"}
 
     We map over the list of items, and when we find the item to toggle we flip the `completed` boolean.
 
-# {"type":"header","children":13}
+# {"type":"header","children":14}
 
     Text input
 
 # {"type":"normal"}
 
-    Having a button that always adds the same item isn't the most useful -- let's replace it with a text input. For this, we'll make a reducer component.
+    Having a button that always adds the same item isn't the most useful -- let's replace it with a text input. For this, we'll make another nested module component.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* TodoApp_final.re 30:48 */
+    /* TodoApp_final.re 26:44 */
     type item = {
       id: int,
       title: string,
@@ -1058,26 +1050,22 @@
       };
     };
 
-    let valueFromEvent = (evt): string => (
-      evt
-      |> ReactEventRe.Form.target
-      |> ReactDOMRe.domElementToObj
-    )##value;
+    let valueFromEvent = (evt): string => evt->ReactEvent.Form.target##value;
 
     module Input = {
       type state = string;
       [@react.component]
       let make = (~onSubmit) => {
-        let (text, setText) = React.useState(() => "");
+        let (text, setText) = React.useReducer((oldText, newText) => newText, "");
         <input
           value=text
           type_="text"
           placeholder="Write something to do"
-          onChange=((evt) => setText(_oldText => valueFromEvent(evt)))
+          onChange=((evt) => setText(valueFromEvent(evt)))
           onKeyDown=((evt) =>
-            if (ReactEventRe.Keyboard.key(evt) == "Enter") {
+            if (ReactEvent.Keyboard.key(evt) == "Enter") {
               onSubmit(text);
-              setText(_oldText => "")
+              setText("")
             }
           )
         />
@@ -1091,8 +1079,6 @@
       | AddItem(string)
       | ToggleItem(int);
 
-    let component = ReasonReact.reducerComponent("TodoApp");
-
     let lastId = ref(0);
     let newItem = (text) => {
       lastId := lastId^ + 1;
@@ -1103,14 +1089,14 @@
     let make = () => {
       let ({items}, dispatch) = React.useReducer((state, action) => {
         switch action {
-        | AddItem(text) => {items: [newItem(text), ...items]}
+        | AddItem(text) => {items: [newItem(text), ...state.items]}
         | ToggleItem(id) =>
           let items = List.map(
             (item) =>
               item.id === id
                 ? {...item, completed: !item.completed}
                 : item,
-            items
+            state.items
           );
           {items: items}
         }
@@ -1146,7 +1132,7 @@
 
 # {"type":"note"}
 
-    For this component, our state is just a string, and we only ever want to replace it with a new string, so we'll use `useState`. For anything more complex, go with `useReducer`.
+    For this component, our state is just a string, and we only ever want to replace it with a new string, so our usage of `useReducer` is a lot simpler, and we can call `dispatch` `setText`.
 
 # {"type":"normal"}
 
@@ -1154,7 +1140,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* @show TodoApp_final.re 39:45 */
+    /* @show TodoApp_final.re 35:41 */
 
 # {"type":"normal"}
 
@@ -1162,19 +1148,23 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* @show TodoApp_final.re 24:28 */
+    /* @show TodoApp_final.re 24:24 */
 
 # {"type":"normal"}
 
-    In JavaScript, we'd do `evt.target.value` to get the current text of the input, and this is the ReasonReact equivalent. ReasonReact's bindings don't yet have a well-typed way to get the `value` of an input element, so we take the `Dom.element` that we got from `ReactEventRe.Form.target`, convert it into a "catch-all javascript object", and get out the value with the "magic accessor syntax" `##value`.
+    In JavaScript, we'd do `evt.target.value` to get the current text of the input, and this is the ReasonReact equivalent. ReasonReact's bindings don't yet have a well-typed way to get the `value` of an input element, so we use `ReactEvent.Form.target` to get the "target element of the event" as a "catch-all javascript object", and get out the value with the "JavaScript accessor syntax" `##value`.
 
 # {"type":"normal"}
 
     **This is sacrificing some type safety**, and it would be best for ReasonReact to just provide a safe way to get the input text directly, but this is what we have for now. Notice that we've annotated the return value of `valueFromEvent` to be `string`. Without this, OCaml would make the return value `'a` (because we used the catch-all JavaScript object) meaning it could unify with anything, similar to the `any` type in Flow.
+  
+# {"type": "note"}
+
+    The `->` that we're using here, called [Pipe First](https://reasonml.github.io/docs/en/pipe-first), is similar to the `|>` operator, but it passes the "thing on the left" as the *first* argument of the "thing on the right", instead of the last. It can do this because it's a syntax transform instead of a normal function, and this allows for a more fluid style. With the normal pipe, you'd do `(evt |> ReactEvent.Form.target)##value` or `evt |> ReactEvent.Form.target |> (x => x##value)`. You can think of `->` kind of like method dispatch in `go` and `rust`, where a function gets called with the "thing on the left" as the first argument.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* @show TodoApp_final.re 40:45 */
+    /* @show TodoApp_final.re 36:41 */
 
 # {"type":"normal"}
 
@@ -1186,7 +1176,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* @show TodoApp_final.re 53:55 60:63 68:69 89:92 */
+    /* @show TodoApp_final.re 49:51 56:59 64:65 85:88 */
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 

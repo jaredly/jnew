@@ -16,7 +16,7 @@ let str = ReasonReact.string;
 let make = () => {
   let ({items}, dispatch) = React.useReducer((state, action) => {
     switch action {
-    | AddItem => {items: [newItem(), ...items]}
+    | AddItem => {items: [newItem(), ...state.items]}
     }
   }, {
     items: [{
@@ -28,9 +28,7 @@ let make = () => {
   <div className="app">
     <div className="title">
       (str("What to do"))
-      <button
-        onClick=((_evt) => dispatch(AddItem))
-      >
+      <button onClick=((_evt) => dispatch(AddItem))>
         (str("Add something"))
       </button>
     </div>

@@ -7,8 +7,8 @@
     "clean": "bsb -clean-world"
   },
   "dependencies": {
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
     "reason-react": "0.7.0"
   },
   "devDependencies": {
