@@ -19,7 +19,6 @@ walk(full.root, node => {
 // console.log(Object.keys(types).join(','))
 // types: undefined,code-playground,base,normal,symlink,image,table,todo,ordered_list,list
 
-
 const renderContent = node => {
   switch (node.type) {
     case 'image':

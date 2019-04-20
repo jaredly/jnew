@@ -85,7 +85,7 @@
 
 # {"type":"note"}
 
-    This tutorial was updated on Dec 8, 2018 for reason-react version 0.5.3.
+    This tutorial was updated on April 20, 2019 for reason-react version 0.7.0, and React hooks! If you want to see what it was like before hooks, [here's the previous version](http://web.archive.org/web/20190420064733/https://jaredforsyth.com/posts/a-reason-react-tutorial/)
 
 # {"type":"normal"}
 
@@ -150,7 +150,7 @@
 
     {
       "name" : "a-reason-react-tutorial",
-      "reason" : {"react-jsx" : 2},
+      "reason" : {"react-jsx" : 3},
       "refmt": 3,
       "bs-dependencies": ["reason-react"],
       "sources": "src"
@@ -183,12 +183,12 @@
         "clean": "bsb -clean-world"
       },
       "dependencies": {
-        "react": "^15.4.2",
-        "react-dom": "^15.4.2",
-        "reason-react": "0.5.3"
+        "react": "16.8.6",
+        "react-dom": "16.8.6",
+        "reason-react": "0.7.0"
       },
       "devDependencies": {
-        "bs-platform": "4.0.8",
+        "bs-platform": "5.0.3",
         "webpack": "^3.0.0"
       }
     }
@@ -215,13 +215,17 @@
       },
     };
 
-# {"type":"header","children":3}
+# {"type":"header","children":4}
 
     Building
 
 # {"type":"normal"}
 
     Open two terminals, and `npm install && npm start` in one, `npm run build` in the other. The one with `npm start` is bucklescript, which you'll want to keep an eye on -- that's the one that's going to show you error messages if you e.g. have a type error in your code. The webpack one you can pretty much ignore.
+
+# {"type":"note"}
+
+    If you're using VSCode and my [reason-vscode](https://marketplace.visualstudio.com/items?itemName=jaredly.reason-vscode) extension, you can skip the `npm start` bit -- the extension will run bucklescript for you & report errors inline.
 
 # {"type":"normal"}
 
@@ -230,7 +234,7 @@
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
     /* @render */
-    ReactDOMRe.renderToElementWithId(<TodoApp />, "root");
+    ReactDOMRe.renderToElementWithId(<TodoApp title="What to do" />, "root");
 
 # {"type":"header","children":7}
 
@@ -243,13 +247,13 @@
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
     /* Main.re */
-    ReactDOMRe.renderToElementWithId(<TodoApp />, "root");
+    ReactDOMRe.renderToElementWithId(<TodoApp title="What to do" />, "root");
 
 # {"type":"normal"}
 
-    Here we have a single function call, which translates (roughly) to `ReactDOM.render(<TodoApp />, document.getElementById("root"))`.
+    Here we have a single function call, which translates (roughly) to `ReactDOM.render(<TodoApp hello="world" />, document.getElementById("root"))`.
 
-# {"type":"header","children":2}
+# {"type":"header","children":1}
 
     Inter-file dependencies
 
@@ -257,43 +261,35 @@
 
     One thing you'll notice is that there's no `require()` or `import` statement indicating where `TodoApp` came from. In OCaml, inter-file (and indeed inter-package) dependencies are all *inferred* from your code. Basically, the compiler sees `TodoApp` isn't defined anywhere in this file, so there must be a file `TodoApp.re` (or `.ml`) somewhere that this depends on.
 
-# {"type":"note"}
-
-    Currently, there is no distinction made between files in your own project and files in libraries you depend on -- meaning that if `ReasonReact` had a file called `Utils.re` inside of it, you wouldn't be able to have a file named `Utils.re` in your project. As you might imagine, this is something of a mess, and is being [actively worked on](https://github.com/BuckleScript/bucklescript/issues/1584).
-
 # {"type":"header","children":6}
 
     ReasonReact's JSX
 
 # {"type":"normal"}
 
-    Let's look at what `<TodoApp />` desugars to in ReasonReact:
+    Let's look at what `<TodoApp title="What to do" />` desugars to in ReasonReact:
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    TodoApp.make([||]);
+    React.createElement(TodoApp.make, TodoApp.makeProps(~title="What to do", ()));
 
 # {"type":"normal"}
 
-    This means "call the `make` function in the `TodoApp` module with a single argument, an empty array".
+    So ReasonReact expects there to be a `make` function that's a React function component, and a `makeProps` function as well.
 
 # {"type":"normal"}
 
-    If there had been some props and some children, it would desugar like this:
+    If there had been more props and some children, it would desugar like this:
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
     <TodoApp some="thing" other=12> child1 child2 </TodoApp>;
-    /* becomes (approximately) */
-    TodoApp.make(~some="thing", ~other=12, [|child1, child2|]);
+    /* becomes */
+    React.createElement(TodoApp.make, TodoApp.makeProps(~some="thing", ~other=12, ~children=[|child1, child2|], ()));
 
-# {"type":"list","children":4}
+# {"type":"list","children":3}
 
     Some key points here
-
-# {"type":"normal"}
-
-    ~~Calling a function in Reason, like OCaml and Haskell, doesn't involve parenthesis or commas. `a b c` is akin to JavaScript's `a(b, c)`.~~ Starting with [Reason version 3](https://reasonml.github.io/community/blog/#reason-3), calling a function uses parentheses & commas just like JavaScript.
 
 # {"type":"normal"}
 
@@ -309,9 +305,9 @@
 
 # {"type":"normal"}
 
-    So we know that `TodoApp` needs to have a `make` function that takes an array of children. Let's take a look at it.
+    So we know that `TodoApp` needs to have a `make` function and a `makeProps` function. Let's take a look at it.
 
-# {"type":"header","children":7}
+# {"type":"header","children":6}
 
     Defining a component
 
@@ -321,20 +317,17 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* TodoApp.re :15 */
-    let component = ReasonReact.statelessComponent("TodoApp");
-
-    let make = (children) => {
-      ...component,
-      render: (self) =>
-        <div className="app">
-          <div className="title">
-            (ReasonReact.string("What to do"))
-          </div>
-          <div className="items">
-            (ReasonReact.string("Nothing"))
-          </div>
+    /* TodoApp.re :12 */
+    [@react.component]
+    let make = (~title) => {
+      <div className="app">
+        <div className="title">
+          (ReasonReact.string(title))
         </div>
+        <div className="items">
+          (ReasonReact.string("Nothing"))
+        </div>
+      </div>
     };
 
     let hidden = "cool";
@@ -343,11 +336,11 @@
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
     /* @render */
-    ReactDOMRe.renderToElementWithId(<TodoApp />, "root");
+    ReactDOMRe.renderToElementWithId(<TodoApp title="What to do" />, "root");
 
 # {"type":"normal"}
 
-    In the `make` function, we're taking a `children` argument (but ignoring it), and returning a component definition. `ReasonReact.statelessComponent` returns a default component definition (as a [record](https://reasonml.github.io/guide/language/record)), with various lifecycle methods & other properties that you can override with the `...record spread` syntax, which is similar to es6 object spread. In this case, we only want to override the `render` function.
+    For our `TodoApp` component, the `make` function acts like very similar to a "function component" in ReactJS, where it takes props as arguments, only in Reason we used named function arguments instead of a props object. Then the `[@react.component]` decorator *automacigally* creates a `makeProps` function that will take those labelled arguments and turn them into a normal JavaScript props object that React can understand. It also modifies the `make` function so that it consumes that JavaScript object from React.
 
 # {"type":"note"}
 
@@ -355,11 +348,7 @@
 
 # {"type":"normal"}
 
-    Our render function takes a single argument, `self` (here's [the type definition](https://github.com/reasonml/reason-react/blob/7a42ec9e5a1bde04ed9b630ba12ad34d82b963d1/src/reasonReact.rei#L84)). For reducer components, you can access the state via `self.state` and update it via `self.send`. As we're currently stateless, we don't use it at all.
-
-# {"type":"normal"}
-
-    We return some virtual dom elements! Tags that start with lower-case letters (like `div`) are intepreted as DOM elements, and become straight `React.createElement` calls in the compiled JS.
+    And we return some virtual dom elements! Tags that start with lower-case letters (like `div`) are intepreted as DOM elements, just like in JavaScript.
 
 # {"type":"normal"}
 
@@ -392,29 +381,27 @@
       items: list(item)
     };
 
-    let component = ReasonReact.reducerComponent("TodoApp");
-
-    /* I've gone ahead and made a shortened name for converting strings to elements */
+    // I've gone ahead and made a shortened name for converting strings to elements
     let str = ReasonReact.string;
 
-    let make = (children) => {
-      ...component,
-      initialState: () => {
+    [@react.component]
+    let make = () => {
+      let ({items}, dispatch) = React.useReducer((state, action) => {
+        // We don't have state transitions yet
+        state
+      }, {
         items: [
           {title: "Write some things to do", completed: false}
         ]
-      },
-      reducer: ((), _) => ReasonReact.NoUpdate,
-      render: ({state: {items}}) => {
-        let numItems = List.length(items);
-        <div className="app">
-          <div className="title"> (str("What to do")) </div>
-          <div className="items"> (str("Nothing")) </div>
-          <div className="footer">
-            (str(string_of_int(numItems) ++ " items"))
-          </div>
+      });
+      let numItems = List.length(items);
+      <div className="app">
+        <div className="title"> (str("What to do")) </div>
+        <div className="items"> (str("Nothing")) </div>
+        <div className="footer">
+          (str(string_of_int(numItems) ++ " items"))
         </div>
-      }
+      </div>
     };
 
 # {"type":"normal"}
@@ -437,15 +424,15 @@
 
 # {"type":"normal"}
 
-    Another important thing to note is that type names (and indeed variable names) *must* start with a lower-case letter. Variant (enum) cases and Module names must start with an upper-case letter.
+    Another important thing to note is that type names (and also variable names) *must* start with a lower-case letter. Variant (enum) cases and Module names must start with an upper-case letter.
 
 # {"type":"header","children":5}
 
-    Making a reducer component
+    Adding some state with `useReducer`
 
 # {"type":"normal"}
 
-    We'll start out by changing `ReasonReact.statelessComponent` to `ReasonReact.reducerComponent`. Then our `make` function gets a little more interesting.
+    With React's hooks, going from stateless to stateful is as easy as dropping in a function call.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
@@ -458,7 +445,7 @@
 
 # {"type":"normal"}
 
-    `initialState` is what you'd expect, and now the first argument to our `render` function gets useful. The argument destructuring syntax is just like in JavaScript, where we get the `state.items` right out of the self argument.
+    `useReducer` acts the same as in ReactJS, taking a reducer function and an initial state, and returning the current state and a dispatch function. Here we're destructuring the current state in the `let` binding, similar to JavaScript, so we have access to `items` immediately.
 
 # {"type":"normal"}
 
@@ -478,7 +465,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* TodoApp_1_2.re 11:12 22:33 38: */
+    /* TodoApp_1_2.re 10:10 23:32 37: */
     type item = {
       title: string,
       completed: bool
@@ -487,36 +474,34 @@
       items: list(item)
     };
 
-    let component = ReasonReact.reducerComponent("TodoApp");
     let newItem = () => {title: "Click a button", completed: true};
 
     let str = ReasonReact.string;
-    let make = (children) => {
-      ...component,
-      initialState: () => {
+    [@react.component]
+    let make = () => {
+      let ({items}, dispatch) = React.useReducer((state, action) => {
+        state
+      }, {
         items: [{
           title: "Write some things to do",
           completed: false
         }]
-      },
-      reducer: ((), _) => ReasonReact.NoUpdate,
-      render: ({state: {items}}) => {
-        let numItems = List.length(items);
-        <div className="app">
-          <div className="title">
-            (str("What to do"))
-            <button
-              onClick=((evt) => Js.log("didn't add something"))
-            >
-              (str("Add something"))
-            </button>
-          </div>
-          <div className="items"> (str("Nothing")) </div>
-          <div className="footer">
-            (str(string_of_int(numItems) ++ " items"))
-          </div>
+      });
+      let numItems = List.length(items);
+      <div className="app">
+        <div className="title">
+          (str("What to do"))
+          <button
+            onClick=((_evt) => Js.log("didn't add something"))
+          >
+            (str("Add something"))
+          </button>
         </div>
-      }
+        <div className="items"> (str("Nothing")) </div>
+        <div className="footer">
+          (str(string_of_int(numItems) ++ " items"))
+        </div>
+      </div>
     };
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
@@ -526,11 +511,11 @@
 
 # {"type":"normal"}
 
-    If this were JavaScript & React, this is where we'd call `this.setState`. In ReasonReact, there's two steps. First, we make an `action` type, which describes the ways that our state can be updated. To start there will be only one way to update it; adding a pre-defined item. We then make our `reducer` function handle that action type.
+    If this were classes-style JavaScript & React, this is where we'd call `this.setState`. In new-style React.js, with useReducer, we'd call dispatch, probably with a string or javascript object, and handle it there. In ReasonReact, we'll first make an `action` type, which describes the ways that our state can be updated. To start there will be only one way to update it; adding a pre-defined item. We then make our `reducer` function handle that action type.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* TodoApp_1_3.re 9:10 26:28 */
+    /* TodoApp_1_3.re 9:10 18:22 */
     type item = {
       title: string,
       completed: bool
@@ -541,49 +526,45 @@
     type action =
       | AddItem;
 
-    let component = ReasonReact.reducerComponent("TodoApp");
-
     let newItem = () => {title: "Click a button", completed: true};
 
     let str = ReasonReact.string;
 
-    let make = (children) => {
-      ...component,
-      initialState: () => {
-        items: [
-          {title: "Write some things to do", completed: false}
-        ]
-      },
-      reducer: (action, {items}) =>
+    [@react.component]
+    let make = () => {
+      let ({items}, dispatch) = React.useReducer((state, action) => {
         switch action {
-        | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
-        },
-      render: ({state: {items}, send}) => {
-        let numItems = List.length(items);
-        <div className="app">
-          <div className="title">
-            (str("What to do"))
-            <button onClick=((_evt) => send(AddItem))>
-              (str("Add something"))
-            </button>
-          </div>
-          <div className="items"> (str("Nothing")) </div>
-          <div className="footer">
-            (str(string_of_int(numItems) ++ " items"))
-          </div>
+        | AddItem => {items: [newItem(), ...state.items]}
+        }
+      }, {
+        items: [{
+          title: "Write some things to do",
+          completed: false
+        }]
+      });
+      let numItems = List.length(items);
+      <div className="app">
+        <div className="title">
+          (str("What to do"))
+          <button onClick=((_evt) => dispatch(AddItem))>
+            (str("Add something"))
+          </button>
         </div>
-      }
+        <div className="items"> (str("Nothing")) </div>
+        <div className="footer">
+          (str(string_of_int(numItems) ++ " items"))
+        </div>
+      </div>
     };
 
 # {"type":"normal"}
 
     Then we can change the `onClick` handler to trigger that action. We do so
-    by calling `send` with an action as the argument. If you've used redux,
-    you can think of `send` as equivalent to `dispatch()`.
+    by calling `dispatch` with an action as the argument.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* @show TodoApp_1_3.re 29:29 34:36 */
+    /* @show TodoApp_1_3.re 32:34 */
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
@@ -608,7 +589,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* TodoApp_2_1.re :23 */
+    /* TodoApp_2_1.re :21 */
     type item = {
       title: string,
       completed: bool
@@ -617,18 +598,16 @@
     let str = ReasonReact.string;
 
     module TodoItem = {
-      let component = ReasonReact.statelessComponent("TodoItem");
-      let make = (~item, children) => {
-        ...component,
-        render: (self) =>
-          <div className="item">
-            <input
-              type_="checkbox"
-              checked=(item.completed)
-              /* TODO make interactive */
-            />
-            (str(item.title))
-          </div>
+      [@react.component]
+      let make = (~item) => {
+        <div className="item">
+          <input
+            type_="checkbox"
+            checked=(item.completed)
+            /* TODO make interactive */
+          />
+          (str(item.title))
+        </div>
       };
     };
 
@@ -637,44 +616,39 @@
     type action =
       | AddItem;
 
-    let component = ReasonReact.reducerComponent("TodoApp");
-
     let newItem = () => {title: "Click a button", completed: true};
 
-    let make = (children) => {
-      ...component,
-      initialState: () => {
+    [@react.component]
+    let make = () => {
+      let ({items}, dispatch) = React.useReducer((state, action) => {
+        switch action {
+        | AddItem => {items: [newItem(), ...state.items]}
+        }
+      }, {
         items: [{
           title: "Write some things to do",
           completed: false
         }]
-      },
-      reducer: (action, {items}) =>
-        switch action {
-        | AddItem =>
-          ReasonReact.Update({items: [newItem(), ...items]})
-        },
-      render: ({state: {items}, send}) => {
-        let numItems = List.length(items);
-        <div className="app">
-          <div className="title">
-            (str("What to do"))
-            <button onClick=((_evt) => send(AddItem))>
-              (str("Add something"))
-            </button>
-          </div>
-          <div className="items">
-            (
-              ReasonReact.array(Array.of_list(
-                  List.map((item) => <TodoItem item />, items)
-              ))
-            )
-          </div>
-          <div className="footer">
-            (str(string_of_int(numItems) ++ " items"))
-          </div>
+      });
+      let numItems = List.length(items);
+      <div className="app">
+        <div className="title">
+          (str("What to do"))
+          <button onClick=((_evt) => dispatch(AddItem))>
+            (str("Add something"))
+          </button>
         </div>
-      }
+        <div className="items">
+          (
+            ReasonReact.array(Array.of_list(
+                List.map((item) => <TodoItem item />, items)
+            ))
+          )
+        </div>
+        <div className="footer">
+          (str(string_of_int(numItems) ++ " items"))
+        </div>
+      </div>
     };
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
@@ -691,7 +665,7 @@
 
 # {"type":"normal"}
 
-    So this is another stateless component, except this one accepts a property: `item`. The `~argname` syntax means "this function takes a labeled argument which is known as `item` both externally and internally". Swift and Objective C also allow you have labeled arguments, with an external name that is optionally different from the internal one. If you wanted them to be different, you would write e.g. `(~externalFacingName as internalFacingName) => `. `children` is an unnamed argument.
+    So this is another stateless component, except this one accepts a property: `item`. The `~argname` syntax means "this function takes a labeled argument which is known as `item` both externally and internally". Swift and Objective C also allow you have labeled arguments, with an external name that is optionally different from the internal one. If you wanted them to be different, you would write e.g. `(~externalFacingName as internalFacingName) => `.
 
 # {"type":"note"}
 
@@ -707,7 +681,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* @show TodoApp_2_1.re 55:61 */
+    /* @show TodoApp_2_1.re 50:56 */
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
@@ -724,11 +698,11 @@
 
 # {"type":"normal"}
 
-    Another difference from JSX is that an attribute without a value is "punned", meaning that `<TodoItem item />` is the same as `<TodoItem item=item />`. In JSX, lone attributes are interpreted as `<TodoItem item={true} />`.
+    Another difference from JavaScript's JSX is that, in Reason, an attribute without a value is "punned", meaning that `<TodoItem item />` is the same as `<TodoItem item=item />`. In JavaScript's JSX, lone attributes are interpreted as `<TodoItem item={true} />`.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    ReasonReact.array(Array.of_list(List.map(/*...*/ items)));
+    ReasonReact.array(Array.of_list(List.map(/*...*/, items)));
 
 # {"type":"normal"}
 
@@ -736,7 +710,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    List.map /*...*/ items |> Array.of_list |> ReasonReact.array
+    List.map(/*...*/, items) |> Array.of_list |> ReasonReact.array
 
 # {"type":"normal"}
 
@@ -756,7 +730,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* TodoApp_2_2.re :6 42:48 */
+    /* TodoApp_2_2.re :6 41:47 */
     type item = {
       id: int,
       title: string,
@@ -766,28 +740,23 @@
     let str = ReasonReact.string;
 
     module TodoItem = {
-      let component = ReasonReact.statelessComponent("TodoItem");
-      let make = (~item, children) => {
-        ...component,
-        render: (_) =>
-          <div className="item">
-            <input
-              type_="checkbox"
-              checked=((item.completed))
-              /* TODO make interactive */
-            />
-            (str(item.title))
-          </div>
+      [@react.component]
+      let make = (~item) => {
+        <div className="item">
+          <input
+            type_="checkbox"
+            checked=(item.completed)
+            /* TODO make interactive */
+          />
+          (str(item.title))
+        </div>
       };
     };
 
-    type state = {
-      items: list(item)
-    };
+    type state = {items: list(item)};
+
     type action =
       | AddItem;
-
-    let component = ReasonReact.reducerComponent("TodoApp");
 
     let lastId = 0;
     let newItem = () => {
@@ -795,39 +764,38 @@
       {id: lastId, title: "Click a button", completed: true}
     };
 
-    let make = (children) => {
-      ...component,
-      initialState: () => {
+    [@react.component]
+    let make = () => {
+      let ({items}, dispatch) = React.useReducer((state, action) => {
+        switch action {
+        | AddItem => {items: [newItem(), ...state.items]}
+        }
+      }, {
         items: [{
           id: 0,
           title: "Write some things to do",
           completed: false
         }]
-      },
-      reducer: (action, {items}) => switch action {
-        | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
-      },
-      render: ({state: {items}, send}) => {
-        let numItems = List.length(items);
-        <div className="app">
-          <div className="title">
-            (str("What to do"))
-            <button onClick=((_evt) => send(AddItem))>
-              (str("Add something"))
-            </button>
-          </div>
-          <div className="items">
-            (ReasonReact.array(
-              Array.of_list(
-                List.map((item) => <TodoItem item />, items)
-              )
-            ))
-          </div>
-          <div className="footer">
-            (str(string_of_int(numItems) ++ " items"))
-          </div>
+      });
+      let numItems = List.length(items);
+      <div className="app">
+        <div className="title">
+          (str("What to do"))
+          <button onClick=((_evt) => dispatch(AddItem))>
+            (str("Add something"))
+          </button>
         </div>
-      }
+        <div className="items">
+          (
+            ReasonReact.array(Array.of_list(
+                List.map((item) => <TodoItem item />, items)
+            ))
+          )
+        </div>
+        <div className="footer">
+          (str(string_of_int(numItems) ++ " items"))
+        </div>
+      </div>
     };
 
 # {"type":"normal"}
@@ -836,7 +804,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* @show TodoApp_2_2.re 34:38 */
+    /* @show TodoApp_2_2.re 29:33 */
 
 # {"type":"normal"}
 
@@ -844,7 +812,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* TodoApp_2_3.re 34:38 */
+    /* TodoApp_2_3.re 30:34 */
     type item = {
       id: int,
       title: string,
@@ -854,18 +822,16 @@
     let str = ReasonReact.string;
 
     module TodoItem = {
-      let component = ReasonReact.statelessComponent("TodoItem");
-      let make = (~item, children) => {
-        ...component,
-        render: (_) =>
-          <div className="item">
-            <input
-              type_="checkbox"
-              checked=((item.completed))
-              /* TODO make interactive */
-            />
-            (str(item.title))
-          </div>
+      [@react.component]
+      let make = (~item) => {
+        <div className="item">
+          <input
+            type_="checkbox"
+            checked=(item.completed)
+            /* TODO make interactive */
+          />
+          (str(item.title))
+        </div>
       };
     };
 
@@ -875,50 +841,47 @@
     type action =
       | AddItem;
 
-    let component = ReasonReact.reducerComponent("TodoApp");
-
     let lastId = ref(0);
     let newItem = () => {
       lastId := lastId^ + 1;
       {id: lastId^, title: "Click a button", completed: true}
     };
 
-    let make = (children) => {
-      ...component,
-      initialState: () => {
+    [@react.component]
+    let make = () => {
+      let ({items}, dispatch) = React.useReducer((state, action) => {
+        switch action {
+        | AddItem => {items: [newItem(), ...state.items]}
+        }
+      }, {
         items: [{
           id: 0,
           title: "Write some things to do",
           completed: false
         }]
-      },
-      reducer: (action, {items}) => switch action {
-        | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
-      },
-      render: ({state: {items}, send}) => {
-        let numItems = List.length(items);
-        <div className="app">
-          <div className="title">
-            (str("What to do"))
-            <button onClick=((_evt) => send(AddItem))>
-              (str("Add something"))
-            </button>
-          </div>
-          <div className="items">
-            (ReasonReact.array(Array.of_list(
-              List.map(
-                (item) => <TodoItem
-                  key=(string_of_int(item.id))
-                  item
-                />, items
-              )
-            )))
-          </div>
-          <div className="footer">
-            (str(string_of_int(numItems) ++ " items"))
-          </div>
+      });
+      let numItems = List.length(items);
+      <div className="app">
+        <div className="title">
+          (str("What to do"))
+          <button onClick=((_evt) => dispatch(AddItem))>
+            (str("Add something"))
+          </button>
         </div>
-      }
+        <div className="items">
+          (ReasonReact.array(Array.of_list(
+            List.map(
+              (item) => <TodoItem
+                key=(string_of_int(item.id))
+                item
+              />, items
+            )
+          )))
+        </div>
+        <div className="footer">
+          (str(string_of_int(numItems) ++ " items"))
+        </div>
+      </div>
     };
 
 # {"type":"normal"}
@@ -927,7 +890,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* @show TodoApp_2_3.re 63:68 */
+    /* @show TodoApp_2_3.re 60:63 */
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
@@ -948,7 +911,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* TodoApp_3_1.re 10:15 */
+    /* TodoApp_3_1.re 10:13 */
     type item = {
       id: int,
       title: string,
@@ -958,17 +921,16 @@
     let str = ReasonReact.string;
 
     module TodoItem = {
-      let component = ReasonReact.statelessComponent("TodoItem");
-      let make = (~item, ~onToggle, children) => {
-        ...component,
-        render: (_) =>
-          <div className="item" onClick=((_evt) => onToggle())>
-            <input
-              type_="checkbox"
-              checked=((item.completed))
-            />
-            (str(item.title))
-          </div>
+      [@react.component]
+      let make = (~item, ~onToggle) => {
+        <div className="item" onClick=((_evt) => onToggle())>
+          <input
+            type_="checkbox"
+            checked=(item.completed)
+            /* TODO make interactive */
+          />
+          (str(item.title))
+        </div>
       };
     };
 
@@ -979,61 +941,58 @@
       | AddItem
       | ToggleItem(int);
 
-    let component = ReasonReact.reducerComponent("TodoApp");
-
     let lastId = ref(0);
     let newItem = () => {
       lastId := lastId^ + 1;
       {id: lastId^, title: "Click a button", completed: true}
     };
 
-    let make = (children) => {
-      ...component,
-      initialState: () => {
+    [@react.component]
+    let make = () => {
+      let ({items}, dispatch) = React.useReducer((state, action) => {
+        switch action {
+        | AddItem => {items: [newItem(), ...state.items]}
+        | ToggleItem(id) =>
+          let items = List.map(
+            (item) =>
+              item.id === id
+                ? {...item, completed: !item.completed}
+                : item,
+            state.items
+          );
+          {items: items}
+        }
+      }, {
         items: [{
           id: 0,
           title: "Write some things to do",
           completed: false
         }]
-      },
-      reducer: (action, {items}) => switch action {
-        | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
-        | ToggleItem(id) =>
-          let items = List.map(
-            (item) =>
-              item.id === id ?
-                {...item, completed: ! item.completed} : item,
-            items
-          );
-          ReasonReact.Update({items: items})
-      },
-      render: ({state: {items}, send}) => {
-        let numItems = List.length(items);
-        <div className="app">
-          <div className="title">
-            (str("What to do"))
-            <button onClick=((_evt) => send(AddItem))>
-              (str("Add something"))
-            </button>
-          </div>
-          <div className="items">
-            (ReasonReact.array(Array.of_list(
-              List.map(
-                (item) => <TodoItem
-                  key=(string_of_int(item.id))
-                  onToggle=(() => send(ToggleItem(item.id)))
-                  item
-                />, items
-              )
-            )))
-          </div>
-          <div className="footer">
-            (str(string_of_int(numItems) ++ " items"))
-          </div>
+      });
+      let numItems = List.length(items);
+      <div className="app">
+        <div className="title">
+          (str("What to do"))
+          <button onClick=((_evt) => dispatch(AddItem))>
+            (str("Add something"))
+          </button>
         </div>
-      }
+        <div className="items">
+          (ReasonReact.array(Array.of_list(
+            List.map(
+              (item) => <TodoItem
+                key=(string_of_int(item.id))
+                onToggle=(() => dispatch(ToggleItem(item.id)))
+                item
+              />, items
+            )
+          )))
+        </div>
+        <div className="footer">
+          (str(string_of_int(numItems) ++ " items"))
+        </div>
+      </div>
     };
-
 
 # {"type":"normal"}
 
@@ -1043,7 +1002,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}, "children": 1}
 
-    /* @show TodoApp_3_1.re 28:30 49:59 71:77 */
+    /* @show TodoApp_3_1.re 27:29 40:51 70:74 */
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
@@ -1056,23 +1015,23 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* @show TodoApp_3_1.re 51:59 */
+    /* @show TodoApp_3_1.re 42:50 */
 
 # {"type":"normal"}
 
     We map over the list of items, and when we find the item to toggle we flip the `completed` boolean.
 
-# {"type":"header","children":13}
+# {"type":"header","children":14}
 
     Text input
 
 # {"type":"normal"}
 
-    Having a button that always adds the same item isn't the most useful -- let's replace it with a text input. For this, we'll make a reducer component.
+    Having a button that always adds the same item isn't the most useful -- let's replace it with a text input. For this, we'll make another nested module component.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* TodoApp_final.re 31:51 */
+    /* TodoApp_final.re 26:44 */
     type item = {
       id: int,
       title: string,
@@ -1082,46 +1041,38 @@
     let str = ReasonReact.string;
 
     module TodoItem = {
-      let component = ReasonReact.statelessComponent("TodoItem");
-      let make = (~item, ~onToggle, children) => {
-        ...component,
-        render: (_) =>
-          <div className="item" onClick=((evt) => onToggle())>
-            <input
-              type_="checkbox"
-              checked=((item.completed))
-            />
-            (str(item.title))
-          </div>
+      [@react.component]
+      let make = (~item, ~onToggle) => {
+        <div className="item" onClick=((_evt) => onToggle())>
+          <input
+            type_="checkbox"
+            checked=(item.completed)
+            /* TODO make interactive */
+          />
+          (str(item.title))
+        </div>
       };
     };
 
-    let valueFromEvent = (evt) : string => (
-      evt
-      |> ReactEventRe.Form.target
-      |> ReactDOMRe.domElementToObj
-    )##value;
+    let valueFromEvent = (evt): string => evt->ReactEvent.Form.target##value;
 
     module Input = {
       type state = string;
-      let component = ReasonReact.reducerComponent("Input");
-      let make = (~onSubmit, _) => {
-        ...component,
-        initialState: () => "",
-        reducer: (newText, _text) => ReasonReact.Update(newText),
-        render: ({state: text, send}) =>
-          <input
-            value=text
-            type_="text"
-            placeholder="Write something to do"
-            onChange=((evt) => send(valueFromEvent(evt)))
-            onKeyDown=((evt) =>
-              if (ReactEventRe.Keyboard.key(evt) == "Enter") {
-                onSubmit(text);
-                send("")
-              }
-            )
-          />
+      [@react.component]
+      let make = (~onSubmit) => {
+        let (text, setText) = React.useReducer((oldText, newText) => newText, "");
+        <input
+          value=text
+          type_="text"
+          placeholder="Write something to do"
+          onChange=((evt) => setText(valueFromEvent(evt)))
+          onKeyDown=((evt) =>
+            if (ReactEvent.Keyboard.key(evt) == "Enter") {
+              onSubmit(text);
+              setText("")
+            }
+          )
+        />
       };
     };
 
@@ -1132,65 +1083,60 @@
       | AddItem(string)
       | ToggleItem(int);
 
-    let component = ReasonReact.reducerComponent("TodoApp");
-
     let lastId = ref(0);
     let newItem = (text) => {
       lastId := lastId^ + 1;
       {id: lastId^, title: text, completed: false}
     };
-    let make = (children) => {
-      ...component,
-      initialState: () => {
+
+    [@react.component]
+    let make = () => {
+      let ({items}, dispatch) = React.useReducer((state, action) => {
+        switch action {
+        | AddItem(text) => {items: [newItem(text), ...state.items]}
+        | ToggleItem(id) =>
+          let items = List.map(
+            (item) =>
+              item.id === id
+                ? {...item, completed: !item.completed}
+                : item,
+            state.items
+          );
+          {items: items}
+        }
+      }, {
         items: [{
           id: 0,
           title: "Write some things to do",
           completed: false
         }]
-      },
-      reducer: (action, {items}) =>
-        switch action {
-        | AddItem(text) => ReasonReact.Update({items: [newItem(text), ...items]})
-        | ToggleItem(id) =>
-          let items =
-            List.map(
-              (item) =>
-                item.id === id ?
-                  {...item, completed: ! item.completed} : item,
-              items
-            );
-          ReasonReact.Update({items: items})
-        },
-      render: ({state: {items}, send}) => {
-        let numItems = List.length(items);
-        <div className="app">
-          <div className="title">
-            (str("What to do"))
-            <Input onSubmit=((text) => send(AddItem(text))) />
-          </div>
-          <div className="items">
-            (
-              ReasonReact.array(Array.of_list(List.map(
-                (item) =>
-                  <TodoItem
-                    key=(string_of_int(item.id))
-                    onToggle=(() => send(ToggleItem(item.id)))
-                    item
-                  />,
-                items
-              )))
-            )
-          </div>
-          <div className="footer">
-            (str(string_of_int(numItems) ++ " items"))
-          </div>
+      });
+      let numItems = List.length(items);
+      <div className="app">
+        <div className="title">
+          (str("What to do"))
+          <Input onSubmit=((text) => dispatch(AddItem(text))) />
         </div>
-      }
+        <div className="items">
+          (ReasonReact.array(Array.of_list(
+            List.map(
+              (item) => <TodoItem
+                key=(string_of_int(item.id))
+                onToggle=(() => dispatch(ToggleItem(item.id)))
+                item
+              />, items
+            )
+          )))
+        </div>
+        <div className="footer">
+          (str(string_of_int(numItems) ++ " items"))
+        </div>
+      </div>
     };
 
 # {"type":"note"}
 
-    For this component, our `state` type is just `string`, because that's all we need to keep track of. In fact, for the `TodoApp` component we could have just had the `list(item)` be the state, but it was useful to show an example of a `record`. We only have one kind of action here as well, so we don't need to declare a separate `action` type -- we just use a `string`.
+    For this component, our state is just a string, and we only ever want to replace it with a new string, so our usage of `useReducer` is a lot simpler, and we can call `dispatch` `setText`.
 
 # {"type":"normal"}
 
@@ -1198,7 +1144,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* @show TodoApp_final.re 43:49 */
+    /* @show TodoApp_final.re 35:41 */
 
 # {"type":"normal"}
 
@@ -1206,23 +1152,27 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* @show TodoApp_final.re 25:29 */
+    /* @show TodoApp_final.re 24:24 */
 
 # {"type":"normal"}
 
-    In JavaScript, we'd do `evt.target.value` to get the current text of the input, and this is the ReasonReact equivalent. ReasonReact's bindings don't yet have a well-typed way to get the `value` of an input element, so we take the `Dom.element` that we got from `ReactEventRe.Form.target`, convert it into a "catch-all javascript object", and get out the value with the "magic accessor syntax" `##value`.
+    In JavaScript, we'd do `evt.target.value` to get the current text of the input, and this is the ReasonReact equivalent. ReasonReact's bindings don't yet have a well-typed way to get the `value` of an input element, so we use `ReactEvent.Form.target` to get the "target element of the event" as a "catch-all javascript object", and get out the value with the "JavaScript accessor syntax" `##value`.
 
 # {"type":"normal"}
 
     **This is sacrificing some type safety**, and it would be best for ReasonReact to just provide a safe way to get the input text directly, but this is what we have for now. Notice that we've annotated the return value of `valueFromEvent` to be `string`. Without this, OCaml would make the return value `'a` (because we used the catch-all JavaScript object) meaning it could unify with anything, similar to the `any` type in Flow.
+  
+# {"type": "note"}
+
+    The `->` that we're using here, called [Pipe First](https://reasonml.github.io/docs/en/pipe-first), is similar to the `|>` operator, but it passes the "thing on the left" as the *first* argument of the "thing on the right", instead of the last. It can do this because it's a syntax transform instead of a normal function, and this allows for a more fluid style. With the normal pipe, you'd do `(evt |> ReactEvent.Form.target)##value` or `evt |> ReactEvent.Form.target |> (x => x##value)`. You can think of `->` kind of like method dispatch in `go` and `rust`, where a function gets called with the "thing on the left" as the first argument.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* @show TodoApp_final.re 44:49 */
+    /* @show TodoApp_final.re 36:41 */
 
 # {"type":"normal"}
 
-    ReasonReact *does* provide a nice function for getting the `key` off of a keyboard event. So here we check if they pressed `Enter`, and if they did we call the `onSubmit` handler with the current text and fire off an action to clear out the input.
+    ReasonReact *does* provide a nice function for getting the `key` off of a keyboard event. So here we check if they pressed `Enter`, and if they did we call the `onSubmit` handler with the current text and then clear the input.
 
 # {"type":"normal"}
 
@@ -1230,14 +1180,14 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* @show TodoApp_final.re 57:59 64:67 78:79 93:96 */
+    /* @show TodoApp_final.re 49:57 62:63 83:86 */
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
     /* @render */
     ReactDOMRe.renderToElementWithId(<TodoApp_final />, "root");
 
-# {"type":"header","children":4}
+# {"type":"header","children":3}
 
     And that's it!
 
@@ -1248,10 +1198,6 @@
 # {"type":"normal"}
 
     If there was anything confusing, let me know [on twitter](https://twitter.com/jaredforsyth) or open an issue [on github](https://github.com/jaredly/jaredly.github.io/issues). If you want to know more, come join our [reasonml channel on Discord](https://discord.gg/reasonml) or the [OCaml Discourse forum](https://discuss.ocaml.org/).
-
-# {"type":"normal"}
-
-    As you might be able to tell, there's lots of work to do on this language, but I think it's really promising! Contributions are quite welcome.
 
 # {"type":"list","children":4}
 
