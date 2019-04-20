@@ -1,6 +1,6 @@
     {
       "name" : "a-reason-react-tutorial",
-      "reason" : {"react-jsx" : 2},
+      "reason" : {"react-jsx" : 3},
       "refmt": 3,
       "bs-dependencies": ["reason-react"],
       "sources": ["src", "render"]

@@ -150,7 +150,7 @@
 
     {
       "name" : "a-reason-react-tutorial",
-      "reason" : {"react-jsx" : 2},
+      "reason" : {"react-jsx" : 3},
       "refmt": 3,
       "bs-dependencies": ["reason-react"],
       "sources": "src"
@@ -317,19 +317,17 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* TodoApp.re :14 */
+    /* TodoApp.re :12 */
     [@react.component]
-    let make = (children) => {
-      ...component,
-      render: (self) =>
-        <div className="app">
-          <div className="title">
-            (ReasonReact.string("What to do"))
-          </div>
-          <div className="items">
-            (ReasonReact.string("Nothing"))
-          </div>
+    let make = (~children) => {
+      <div className="app">
+        <div className="title">
+          (ReasonReact.string("What to do"))
         </div>
+        <div className="items">
+          (ReasonReact.string("Nothing"))
+        </div>
+      </div>
     };
 
     let hidden = "cool";
@@ -342,7 +340,7 @@
 
 # {"type":"normal"}
 
-    In the `make` function, we're taking a `children` argument (but ignoring it), and returning a component definition. `ReasonReact.statelessComponent` returns a default component definition (as a [record](https://reasonml.github.io/guide/language/record)), with various lifecycle methods & other properties that you can override with the `...record spread` syntax, which is similar to es6 object spread. In this case, we only want to override the `render` function.
+    For our `TodoApp` component, the `make` function acts like very similar to a "function component" in ReactJS, where it takes props as arguments, only in Reason we used named arguments instead of a props object.
 
 # {"type":"note"}
 
@@ -350,11 +348,7 @@
 
 # {"type":"normal"}
 
-    Our render function takes a single argument, `self` (here's [the type definition](https://github.com/reasonml/reason-react/blob/7a42ec9e5a1bde04ed9b630ba12ad34d82b963d1/src/reasonReact.rei#L84)). For reducer components, you can access the state via `self.state` and update it via `self.send`. As we're currently stateless, we don't use it at all.
-
-# {"type":"normal"}
-
-    We return some virtual dom elements! Tags that start with lower-case letters (like `div`) are intepreted as DOM elements, and become straight `React.createElement` calls in the compiled JS.
+    And we return some virtual dom elements! Tags that start with lower-case letters (like `div`) are intepreted as DOM elements, and become straight `React.createElement` calls in the compiled JS.
 
 # {"type":"normal"}
 
@@ -387,29 +381,27 @@
       items: list(item)
     };
 
-    let component = ReasonReact.reducerComponent("TodoApp");
-
-    /* I've gone ahead and made a shortened name for converting strings to elements */
+    // I've gone ahead and made a shortened name for converting strings to elements
     let str = ReasonReact.string;
 
-    let make = (children) => {
-      ...component,
-      initialState: () => {
+    [@react.component]
+    let make = () => {
+      let ({items}, dispatch) = React.useReducer((state, action) => {
+        // We don't have state transitions yet
+        state
+      }, {
         items: [
           {title: "Write some things to do", completed: false}
         ]
-      },
-      reducer: ((), _) => ReasonReact.NoUpdate,
-      render: ({state: {items}}) => {
-        let numItems = List.length(items);
-        <div className="app">
-          <div className="title"> (str("What to do")) </div>
-          <div className="items"> (str("Nothing")) </div>
-          <div className="footer">
-            (str(string_of_int(numItems) ++ " items"))
-          </div>
+      });
+      let numItems = List.length(items);
+      <div className="app">
+        <div className="title"> (str("What to do")) </div>
+        <div className="items"> (str("Nothing")) </div>
+        <div className="footer">
+          (str(string_of_int(numItems) ++ " items"))
         </div>
-      }
+      </div>
     };
 
 # {"type":"normal"}
@@ -436,11 +428,11 @@
 
 # {"type":"header","children":5}
 
-    Making a reducer component
+    Adding some state with `useReducer`
 
 # {"type":"normal"}
 
-    We'll start out by changing `ReasonReact.statelessComponent` to `ReasonReact.reducerComponent`. Then our `make` function gets a little more interesting.
+    With React's hooks, going from stateless to stateful is as easy as dropping in a function call.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
@@ -453,7 +445,7 @@
 
 # {"type":"normal"}
 
-    `initialState` is what you'd expect, and now the first argument to our `render` function gets useful. The argument destructuring syntax is just like in JavaScript, where we get the `state.items` right out of the self argument.
+    `useReducer` acts the same as in ReactJS, taking a reducer function and an initial state, and returning the current state and a dispatch function. Here we're destructuring the current state, similar to JavaScript, so we have access to `items` immediately.
 
 # {"type":"normal"}
 
@@ -473,7 +465,7 @@
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* TodoApp_1_2.re 11:12 22:33 38: */
+    /* TodoApp_1_2.re 10:10 23:32 37: */
     type item = {
       title: string,
       completed: bool
@@ -482,36 +474,34 @@
       items: list(item)
     };
 
-    let component = ReasonReact.reducerComponent("TodoApp");
     let newItem = () => {title: "Click a button", completed: true};
 
     let str = ReasonReact.string;
-    let make = (children) => {
-      ...component,
-      initialState: () => {
+    [@react.component]
+    let make = () => {
+      let ({items}, dispatch) = React.useReducer((state, action) => {
+        state
+      }, {
         items: [{
           title: "Write some things to do",
           completed: false
         }]
-      },
-      reducer: ((), _) => ReasonReact.NoUpdate,
-      render: ({state: {items}}) => {
-        let numItems = List.length(items);
-        <div className="app">
-          <div className="title">
-            (str("What to do"))
-            <button
-              onClick=((evt) => Js.log("didn't add something"))
-            >
-              (str("Add something"))
-            </button>
-          </div>
-          <div className="items"> (str("Nothing")) </div>
-          <div className="footer">
-            (str(string_of_int(numItems) ++ " items"))
-          </div>
+      });
+      let numItems = List.length(items);
+      <div className="app">
+        <div className="title">
+          (str("What to do"))
+          <button
+            onClick=((_evt) => Js.log("didn't add something"))
+          >
+            (str("Add something"))
+          </button>
         </div>
-      }
+        <div className="items"> (str("Nothing")) </div>
+        <div className="footer">
+          (str(string_of_int(numItems) ++ " items"))
+        </div>
+      </div>
     };
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
@@ -521,11 +511,11 @@
 
 # {"type":"normal"}
 
-    If this were JavaScript & React, this is where we'd call `this.setState`. In ReasonReact, there's two steps. First, we make an `action` type, which describes the ways that our state can be updated. To start there will be only one way to update it; adding a pre-defined item. We then make our `reducer` function handle that action type.
+    If this were classes-style JavaScript & React, this is where we'd call `this.setState`. In new-style React.js, with useReducer, we'd call dispatch, probably with a string or javascript object, and handle it there. In ReasonReact, we'll first make an `action` type, which describes the ways that our state can be updated. To start there will be only one way to update it; adding a pre-defined item. We then make our `reducer` function handle that action type.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
-    /* TodoApp_1_3.re 9:10 26:28 */
+    /* TodoApp_1_3.re 9:10 18:22 */
     type item = {
       title: string,
       completed: bool
@@ -536,49 +526,45 @@
     type action =
       | AddItem;
 
-    let component = ReasonReact.reducerComponent("TodoApp");
-
     let newItem = () => {title: "Click a button", completed: true};
 
     let str = ReasonReact.string;
 
-    let make = (children) => {
-      ...component,
-      initialState: () => {
-        items: [
-          {title: "Write some things to do", completed: false}
-        ]
-      },
-      reducer: (action, {items}) =>
+    [@react.component]
+    let make = () => {
+      let ({items}, dispatch) = React.useReducer((state, action) => {
         switch action {
-        | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
-        },
-      render: ({state: {items}, send}) => {
-        let numItems = List.length(items);
-        <div className="app">
-          <div className="title">
-            (str("What to do"))
-            <button onClick=((_evt) => send(AddItem))>
-              (str("Add something"))
-            </button>
-          </div>
-          <div className="items"> (str("Nothing")) </div>
-          <div className="footer">
-            (str(string_of_int(numItems) ++ " items"))
-          </div>
+        | AddItem => {items: [newItem(), ...items]}
+        }
+      }, {
+        items: [{
+          title: "Write some things to do",
+          completed: false
+        }]
+      });
+      let numItems = List.length(items);
+      <div className="app">
+        <div className="title">
+          (str("What to do"))
+          <button onClick=((_evt) => dispatch(AddItem))>
+            (str("Add something"))
+          </button>
         </div>
-      }
+        <div className="items"> (str("Nothing")) </div>
+        <div className="footer">
+          (str(string_of_int(numItems) ++ " items"))
+        </div>
+      </div>
     };
 
 # {"type":"normal"}
 
     Then we can change the `onClick` handler to trigger that action. We do so
-    by calling `send` with an action as the argument. If you've used redux,
-    you can think of `send` as equivalent to `dispatch()`.
+    by calling `dispatch` with an action as the argument.
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}},"children":1}
 
-    /* @show TodoApp_1_3.re 29:29 34:36 */
+    /* @show TodoApp_1_3.re 32:34 */
 
 # {"type":"code","types":{"code":{"kernelId":null,"language":"reason","lastRun":null}}}
 
