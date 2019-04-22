@@ -158,7 +158,7 @@
 
 # {"type":"note"}
 
-    Here's some documentation on the [schema of bsconfig.json](http://bucklescript.github.io/bucklescript/docson/#build-schema.json). Note that source directories are **not** walked recursively. Subfolders have to be listed out.
+    Here's some documentation on the [schema of bsconfig.json](http://bucklescript.github.io/bucklescript/docson/#build-schema.json). Note that source directories are **not** walked recursively by default. You can specify them explicitly, or use `"subdirs": true`.
 
 # {"type":"header","children":4}
 
@@ -297,7 +297,7 @@
 
 # {"type":"normal"}
 
-    prop values don't have the `{}` curly wrappers what we know from JSX, they are parsed as expressions. So `a=some_vbl_name` is perfectly fine.
+    prop values don't have the `{}` curly wrappers that we know from JSX, they are parsed as expressions. So `a=some_vbl_name` is perfectly fine.
 
 # {"type":"normal"}
 
