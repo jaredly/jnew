@@ -65,7 +65,7 @@ date: 2017-07-05 20:06:00
   <span class="hljs-attr">"sources"</span>: <span class="hljs-string">"src"</span>
 }</pre>
 
-<blockquote><p>Here's some documentation on the <a href="http://bucklescript.github.io/bucklescript/docson/#build-schema.json">schema of bsconfig.json</a>. Note that source directories are <strong>not</strong> walked recursively. Subfolders have to be listed out.</p></blockquote>
+<blockquote><p>Here's some documentation on the <a href="http://bucklescript.github.io/bucklescript/docson/#build-schema.json">schema of bsconfig.json</a>. Note that source directories are <strong>not</strong> walked recursively by default. You can specify them explicitly, or use <code>&quot;subdirs&quot;: true</code>.</p></blockquote>
 
 <h3 id="4-package-json">package.json</h3>
 
@@ -161,7 +161,7 @@ date: 2017-07-05 20:06:00
         Some key points here
         <ul>
           <li>
-            <p><code>[| val, val |]</code> is array literal syntax. An array is fixed-length &amp; mutable, with O(1) random access, in comparison to a List, which is singly linked &amp; immutable, with O(n) random access.</p></li><li><p>prop values don't have the <code>{}</code> curly wrappers what we know from JSX, they are parsed as expressions. So <code>a=some_vbl_name</code> is perfectly fine.</p></li><li><p>Children are also expressions -- in contrast to JSX, where they are strings by default.</p>
+            <p><code>[| val, val |]</code> is array literal syntax. An array is fixed-length &amp; mutable, with O(1) random access, in comparison to a List, which is singly linked &amp; immutable, with O(n) random access.</p></li><li><p>prop values don't have the <code>{}</code> curly wrappers that we know from JSX, they are parsed as expressions. So <code>a=some_vbl_name</code> is perfectly fine.</p></li><li><p>Children are also expressions -- in contrast to JSX, where they are strings by default.</p>
           </li>
         </ul>
       </p>
