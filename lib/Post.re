@@ -186,6 +186,7 @@ let defaultConfig = fileName => {
   date: (0, 0, 0), /* Year, Month, Day */
   description: None,
   thumbnail: None,
+  draft: false,
   featured: false,
   wordCount: None
 };
@@ -207,6 +208,7 @@ let parseConfig = (fileName, opts) => {
   let config = check(Toml.stringList("categories", opts), config, categories => {...config, categories});
   let config = check(Toml.string("date", opts), config, date => {...config, date: parseDate(date)});
   let config = check(Toml.bool("featured", opts), config, featured => {...config, featured});
+  let config = check(Toml.bool("draft", opts), config, draft => {...config, draft});
   config
 };
 

@@ -9,6 +9,7 @@ type config = {
   description: option(string),
   thumbnail: option(string),
   featured: bool,
+  draft: bool,
   fileName: string,
   wordCount: option(int)
 };

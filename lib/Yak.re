@@ -105,7 +105,7 @@ let processProjects = (inputDir, outputDir) => {
 let processBlog = (inputDir, outputDir) => {
   /* Posts */
   let fullPosts = collectPages(inputDir, outputDir, "posts", Post.parse);
-  let posts = List.map(snd, fullPosts) |> List.sort(sortPostsByDate);
+  let posts = List.map(snd, fullPosts) |> List.sort(sortPostsByDate) |> List.filter(((post, _, _)) => !post.draft);
   renderPages(Post.render(posts), fullPosts) |> ignore;
 
   let tags = assembleTags(posts);
