@@ -11,7 +11,7 @@ author: Jared Forsyth
 
 One of the things that keeps coming up as a pain point in Reason development is the boilerplate involved in parsing & generating JSON. Whether you're using JSON for a REST api, or an on-disk file format, JSON is ubiquitous, and if you're coming from JavaScript, you're used to it also being painless! Because the data objects you're working with are immediately serializable to JSON and back.
 
-`Milk` 🥛 is a new tool I developed that generates serialization and deserialization code for your Reason/OCaml types, including types from arbitrary other packages, *and* it manages migration when the types change.
+`Milk` 🥛 is a new tool I developed that generates serialization and deserialization code for your Reason/OCaml types, including types from arbitrary external packages, *and* it manages migration when the types change.
 
 <!-- more -->
 
@@ -114,7 +114,7 @@ Now we can run `milk`, and it will generate `src/TypeSerde.re`, which exports `s
 
 > milk also generates a `types.lock.json`, which you should check into your git repo as well. This file is the way milk keeps track of the type definitions of all previous versions, in order to be able to generate deserializers & migrators for them.
 
-And now we're all set to load that config file in our main executable module ([full source here]):
+And now we're all set to load that config file in our main executable module ([full source here](https://github.com/jaredly/cowsay/blob/0f5204c9fe6aa1216f82546e483668281f910766/src/Cowsay.re)):
 
 ```
 // src/Cowsay.re
@@ -130,7 +130,7 @@ let main = () => {
 
 Once we make a `config.json` that contains `{"color": "red", "languages": ["English", "German"], "$schemaVersion": 1}`, we can run `esy dune exec cowsay` and we're off to the races:
 
-[] screenshot
+![screenshot](/images/cowsay-1.png)
 
 That might be a cool enough trick on its own, but the real magic happens when you want to make a change to the types.
 
