@@ -11,7 +11,7 @@ author: Jared Forsyth
 
 One of the things that keeps coming up as a pain point in Reason development is the boilerplate involved in parsing & generating JSON. Whether you're using JSON for a REST api, or an on-disk file format, JSON is ubiquitous, and if you're coming from JavaScript, you're used to it also being painless! Because the data objects you're working with are immediately serializable to JSON and back.
 
-`Milk` 🥛 is a new tool I developed that generates serialization and deserialization code for your Reason/OCaml types, including types from arbitrary external packages, *and* it manages migration when the types change.
+[`Milk` 🥛](https://github.com/jaredly/milk) is a new tool I developed that generates serialization and deserialization code for your Reason/OCaml types, including types from arbitrary external packages, *and* it manages migration when the types change.
 
 <!-- more -->
 
@@ -34,7 +34,7 @@ One of the things that keeps coming up as a pain point in Reason development is 
 
 ## How ready is milk?
 
-I've been using it for several months in various projects, and have stress-tested it quite a bit. That said, I'm calling it "alpha" for now until other people have tried it out a bit.
+I've been using it for several months in various projects, and have stress-tested it quite a bit. That said, I'm calling it "alpha" for now until other people have tried it out.
 
 ## Installation
 
@@ -66,7 +66,7 @@ type config = {
 
 ### Initial setup
 
-Now to generate serialization & deserialization code for this config, we first need to make a `types.json` file, and `milk --init` will create the following default `types.json` for you:
+To generate serialization & deserialization code for this config, we first need to make a `types.json` file, and `milk --init` will create the following default `types.json` for you:
 
 ```
 {
@@ -87,7 +87,7 @@ Now to generate serialization & deserialization code for this config, we first n
 }
 ```
 
-The default entry that is created assumes the existance of a `src/Types.re`, so let's change that to `src/Config.re`. Let's also change the engine from `Js.Json` (which is for bucklescript targets) to `ezjsonm`, a native-side json library.
+The default entry that is created assumes the existence of a `src/Types.re`, so let's change that to `src/Config.re`. Let's also change the engine from `Js.Json` (which is for bucklescript targets) to `ezjsonm`, a native-side json library.
 
 ```
 {
@@ -151,9 +151,9 @@ Now that we've made a change to a type that's managed by `milk`, our app will fa
 
 So we increment the `"version"` field in the lockfile, run `milk` again, and now we have a new error!
 
-`Must provide migrater. Cannot migrate automatically: config`
+`Must provide migrator. Cannot migrate automatically: config`
 
-Milk doesn't know how to turn the old config into the new config, and so we need to provide a custom migrator, as a decorator on the type delcaration. Here's what this looks like:
+Milk doesn't know how to turn the old config into the new config, and so we need to provide a custom migrator, as a decorator on the type declaration. Here's what this looks like:
 
 ```
 [@migrate oldConfig => {
@@ -191,6 +191,6 @@ Milk saw that `config.json` had `"$schemaVersion": 1`, deserialized it with the 
 
 There's a lot more complexity we could go into, but hopefully this gave you a taste of what milk is capable of.
 
-If you want a deep dive of how milk does what it does, check out [the Readme].
+If you want a deep dive of how milk does what it does, check out [the Readme](https://github.com/jaredly/milk/blob/master/Readme.md).
 
 I'll be publishing another post soon about using Milk to make an isomorphic REST application w/ a bucklescript frontend and a native backend, so stay tuned!
