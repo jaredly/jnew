@@ -1,6 +1,7 @@
 
 let module Infix = {
   let (|?) = (x, y) => switch x { | None => y | Some(x) => x };
+  let (|??) = (x, y) => switch x { | None => y | Some(x) => Some(x) };
   let (|?>) = (x, f) => switch x { | None => None | Some(x) => f(x) };
   let (|?>>) = (x, f) => switch x { | None => None | Some(x) => Some(f(x)) };
   let (|!) = (x, y) => switch x { | None => failwith(y) | Some(x) => x };
@@ -51,13 +52,13 @@ let module Consts = {
   };
 };
 
-let twitter = (~contentTitle, ~description, ~thumbnail, ~children, ()) => {
+let twitter = (~contentTitle, ~description, ~article_image, ~thumbnail, ~children, ()) => {
   open Html;
   <fragment>
-    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:card" content=(article_image == None ? "summary" : "summary_large_image")/>
     <meta name="twitter:title" content=contentTitle />
     <meta name="twitter:description" content=description />
-    <meta name="twitter:image" content=(thumbnail |? "https://jaredforsyth.com/images/logo/JF_black_128.png")/>
+    <meta name="twitter:image" content=(article_image |?? thumbnail |? "https://jaredforsyth.com/images/logo/JF_black_128.png")/>
     <meta name="twitter:site" content="https://jaredforsyth.com"/>
     <meta name="twitter:creator" content="@jaredforsyth"/>
   </fragment>
@@ -71,7 +72,7 @@ let mobileMeta = (~children, ()) => Html.(<fragment>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 </fragment>);
 
-let metaHead = (~title as contentTitle, ~description, ~thumbnail=?, ~children, ()) => {
+let metaHead = (~title as contentTitle, ~description, ~thumbnail=?, ~article_image=?, ~children, ()) => {
   open Html;
   <fragment>
     {Meta.charset("utf8")}
@@ -79,7 +80,7 @@ let metaHead = (~title as contentTitle, ~description, ~thumbnail=?, ~children, (
     <meta name="description" content=description />
 
     <mobileMeta />
-    <twitter contentTitle description thumbnail />
+    <twitter contentTitle description article_image thumbnail />
 
     <pmeta property="og:type" content="article"/>
     <pmeta property="og:title" content=contentTitle/>
@@ -91,7 +92,7 @@ let metaHead = (~title as contentTitle, ~description, ~thumbnail=?, ~children, (
   </fragment>
 };
 
-let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead="", ~children, ()) => {
+let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~article_image=?, ~extraHead="", ~children, ()) => {
   let contentTitle = contentTitle ++ " | Jared Forsyth.com";
   let description = switch (description) {
   | Some(description) => description
@@ -99,7 +100,7 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~extraHead
   };
   open Html;
 <head>
-    <metaHead title=contentTitle description ?thumbnail />
+    <metaHead title=contentTitle description ?thumbnail ?article_image />
 
     /* TODO audit these */
     /* <link rel="stylesheet" href="/js/styles/obsidian.css"/> */

@@ -33,7 +33,7 @@ let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
 let pageWithTopAndBottom = Shared.pageWithTopAndBottom;
 let pageHead = Shared.pageHead;
 
-let render = (posts, ({Types.title: contentTitle, fileName, description, date, tags, thumbnail}, _, rawBody)) => {
+let render = (posts, ({Types.title: contentTitle, fileName, description, date, tags, thumbnail, article_image}, _, rawBody)) => {
   let (css, inlineCss) = Css.startPage();
   open Html;
   open Css;
@@ -90,6 +90,7 @@ let render = (posts, ({Types.title: contentTitle, fileName, description, date, t
       title=contentTitle
       ?description
       ?thumbnail
+      ?article_image
     >
       <style>(inlineCss())</style>
     </pageHead>
@@ -186,6 +187,7 @@ let defaultConfig = fileName => {
   date: (0, 0, 0), /* Year, Month, Day */
   description: None,
   thumbnail: None,
+  article_image: None,
   draft: false,
   featured: false,
   wordCount: None
@@ -208,6 +210,8 @@ let parseConfig = (fileName, opts) => {
   let config = check(Toml.stringList("categories", opts), config, categories => {...config, categories});
   let config = check(Toml.string("date", opts), config, date => {...config, date: parseDate(date)});
   let config = check(Toml.bool("featured", opts), config, featured => {...config, featured});
+  let config = check(Toml.string("thumbnail", opts), config, thumbnail => {...config, thumbnail: Some(thumbnail)});
+  let config = check(Toml.string("article_image", opts), config, article_image => {...config, article_image: Some(article_image)});
   let config = check(Toml.bool("draft", opts), config, draft => {...config, draft});
   config
 };

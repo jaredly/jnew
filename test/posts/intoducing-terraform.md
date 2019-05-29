@@ -1,6 +1,6 @@
 title: Terraform: generate 3-d models of geographic terrain
 featured: true
-article_image: images/terraform/splash.png
+article_image: /images/terraform/splash.png
 tags:
   - rust
 categories:
