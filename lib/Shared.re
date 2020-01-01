@@ -172,6 +172,15 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~article_i
         /* color: #28cc4c;
         text-decoration-color: #28cc4c; */
       }
+      h1 > a, h2 > a, h3 > a, h4 > a, h5 > a, h6 > a {
+        text-decoration: none;
+        color: inherit;
+      }
+      h1 > a:hover, h2 > a:hover, h3 > a:hover, h4 > a:hover, h5 > a:hover, h6 > a:hover,
+      h1 > a:focus, h2 > a:focus, h3 > a:focus, h4 > a:focus, h5 > a:focus, h6 > a:focus {
+        text-decoration: underline;
+        color: |} ++ Colors.green ++ {|;
+      }
       h2 {
         padding-bottom: 16px;
         font-size: 36px;

@@ -14,7 +14,7 @@ let render = (contentTitle, description, rawBody) => {
     css
     top={ <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>}
     middle=(
-      <div className=css(Shared.Styles.bodyText)> (MarkdownParser.parse(rawBody)) </div>
+      <div className=css(Shared.Styles.bodyText)> (MarkdownParser.process(rawBody)) </div>
     )
     bottom=("This is the personal site of Jared Forsyth")
   />;

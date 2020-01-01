@@ -91,7 +91,7 @@ let renderUpdate = (css, ((year, month, day), screenshot, content)) => {
     (Shared.monthName(month))
     (string_of_int(day))
     </div>
-    (MarkdownParser.parse(content))
+    (MarkdownParser.process(content))
   </div>
 };
 
@@ -108,7 +108,7 @@ let render = ({title: contentTitle, tags, description, github, longDescription, 
     <asyncScript src="//platform.twitter.com/widgets.js" />
     <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>
     <div className=css(Shared.Styles.bodyText)>
-      (MarkdownParser.parse(description))
+      (MarkdownParser.process(description))
       <div className=css([
               A("font-family", "Open sans, sans-serif"),
               A("font-size", "16px"),
@@ -140,7 +140,7 @@ let render = ({title: contentTitle, tags, description, github, longDescription, 
       })
       (switch longDescription {
       | None => ""
-      | Some(text) => <div style="padding: 16px 0">(MarkdownParser.parse(text))</div>
+      | Some(text) => <div style="padding: 16px 0">(MarkdownParser.process(text))</div>
       })
       <div style="height: 32px"/>
       (List.map(renderUpdate(css), updates) |> String.concat("\n"))
@@ -320,7 +320,7 @@ let renderList = (tags, projects, contentTitle) => {
               A("padding-top", "16px"),
               Sub("p", [("padding-bottom", "0")]),
               ...Shared.Styles.bodyText
-            ])>(MarkdownParser.parse(text))</div>
+            ])>(MarkdownParser.process(text))</div>
             })
             (Shared.hspace(16))
             <a className=css([A("font-size", "24px")]) href>(string_of_int(numUpdates)) (numUpdates == 1 ? "Update" : "Updates")</a>

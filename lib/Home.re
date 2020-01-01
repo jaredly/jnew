@@ -65,7 +65,7 @@ let projectColumn = (css, projects) => {
                 A("padding-top", px(Consts.smallSpace)),
                 A("font-size", px(Consts.githubSize)),
                 Sub("p", [("padding-bottom", px(Consts.smallSpace))])])>
-                (MarkdownParser.parse(description))
+                (MarkdownParser.process(description))
               </div>
               <div className=css([
                 A("color", Shared.Colors.lightText),

@@ -35,14 +35,13 @@ let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
 let pageWithTopAndBottom = Shared.pageWithTopAndBottom;
 let pageHead = Shared.pageHead;
 
-type nmNode = {typ: string, depth: int, content: string, children: list(nmNode)};
-type postBody = Html(string) | Markdown(string) | Nm(list(nmNode))
+type postBody = Html(string) | Markdown(string) | Nm(list(NotableMind.nmNode))
 type post = {config: Types.config, body: postBody, intro: option(postBody)};
 
 let renderBody = fun
-  | Markdown(md) => MarkdownParser.parse(md)
+  | Markdown(md) => MarkdownParser.process(md)
   | Html(html) => html
-  | Nm(_) => failwith("Not yet")
+  | Nm(nodes) => NotableMind.render(nodes)
 
 let render = (posts, {config: {Types.title: contentTitle, fileName, description, date, tags, thumbnail, article_image}, body: postBody}) => {
   let (css, inlineCss) = Css.startPage();
@@ -252,111 +251,9 @@ let parse = (fileName, opts, content) => {
   isMarkdown ? {config, intro: intro |?>> x => Markdown(x), body: Markdown(content)} : {intro: intro |?>> intro => Html(intro), config, body: Html(content)}
 };
 
-
-
-module Json = {
-  module Infix = {
-    let (|?>) = (v, fn) => switch v {
-      | Ok(v) => fn(v)
-      | Error(e) => Error(e)
-    };
-    let (|?>>) = (v, fn) => switch v {
-      | Ok(v) => Ok(fn(v))
-      | Error(e) => Error(e)
-    };
-    let (|!) = (v, msg) => switch v {
-      | Ok(v) => v
-      | Error(e) => failwith("Unwrapping result, error '" ++ e ++ "', " ++ msg)
-    };
-    let opt = x => switch x {
-      | Ok(v) => Some(v)
-      | _ => None
-    };
-  };
-
-  let get = (name, obj) => switch obj {
-    | `Assoc(items) => switch (List.assoc(name, items)) {
-      | exception Not_found => Error("No object attribute " ++ name)
-      | res => Ok(res)
-    }
-    | _ => Error("Not an object")
-  }
-  let string = item => switch item {
-    | `String(s) => Ok(s)
-    | _ => Error("Not a string")
-  }
-  let array = item => switch item {
-    | `List(items) => Ok(items)
-    | _ => Error("Not an array")
-  }
-  let int = item => switch item {
-    | `Int(int) => Ok(int)
-    | _ => Error("Not an int")
-  }
-  let bool = item => switch item {
-    | `Bool(bool) => Ok(bool)
-    | _ => Error("Not a bool")
-  }
-
-  let mapResult = (fn, list) => {
-    let rec loop = (col, items) => switch items {
-      | [] => Ok(List.rev(col))
-      | [one, ...rest] => switch (fn(one)) {
-        | Error(e) => Error(e)
-        | Ok(v) => loop([v, ...col], rest)
-      }
-    };
-    loop([], list)
-  };
-
-  module Get = {
-    open Infix;
-    let stringList = (attr, obj) => obj |> get(attr) |?> array |?> mapResult(string) |> opt;
-    let string = (attr, obj) => obj |> get(attr) |?> string |> opt;
-    let bool = (attr, obj) => obj |> get(attr) |?> bool |> opt;
-  }
-}
-
-let collectNodes = content => {
-  let rawNodes = Str.split(Str.regexp("^#  "), content);
-  rawNodes |> List.map(text => {
-    let lines = String.split_on_char('\n', text);
-    switch lines {
-      | [attrs, ...rest] =>
-        let attrs = Yojson.Basic.from_string(attrs);
-        let content = rest |> List.map(line => Str.replace_first(Str.regexp("^  "), "", line)) |> String.concat("\n") |> String.trim;
-        open Json.Infix;
-        let node = {
-          typ: attrs |> Json.get("type") |?> Json.string |! "nm node type",
-          depth: attrs |> Json.get("depth") |?> Json.int |! "nm node depth",
-          content,
-          children: []
-        }
-        node
-      | [] => failwith("rawNodes")
-    }
-  })
-}
-
-let rec getChildren = (depth, children, nodes) => switch nodes {
-  | [] => (children, [])
-  | [node, ..._] when node.depth <= depth => (children, nodes)
-  | [node, ...rest] => getChildren(depth, [node, ...children], rest)
-}
-
-let organizeNodes = nodes => {
-  let rec loop = (nodes, list) => switch list {
-    | [node, ...rest] =>
-      let (children, rest) = getChildren(node.depth, [], rest);
-      loop([{...node, children: children |> List.rev}, ...nodes], rest)
-    | [] => nodes
-  };
-  loop([], nodes)
-};
-
 let parseJsonConfig = (config, json) => {
-  open Json.Infix;
-  module Get = Json.Get;
+  open NotableMind.Json.Infix;
+  module Get = NotableMind.Json.Get;
   let config = check(Get.string("title", json), config, title => {...config, title});
   let config = check(Get.string("description", json), config, description => {...config, description: Some(description)});
   let config = check(Get.stringList("tags", json), config, tags => {...config, tags});
@@ -370,7 +267,7 @@ let parseJsonConfig = (config, json) => {
 }
 
 let parseNm = (fileName, content) => {
-  let nodes = collectNodes(content) |> organizeNodes;
+  let nodes = NotableMind.parse(content);
   let config = defaultConfig(fileName);
   let (nodes, config) =
     switch (nodes) {
