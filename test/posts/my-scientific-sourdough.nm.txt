@@ -1,0 +1,351 @@
+# {"type":"header","depth":0}
+
+  My Scientific Sourdough
+
+# {"type":"note","depth":1}
+
+  {"categories": ["cooking", "baking"], "date": "2019-12-31 10:49:34", "description": "My current loaf recipe, based on many experiments", "article_image": "/images/bread/cover.jpg", "draft": true, "featured": false, "author": "Jared Forsyth"}
+
+# {"type":"normal","depth":1}
+
+  Just after thanksgiving, I decided to try my hand at sourdough. My general approach to a new recipe or technique is to take a look at the top several search results, weigh the varying advice and ingredients lists, and make an amalgum. When I tried this for sourdough, I was struck by that large variety of techniques espoused by various bloggers and youtubers. Many seemed quite committed to the precise measurements & steps involved, but they were short on explanation for why or how these were so important. I looked around for someone who had done the testing to determine the impact of, for example, a bench rest, and came up empty.
+
+# {"type":"normal","depth":1}
+
+  So here we are.
+
+# {"type":"normal","depth":1}
+
+  What I've included here is my current sourdough recipe, annotated with the various changes I've made, and with links to posts about the results of my experiments.
+
+# {"type":"header","depth":1}
+
+  The Loaf Recipe
+
+# {"type":"list","depth":2}
+
+  Ingredients
+
+# {"type":"normal","depth":3}
+
+  108g active sourdough starter
+
+# {"type":"normal","depth":3}
+
+  2c (235g) water
+
+# {"type":"normal","depth":3}
+
+  250g all-purpose flour
+
+# {"type":"normal","depth":3}
+
+  250g whole wheat flour
+
+# {"type":"normal","depth":3}
+
+  1T (5g) salt
+
+# {"type":"normal","depth":3}
+
+  2T (15g) water
+
+# {"type":"orderedList","depth":2}
+
+  Instructions
+
+# {"type":"normal","depth":3}
+
+  Mix starter, water, and flour in a bowl. Let rest on the counter, covered, for 30 minutes (autolyze).
+
+# {"type":"normal","depth":3}
+
+  At salt and remaining water, mix until combined, cover again and leave on the counter.
+
+# {"type":"normal","depth":3}
+
+  ~~Every thirty minutes for the next 1-3 hours, do a "turn"~~ see test(3)
+
+# {"type":"normal","depth":3}
+
+  Let sit (in a container, covered) for 8-12 hours for the bulk rise.
+
+# {"type":"normal","depth":3}
+
+  Dump onto the counter, do an initial shaping. "bench rest" for 30 minutes.
+
+# {"type":"normal","depth":3}
+
+  Do the final shaping, place in a parchment-paper-lined container for the final rise (60-90 minutes, until ~doubled).
+
+# {"type":"normal","depth":3}
+
+  Place your dutch oven in the oven, and preheat the oven to 500º.
+
+# {"type":"normal","depth":3}
+
+  Once the oven is up to temperature, place the dough in the dutch oven (the parchment paper should help with this).
+
+# {"type":"normal","depth":3}
+
+  Bake, covered, for 30 minutes.
+
+# {"type":"normal","depth":3}
+
+  Take the lid off the dutch oven, and bake for another 10 minutes.
+
+# {"type":"normal","depth":3}
+
+  Turn off the oven, take the loaf out of the dutch oven, and let it sit in the warm oven for another 10-15 minutes to cure the crust and dry out the loaf.
+
+# {"type":"header","depth":1}
+
+  Terms & Techniques
+
+# {"type":"header","depth":2}
+
+  Starter
+
+# {"type":"normal","depth":3}
+
+  A "young" starter is start that has *just* finished doubling. For the 1:5:5 100% hydration formula that I ended up adopting, this means using the start 8-12 hours after feeding (I would generally feed it in the morning, then start the loaf at night). See test (2).
+
+# {"type":"normal","depth":3}
+
+  People talk about "the float test" as the way to determine whether your starter is "ready" to leaven some dough. I believe the theory is that once starter has "risen", it has a lot of trapped gas bubbles, and those will cause it to float. I don't use it at all, mostly because it seems like a waste of starter, but also because I've just never had dough fail to rise. I've used starter that's "old" and would fail the test because the gasses have escaped, and it worked fine. It's possible that the float test is more critical when you're first developing your starter from scratch (a step I skipped by being giften some already-mature starter).
+
+# {"type":"normal","depth":3}
+
+  My current starter maintenance process is: in the morning, or at night, either when I'm making bread, or it's been long enough that I feel I should feed the start (I draw the line around 36 hours), I take most of the starter out of my wide-mouthed pint glass jar, shooting for a combined weight of ~285g. The jar weighs 275g, so that means there's about 10g starter left in the jar. I then add 50g of unbleached all-purpose flour and 50g water, and mix it up. If I'll be making a larger loaf soon, I use 60g water and 60g flour, and might leave as much as 20g of starter. If I'm not making bread with the starter I've taken out, I put it into the glass container I keep in the fridge of old starter, to be turned into a savory sourdough griddle-cake later (recipe pending).
+
+# {"type":"header","depth":2}
+
+  Autolyze
+
+# {"type":"normal","depth":3}
+
+  The "autolyze" step (from biology, [self-digestion](https://en.wikipedia.org/wiki/Autolysis_%28biology%29)) was apparently championed by a [French "bread expert" in the 1970s](https://www.kingarthurflour.com/blog/2017/09/29/using-the-autolyse-method) in response to what he saw as a deterioration in french bread. Its purpose is to allow the water to break down the flour a little bit before you introduce the salt (which apparently inhibits the process somewhat?).
+
+# {"type":"header","depth":2}
+
+  Dough Hydration
+
+# {"type":"normal","depth":3}
+
+  My recipe is 47% hydrated, which is on the lower end of the scale. I'm planning to try out higher hydration doughs, and I'll update here with my findings. My standard yeasted whole wheat bread recipe is 40% hydration, and you can really feel the difference, this dough is much stickier.
+
+# {"type":"header","depth":2}
+
+  Turns
+
+# {"type":"normal","depth":3}
+
+  "turns" seem to be akin to "punching down the dough" in a normal yeasted bread recipe, but descriptions of *how* to do a turn vary. What I've ended up doing is using a spatula to fold the dough over itself in the bowl, similar to what I do when doing the initial mixing. The method I've seen described most often is to reach under the dough with wet / oiled hands, lift up the middle a foot or two (stretching the dough), and then let it drop down. I have never yet tried this method, because I'm lazy and would rather not get my hands dirty. Additionally, I've tested [doing turns vs not doing them](), and it didn't seem to make an important difference, so I've dropped this step from my practice.
+
+# {"type":"header","depth":2}
+
+  Bench Scrapers
+
+# {"type":"normal","depth":3}
+
+  If you don't have these prepare to get several spatulas dirty, and generally have a hard time of it.
+
+# {"type":"normal","depth":3}
+
+  I got mine at WalMart, $5 each. They are 6'' wide and 4.5'' tall, which has been a pretty good size. When first starting out I was using one that was only about 4'' wide, which was rather too narrow for comfort.
+
+# {"type":"normal","depth":3}
+
+  You can get by with just one, but two is much nicer, as you can use one to separate the other one from the dough.
+
+# {"type":"header","depth":2}
+
+  Shaping
+
+# {"type":"normal","depth":3}
+
+  shaping: the method that I've adopted is: after dumping the dough on the table, use the bench scraper to fold the dough over itself, starting at one side putting the scraper an inch or two under the dough and then dragging it over to the other side. Having a second bench scraper is quite helpful in extricating the first scraper from the dough after folding. Then go around the circle 2-4 more times until it has formed a rough ball. Then push your bench scraper along the table into the dough, pushing the dough across the table for a foot or so, so that it "rolls up" a bit, forming some surface tension. Do this several more times from different angles, using the second bench scraper to help remove the first from the sticky dough each time. After the bench rest, repeat the same process once more.
+
+# {"type":"header","depth":2}
+
+  Parchment Paper
+
+# {"type":"normal","depth":3}
+
+  My current technique involves letting the dough do the final rise in a pyrex cake pan lined with parchment paper (8'' round, ~4'' high), and then using the parchment paper to transfer it into the preheated cast iron dutch oven. The hope is that this minimizes volume loss in the transfer, but I don't love that it requires using a lot of parchment paper.
+
+# {"type":"header","depth":2}
+
+  Dutch Oven + Oven
+
+# {"type":"normal","depth":3}
+
+  Using a pre-heated, covered dutch oven inside of a conventional oven does two important things. First, having it covered allows the bread to "self-steam", resulting in a dramatically better crust (see test (TODO)). Second, preheating the dutch oven before putting the bread in .
+
+# {"type":"header","depth":1}
+
+  Experiments & Explorations
+
+# {"type":"header","depth":2}
+
+  Starter
+
+# {"type":"normal","depth":3}
+
+  Before I made my first loaf, however, there was the matter of the formula for feeding the sourdough. Many different websites agreed that, if you have a starter that has languished in the back of the fridge, it would need several feedings before you could expect to use it in dough.
+
+# {"type":"list","depth":3}
+
+  The formulas I tried as as follows: (starter / water / flour)
+
+# {"type":"normal","depth":4}
+
+  40 / 40 / 40 (1:1:1), 100% hydration - unbleached all-purpose
+
+# {"type":"normal","depth":4}
+
+  20 / 100 / 100 (1:5:5) 100% hydration - whole wheat
+
+# {"type":"normal","depth":4}
+
+  20 / 100 / 100 (1:5:5) 100% hydration - unbleached all-purpose
+
+# {"type":"normal","depth":4}
+
+  72 / 120 / 85 (6:10:7) 150% hydration - whole wheat
+
+# {"type":"normal","depth":4}
+
+  10 / 70 / 100 (1:7:10) 70% hydration - unbleached all-purpose
+
+# {"type":"normal","depth":3}
+
+  In addition to testing the ratios, I also wanted to see how all-purpose flour stacked up to my home-ground whole-wheat flour (hard white wheat, ground in my grandma's old excaliber flour mill).
+
+# {"type":"list","depth":3}
+
+  The "starter maintenance process" was agreed upon by most sources:
+
+# {"type":"normal","depth":4}
+
+  weigh out the amount of starter to retain, and discard or otherwise use the rest
+
+# {"type":"normal","depth":4}
+
+  add in the prescribed amount of flour & water
+
+# {"type":"normal","depth":4}
+
+  cover it (to keep out bugs), but don't seal it, so that gasses can escape
+
+# {"type":"normal","depth":4}
+
+  leave it on the counter until it doubles. How long will that take? Well, it varies.
+
+# {"type":"note","depth":3}
+
+  As I went through the work of feeding all of these starters twice a day, I gradually understood that a) the ratios are what this is about, not the exact number of grams (which, of course when you think about it makes sense), and even more than that b) the % hydration is the real difference between these things. If I were to do this again, I would have a very different set of tests to run. But this was my first foray into sourdough, so I was mostly just taking the top several formulas that I found suggested :)
+
+# {"type":"normal","depth":3}
+
+  For the first day, I put a couple of the starters in our Instapot on low-yogurt setting to see if that would speed things up. It may have helped? After that I just left all of them on the counter.
+
+# {"type":"header","depth":3}
+
+  Results <!-- 3 -->
+
+# {"type":"normal","depth":4}
+
+  The 150% hydration starter was very easy to mix, but it doubled super quickly -- 2-4 hours -- which meant it needed feeding much more often than I wanted to feed it. It's possible that the doubling speed was more due to the ratio of starter to new material instead of hydration.
+
+# {"type":"normal","depth":4}
+
+  The 70% hydration starter was much more difficult to mix, so I gave up on it after a couple days. Some bloggers said that using a low hydration is good if you want your starter to be left alone for several days -- I might try that in the future.
+
+# {"type":"normal","depth":4}
+
+  The two 20 / 100 / 100 (white and whole wheat) starters seemed to be the most promising, and so after a few days they were the only ones I retained.
+
+# {"type":"normal","depth":2}
+
+  For my first many loaves I went with a split-test approach. Make two balls of dough -- one would be the "control", where I did everything that was "best sourdough practice", and one where I would change an ingredient or leave out a step, to see what happened. Here are the results of these experiments.
+
+# {"type":"header","depth":2}
+
+  First bake: Focaccia
+
+# {"type":"normal","depth":3}
+
+  At the beginning, the prospect of a multi-day dough was a little off-putting, so I looked around for a sourdough recipe that could be started & finished on the same day, and landed on [this recipe for sourdough focaccia](https://www.theperfectloaf.com/a-simple-focaccia/).
+
+# {"type":"normal","depth":3}
+
+  I used the 20:100:100 all-purpose starter, and made a half-batch of the recipe. It absolutely blew me away! It was a very nice way to start out my sourdough experience.
+
+# {"type":"normal","depth":3}
+
+  A few days later I tried the recipe again, this time using the 20:100:100 whole-wheat starter, but I also changed several other things (different oven, sheet pan instead of glass 8x8, different rising time) and wasn't as thrilled by the result.
+
+# {"type":"header","depth":2}
+
+  (1) First split-test loaf: all-purpose vs whole-wheat start (Dec 3rd)
+
+# {"type":"normal","depth":3}
+
+  With that win under my belt, I decided to try out a loaf. I used the recipe my mom got from the presentation, which is as follows:
+
+# {"type":"normal","depth":3}
+
+  For my first bake, I did two 1/3-batches of the dough (so 37g starter, 84g all-purpose flour, etc.), where one was using the all-purpose (20/100/100), and one was using the whole-wheat (20/100/100) starter.
+
+# {"type":"normal","depth":3}
+
+  The resulting bread was ridiculously tasty. I couldn't remember ever having bread taste this good (and I'm used to delicious home-made bread!).
+
+# {"type":"header","depth":3}
+
+  Results <!-- 4 -->
+
+# {"type":"normal","depth":4}
+
+  Taste: no difference. In a single-blind taste test, neither of us could even distinguish between the two halves of the loaf.
+
+# {"type":"normal","depth":4}
+
+  Rise: the all-purpose starter appears to have a rather better rise than the whole-wheat starter.
+
+# {"type":"header","depth":2}
+
+  (2) "Young starter" vs "old starter" (Dec 5th)
+
+# {"type":"normal","depth":3}
+
+  For my first two bakes, I had used "young" starter, which is sourdough starter that has only just doubled (e.g. was fed ~8 hours previous). This next test was to determine whether there were any adverse consequences from using an "old" starter -- one that was fed 24 hours previous, and so had doubled and then collapsed.
+
+# {"type":"normal","depth":3}
+
+  Three hours after starting the dough, the "old starter" dough had risen rather more than the young starter dough, and the next morning, the old starter had a ton more bubbles.
+
+# {"type":"normal","depth":3}
+
+  However, when it came time to shape them, the young dough was much easier to work with. The old dough had lost its tension, and so was rather stickier.
+
+# {"type":"header","depth":3}
+
+  Results
+
+# {"type":"normal","depth":4}
+
+  The dough made with "young starter" had a much better rise in the oven, and was easier to handle overall.
+
+# {"type":"normal","depth":4}
+
+  Taste-wise (and texture-wise) there wasn't much of a noticable difference.
+
+# {"type":"header","depth":2}
+
+  (3) Two turns vs no turns (Dec 8th)
+
+# {"type":"normal","depth":3}
+
+  A main motivation for my tests is "how little effort can I get away with and still have a great-tasting loaf". So for this test I tried omitting the "turns" step.

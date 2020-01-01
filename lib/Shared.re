@@ -181,6 +181,9 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~article_i
         text-decoration: underline;
         color: |} ++ Colors.green ++ {|;
       }
+      ul, ol {
+        margin-top: 0;
+      }
       h2 {
         padding-bottom: 16px;
         font-size: 36px;

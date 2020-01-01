@@ -99,8 +99,8 @@ let twitterEmbed = element => switch element {
 | _ => None
 };
 
-let process = rawBody => {
+let process = (~ids=?, rawBody) => {
   let md = Omd.of_string(~extensions=[], rawBody);
   let md = Omd.visit(twitterEmbed, md);
-  Omd.to_html(md)
+  Omd.to_html(~ids?, md)
 };
