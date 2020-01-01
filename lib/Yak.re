@@ -5,7 +5,7 @@ let (/+) = Filename.concat;
 open Shared.Infix;
 open Types;
 
-let sortPostsByDate = (({date: date1}, _, _), ({date: date2}, _, _)) => Shared.dateSort(date2, date1);
+let sortPostsByDate = ({Post.config: {date: date1}}, {Post.config: {date: date2}}) => Shared.dateSort(date2, date1);
 
 let sortProjectsByDate = ({Project.updates}, {Project.updates: updates2}) => switch (updates, updates2) {
 | ([(date1, _, _), ..._], [(date2, _, _), ..._]) => Shared.dateSort(date2, date1)
@@ -26,13 +26,11 @@ let splitTopYaml = (text) => {
 let collectPages = (inputDir, outputDir, baseDir, parse) => {
   let base = inputDir /+ baseDir;
   Files.readDirectory(base)
-  |> List.filter(f => Filename.check_suffix(f, ".md") || Filename.check_suffix(f, ".html")) /* TODO .html suffix too */
+  |> List.filter(f => Filename.check_suffix(f, ".md") || Filename.check_suffix(f, ".html") || Filename.check_suffix(f, ".nm.txt"))
   |> List.map((fileName) => {
     let fullName = base /+ fileName;
     let contents = Files.readFile(fullName) |> unwrap("Cannot read file");
-    let (opts, body) = splitTopYaml(contents);
-    let result = parse(baseDir /+ fileName, opts, body);
-
+    let result = parse(baseDir /+ fileName, contents);
     let dest = outputDir /+ baseDir /+ Filename.chop_extension(fileName);
     Files.mkdirp(dest);
     let fullDest = dest /+ "index.html";
@@ -52,11 +50,11 @@ let renderPages = (render, pages) => {
 };
 
 let assembleTags = posts => {
-  posts |> List.fold_left((byTag, (config, intro, body)) => {
+  posts |> List.fold_left((byTag, {Post.config, intro, body}) => {
     let byTag = List.fold_left(
       (byTag, tag) => StrMap.add(tag, switch (StrMap.find(tag, byTag)) {
-      | exception Not_found => [(config, intro, body)]
-      | items => [(config, intro, body), ...items]
+      | exception Not_found => [{config, intro, body}]
+      | items => [{Post.config, intro, body}, ...items]
       }, byTag),
       byTag,
       config.tags
@@ -83,7 +81,10 @@ let assembleProjectTags = projects => {
 
 let processProjects = (inputDir, outputDir) => {
   /* Project pages */
-  let projects = collectPages(inputDir, outputDir, "projects", Project.parse) |> renderPages(Project.render) |> List.sort(sortProjectsByDate);
+  let projects = collectPages(inputDir, outputDir, "projects", (fileName, contents) => {
+    let (opts, body) = splitTopYaml(contents);
+    Project.parse(fileName, opts, body)
+  }) |> renderPages(Project.render) |> List.sort(sortProjectsByDate);
   let projectTags = assembleProjectTags(projects);
   let projectTagCounts = StrMap.fold((key, value, res) => [(key, List.length(value)), ...res], projectTags, [])
   |> List.sort(((k, n), (v, n2)) => n2 - n)
@@ -104,8 +105,15 @@ let processProjects = (inputDir, outputDir) => {
 
 let processBlog = (inputDir, outputDir) => {
   /* Posts */
-  let fullPosts = collectPages(inputDir, outputDir, "posts", Post.parse);
-  let posts = List.map(snd, fullPosts) |> List.sort(sortPostsByDate) |> List.filter(((post, _, _)) => !post.draft);
+  let fullPosts = collectPages(inputDir, outputDir, "posts", (fileName, contents) => {
+    if (Filename.check_suffix(fileName, ".nm.txt")) {
+      Post.parseNm(fileName, contents)
+    } else {
+      let (opts, body) = splitTopYaml(contents);
+      Post.parse(fileName, opts, body);
+    };
+  });
+  let posts = List.map(snd, fullPosts) |> List.sort(sortPostsByDate) |> List.filter(post => !post.Post.config.draft);
   renderPages(Post.render(posts), fullPosts) |> ignore;
 
   let tags = assembleTags(posts);
@@ -155,9 +163,9 @@ let redirect = (url, contentTitle, description) => {
 
 let setupRedirectsForOldPosts = (outputDir, posts) => {
   let oldPosts = posts |> List.filter(
-    (({Types.date}, _, _)) => Shared.dateSort(date, (2018, 1, 14)) < 0
+    ({Post.config: {Types.date}}) => Shared.dateSort(date, (2018, 1, 14)) < 0
   );
-  oldPosts |> List.iter((({Types.title, description, fileName, date: (year, month, day)}, _, _)) => {
+  oldPosts |> List.iter(({Post.config: {Types.title, description, fileName, date: (year, month, day)}}) => {
     let slug = Filename.basename(fileName) |> Filename.chop_extension;
     let path = Printf.sprintf("%04d/%02d/%02d/%s/", year, month, day, slug);
     let fullPath = outputDir /+ path;

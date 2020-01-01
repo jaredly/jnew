@@ -151,7 +151,7 @@ let blogColumn = (css, posts) => {
     <Header href="/posts/" css title="Blog posts" />
     <div>
       (List.map(
-        (({Types.fileName, date, wordCount, title}, intro, body)) => {
+        ({Post.config: {Types.fileName, date, wordCount, title}, intro, body}) => {
           let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
           let (year, month, day) = date;
           <a href className=css(subtleLink)>

@@ -5,7 +5,7 @@ categories:
 date: 2019-05-28 08:40:16
 description: Forget boilerplate -- milk will generate all of that code for you, in a future-proof way including automatic, type-safe migrations.
 article_image: /images/cowsay-top.png
-draft: true
+draft: false
 featured: true
 author: Jared Forsyth
 ---
