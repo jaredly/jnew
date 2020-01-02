@@ -272,11 +272,10 @@ let parseNm = (fileName, content) => {
   let (nodes, config) =
     switch (nodes) {
     | [
-        {children: [{typ: "note", content}, ...otherChildren]} as node,
-        ...rest,
+        {children: [{typ: "note", content: attrs}, ...otherChildren], content},
       ] => (
-        [{...node, children: otherChildren}, ...rest],
-        parseJsonConfig(config, Yojson.Basic.from_string(content)),
+        otherChildren,
+        parseJsonConfig({...config, title: content}, Yojson.Basic.from_string(attrs)),
       )
     | _ => (nodes, config)
     };

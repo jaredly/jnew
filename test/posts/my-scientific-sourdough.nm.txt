@@ -1,10 +1,10 @@
 # {"type":"header","depth":0}
 
-  My Scientific Sourdough
+  An Scientific Approach to Sourdough
 
 # {"type":"note","depth":1}
 
-  {"categories": ["cooking", "baking"], "date": "2019-12-31 10:49:34", "description": "My current loaf recipe, based on many experiments", "article_image": "/images/bread/cover.jpg", "draft": true, "featured": false, "author": "Jared Forsyth"}
+  {"categories": ["cooking", "baking"], "date": "2019-12-31 10:49:34", "description": "My current loaf recipe, based on many experiments", "article_image": "/images/bread/cover.jpg", "draft": true, "featured": false, "author": "Jared Forsyth", "title": "My Scientific Sourdough 🍞"}
 
 # {"type":"normal","depth":1}
 
@@ -24,15 +24,15 @@
 
 # {"type":"list","depth":2}
 
-  Ingredients
+  **Ingredients**
 
 # {"type":"normal","depth":3}
 
-  108g active sourdough starter
+  108g [active sourdough starter](#Starter)
 
 # {"type":"normal","depth":3}
 
-  2c (235g) water
+  2c (475g) [water](#Dough-Hydration)
 
 # {"type":"normal","depth":3}
 
@@ -40,7 +40,7 @@
 
 # {"type":"normal","depth":3}
 
-  250g whole wheat flour
+  250g [whole wheat flour](#Whole-Wheat-Flour)
 
 # {"type":"normal","depth":3}
 
@@ -50,13 +50,33 @@
 
   2T (15g) water
 
-# {"type":"orderedList","depth":2}
+# {"type":"list","depth":2}
 
-  Instructions
+  **Optional mixins**
 
 # {"type":"normal","depth":3}
 
-  Mix starter, water, and flour in a bowl. Let rest on the counter, covered, for 30 minutes (autolyze).
+  [Seeds](#Test-7-Seeds): 1/4-1/3c each of chia, flax, and sunflower seeds.
+
+# {"type":"normal","depth":3}
+
+  Cranberry walnut: 900g craisins, 750g walnuts, chopped.
+
+# {"type":"normal","depth":3}
+
+  Jalapeño cheddar: 9 jalapeños, diced. ~3 inches of a block of sharp cheddar, cubed.
+
+# {"type":"note","depth":3}
+
+  If using mixins, skip the autolyze step and just dump everything together at once.
+
+# {"type":"orderedList","depth":2}
+
+  **Instructions**
+
+# {"type":"normal","depth":3}
+
+  Mix [starter](#Starter), water, and flour in a bowl. Let rest on the counter, covered, for 30 minutes ([autolyze](#Autolyze)). (You can skip the autolyze step if you want, see [Test 6](#Test-6-No-work-but-final-shaping)).
 
 # {"type":"normal","depth":3}
 
@@ -64,7 +84,7 @@
 
 # {"type":"normal","depth":3}
 
-  ~~Every thirty minutes for the next 1-3 hours, do a "turn"~~ see test(3)
+  ~~Every thirty minutes for the next 1-3 hours, do a ["turn"](#Turns)~~ I usually skip these turns, see [Test 4](#Test-4-Two-turns-vs-no-turns)
 
 # {"type":"normal","depth":3}
 
@@ -72,15 +92,15 @@
 
 # {"type":"normal","depth":3}
 
-  Dump onto the counter, do an initial shaping. "bench rest" for 30 minutes.
+  Dump onto the counter, do an [initial shaping](#Shaping) using some [bench scrapers](#Bench-Scrapers). "bench rest" for 30 minutes.
 
 # {"type":"normal","depth":3}
 
-  Do the final shaping, place in a parchment-paper-lined container for the final rise (60-90 minutes, until ~doubled).
+  Do the final [shaping](#Shaping), place in a [parchment-paper](#Parchment-Paper)-lined container for the final rise (60-90 minutes, until ~doubled).
 
 # {"type":"normal","depth":3}
 
-  Place your dutch oven in the oven, and preheat the oven to 500º.
+  Place your [dutch oven in the oven](#Dutch-Oven-Oven), and preheat the oven to 500º. (If you don't preheat the dutch oven, the crust will still be good, but not mind-blowingly good see [test 6]())
 
 # {"type":"normal","depth":3}
 
@@ -88,7 +108,7 @@
 
 # {"type":"normal","depth":3}
 
-  Bake, covered, for 30 minutes.
+  Bake, covered, for 30 minutes. (If you forget to put the cover on, the crust will be much less awesome, see [test 5]())
 
 # {"type":"normal","depth":3}
 
@@ -96,7 +116,7 @@
 
 # {"type":"normal","depth":3}
 
-  Turn off the oven, take the loaf out of the dutch oven, and let it sit in the warm oven for another 10-15 minutes to cure the crust and dry out the loaf.
+  Turn off the oven, take the loaf out of the dutch oven, and let it sit in the warm oven for another 10-15 minutes to cure the crust and dry out the loaf. (If you can't wait and just want to dig in, it's OK, but the inside might be more moist than you want).
 
 # {"type":"header","depth":1}
 
@@ -104,19 +124,56 @@
 
 # {"type":"header","depth":2}
 
+  Whole-Wheat Flour
+
+# {"type":"normal","depth":3}
+
+  I grind my own flour, using a hand-me-down excalibur wheat grinder from my grandmother that's probably 50 years old. I get hard white
+   wheat in 25lb bags from the local supermarket, which lasts me 4-8 months, depending on how much I'm baking.
+
+# {"type":"normal","depth":3}
+
+  In my (certainly uninformed) opinion, there is just no substitutte for freshly-ground whole wheat flour. Any whole wheat flour I've bought from a store tastes terrible in comparison -- if it's a choice between store-bought all-purpose and store-bought whole-wheat, I'd go will all-purpose (in the US at least. I've had good experiences with store-bought whole-wheat in Germany). But in a contest between home-ground whole-wheat and any all-purpose or bread flour, bread made with the whole wheat flour tastes so much better, you can't even imagine.
+
+# {"type":"header","depth":2}
+
   Starter
 
 # {"type":"normal","depth":3}
 
-  A "young" starter is start that has *just* finished doubling. For the 1:5:5 100% hydration formula that I ended up adopting, this means using the start 8-12 hours after feeding (I would generally feed it in the morning, then start the loaf at night). See test (2).
+  At the beginning of my sourdough journey, I did a bit of [experimenting with different starter formulas](#Test-1-Starter), but at the moment I've settled on 1:5:5, fed with unbleached white flour.
 
 # {"type":"normal","depth":3}
 
-  People talk about "the float test" as the way to determine whether your starter is "ready" to leaven some dough. I believe the theory is that once starter has "risen", it has a lot of trapped gas bubbles, and those will cause it to float. I don't use it at all, mostly because it seems like a waste of starter, but also because I've just never had dough fail to rise. I've used starter that's "old" and would fail the test because the gasses have escaped, and it worked fine. It's possible that the float test is more critical when you're first developing your starter from scratch (a step I skipped by being giften some already-mature starter).
+  A "young" starter is start that has *just* finished doubling. For the 1:5:5 100% hydration formula that I ended up adopting, this means using the start 8-12 hours after feeding (I would generally feed it in the morning, then start the loaf at night).
 
 # {"type":"normal","depth":3}
 
-  My current starter maintenance process is: in the morning, or at night, either when I'm making bread, or it's been long enough that I feel I should feed the start (I draw the line around 36 hours), I take most of the starter out of my wide-mouthed pint glass jar, shooting for a combined weight of ~285g. The jar weighs 275g, so that means there's about 10g starter left in the jar. I then add 50g of unbleached all-purpose flour and 50g water, and mix it up. If I'll be making a larger loaf soon, I use 60g water and 60g flour, and might leave as much as 20g of starter. If I'm not making bread with the starter I've taken out, I put it into the glass container I keep in the fridge of old starter, to be turned into a savory sourdough griddle-cake later (recipe pending).
+  In [Test 3](#Test-3-quot-Young-starter-quot-vs-quot-old-starter-quot) I evaluated using a "young" start vs an "older" start that hadn't been fed for 24 hours, and they both turned out fine. So my general approach is: if you do remember to feed the start 8 hours before you want to make the dough, that's great, but if not, the bread will still be fine -- it might just be a little more sour.
+
+# {"type":"normal","depth":3}
+
+  People talk about "the float test" as the way to determine whether your starter is "ready" to leaven some dough. I believe the theory is that once starter has "risen", it has a lot of trapped gas bubbles, and those will cause it to float. I don't use it at all, mostly because it seems like a waste of starter, but also because I've just never had dough fail to rise. I've used starter that's "old" and would fail the test because the gasses have escaped, and it worked fine. It's possible that the float test is more critical when you're first developing your starter from scratch (a step I skipped by being gifted some already-mature starter).
+
+# {"type":"list","depth":3}
+
+  My current starter maintenance process is:
+
+# {"type":"normal","depth":4}
+
+  in the morning, or at night, either when I'm making bread, or it's been long enough that I feel I should feed the start (I draw the line around 36 hours), I take most of the starter out of my wide-mouthed pint glass jar, shooting for a combined weight of ~285g. The jar weighs 275g, so that means there's about 10g starter left in the jar.
+
+# {"type":"normal","depth":4}
+
+  I then add 50g of unbleached all-purpose flour and 50g water, and mix it up.
+
+# {"type":"normal","depth":4}
+
+  If I'll be making a larger loaf that night, I use 60g water and 60g flour, and might leave as much as 20g of starter.
+
+# {"type":"normal","depth":4}
+
+  If I'm not making bread with the starter I've taken out, I put it into the glass container I keep in the fridge of old starter, to be turned into a savory sourdough flatbread later (recipe pending).
 
 # {"type":"header","depth":2}
 
@@ -132,7 +189,7 @@
 
 # {"type":"normal","depth":3}
 
-  My recipe is 47% hydrated, which is on the lower end of the scale. I'm planning to try out higher hydration doughs, and I'll update here with my findings. My standard yeasted whole wheat bread recipe is 40% hydration, and you can really feel the difference, this dough is much stickier.
+  My recipe is 95% hydrated, which is definitely on the higher end of the scale. What's weird is that I see people talking about a "high hydration sourdough", naming percentages like [75%](https://www.theperfectloaf.com/high-hydration-sourdough-bread/) ([2](https://alexandracooks.com/2017/10/24/artisan-sourdough-made-simple-sourdough-bread-demystified-a-beginners-guide-to-sourdough-baking/)) ([3](https://bewitchingkitchen.com/2018/02/22/emilie-raffas-high-hydration-sourdough/)), [80%](https://www.theperfectloaf.com/higher-hydration-sourdough-bread/), [83%](https://figjamandlimecordial.com/2016/06/03/a-new-overnight-sourdough-tutorial-high-hydration-loaf/), so I don't know if the recipe I got is way off in the weeds? It's also possible in my mind that using half whole-wheat messes with things somewhat -- that the whole-wheat flour would absorb more water or something.
 
 # {"type":"header","depth":2}
 
@@ -140,7 +197,7 @@
 
 # {"type":"normal","depth":3}
 
-  "turns" seem to be akin to "punching down the dough" in a normal yeasted bread recipe, but descriptions of *how* to do a turn vary. What I've ended up doing is using a spatula to fold the dough over itself in the bowl, similar to what I do when doing the initial mixing. The method I've seen described most often is to reach under the dough with wet / oiled hands, lift up the middle a foot or two (stretching the dough), and then let it drop down. I have never yet tried this method, because I'm lazy and would rather not get my hands dirty. Additionally, I've tested [doing turns vs not doing them](), and it didn't seem to make an important difference, so I've dropped this step from my practice.
+  "Turns" seem to be a mix between "punching down the dough" and "kneading", and many people talk about the "stretch and fold" method (you can find many youtube videos of people demonstrating this). I've never yet tried this method, because I'm lazy and would rather not get my hands dirty 🤷. What I do is use a firm plastic spatula to fold the dough over itself & push it around, similar to waht I do during the inital mixing. I've tested [doing these turns vs not doing them](#Test-4-Two-turns-vs-no-turns), and it didn't seem to make an important difference, so I've dropped this step from my practice. Of course, it's possible that if I used the more standard method I would get different results.
 
 # {"type":"header","depth":2}
 
@@ -148,7 +205,7 @@
 
 # {"type":"normal","depth":3}
 
-  If you don't have these prepare to get several spatulas dirty, and generally have a hard time of it.
+  If you don't have these, prepare to get several spatulas dirty, and generally have a hard time of it.
 
 # {"type":"normal","depth":3}
 
@@ -156,7 +213,7 @@
 
 # {"type":"normal","depth":3}
 
-  You can get by with just one, but two is much nicer, as you can use one to separate the other one from the dough.
+  You can get by with just one, but two is much nicer, as you can use one to separate the other one from the dough. Honestly there are moments when I wish I had a third.
 
 # {"type":"header","depth":2}
 
@@ -164,7 +221,7 @@
 
 # {"type":"normal","depth":3}
 
-  shaping: the method that I've adopted is: after dumping the dough on the table, use the bench scraper to fold the dough over itself, starting at one side putting the scraper an inch or two under the dough and then dragging it over to the other side. Having a second bench scraper is quite helpful in extricating the first scraper from the dough after folding. Then go around the circle 2-4 more times until it has formed a rough ball. Then push your bench scraper along the table into the dough, pushing the dough across the table for a foot or so, so that it "rolls up" a bit, forming some surface tension. Do this several more times from different angles, using the second bench scraper to help remove the first from the sticky dough each time. After the bench rest, repeat the same process once more.
+  The method that I've adopted is: after dumping the dough on the table, use the bench scraper to fold the dough over itself, starting at one side putting the scraper an inch or two under the dough and then dragging it over to the other side. Having a second bench scraper is quite helpful in extricating the first scraper from the dough after folding. Then go around the circle 2-4 more times until it has formed a rough ball. Then push your bench scraper along the table into the dough, pushing the dough across the table for a foot or so, so that it "rolls up" a bit, forming some surface tension. Do this several more times from different angles, using the second bench scraper to help remove the first from the sticky dough each time. After the bench rest, repeat the same process once more. You can also find a number of youtube videos demonstrating this shaping technique.
 
 # {"type":"header","depth":2}
 
@@ -172,7 +229,7 @@
 
 # {"type":"normal","depth":3}
 
-  My current technique involves letting the dough do the final rise in a pyrex cake pan lined with parchment paper (8'' round, ~4'' high), and then using the parchment paper to transfer it into the preheated cast iron dutch oven. The hope is that this minimizes volume loss in the transfer, but I don't love that it requires using a lot of parchment paper.
+  My current process involves letting the dough do the final rise in a pyrex cake pan lined with parchment paper (8'' round, ~4'' high), and then using the parchment paper to transfer it into the preheated cast iron dutch oven. The hope is that this minimizes volume loss in the transfer, but I don't love that it requires using a lot of parchment paper.
 
 # {"type":"header","depth":2}
 
@@ -180,7 +237,7 @@
 
 # {"type":"normal","depth":3}
 
-  Using a pre-heated, covered dutch oven inside of a conventional oven does two important things. First, having it covered allows the bread to "self-steam", resulting in a dramatically better crust (see test (TODO)). Second, preheating the dutch oven before putting the bread in .
+  Using a pre-heated, covered dutch oven inside of a conventional oven does two important things. First, having it covered allows the bread to "self-steam", resulting in a dramatically better crust (see [Test 5](#Test-5-Forgetting-to-put-the-lid-on-the-dutch-oven)). Second, preheating the dutch oven before putting the bread in absolutely takes the taste & texture of the crust to the next level. Make sure to take the lid off for the last 10 or so minutes of baking to crisp everything up.
 
 # {"type":"header","depth":1}
 
@@ -188,7 +245,7 @@
 
 # {"type":"header","depth":2}
 
-  Starter
+  Test 1: Starter
 
 # {"type":"normal","depth":3}
 
@@ -228,7 +285,7 @@
 
 # {"type":"normal","depth":4}
 
-  weigh out the amount of starter to retain, and discard or otherwise use the rest
+  weigh out the amount of starter to retain, and discard or otherwise use the rest (See my [flatbread recipe](#Bonus-recipe-discard-starter-flatbread) at the end of this post for a nice way to use it).
 
 # {"type":"normal","depth":4}
 
@@ -268,7 +325,7 @@
 
 # {"type":"normal","depth":2}
 
-  For my first many loaves I went with a split-test approach. Make two balls of dough -- one would be the "control", where I did everything that was "best sourdough practice", and one where I would change an ingredient or leave out a step, to see what happened. Here are the results of these experiments.
+  For my first many loaves I went with a split-test approach. Make two balls of dough -- one would be the "control", where I followed all the steps & ingredients of the original recipe, and one where I would change an ingredient or leave out a step, to see what happened. Here are the results of these experiments.
 
 # {"type":"header","depth":2}
 
@@ -288,7 +345,11 @@
 
 # {"type":"header","depth":2}
 
-  (1) First split-test loaf: all-purpose vs whole-wheat start (Dec 3rd)
+  Test 2: all-purpose vs whole-wheat start
+
+# {"type":"normal","depth":3}
+
+  Dec 3-4
 
 # {"type":"normal","depth":3}
 
@@ -316,7 +377,11 @@
 
 # {"type":"header","depth":2}
 
-  (2) "Young starter" vs "old starter" (Dec 5th)
+  Test 3: "Young starter" vs "old starter"
+
+# {"type":"normal","depth":3}
+
+  Dec 5-6
 
 # {"type":"normal","depth":3}
 
@@ -344,8 +409,232 @@
 
 # {"type":"header","depth":2}
 
-  (3) Two turns vs no turns (Dec 8th)
+  Test 4: Two turns vs no turns
 
 # {"type":"normal","depth":3}
 
-  A main motivation for my tests is "how little effort can I get away with and still have a great-tasting loaf". So for this test I tried omitting the "turns" step.
+  Dec 7-8
+
+# {"type":"normal","depth":3}
+
+  A main motivation for my tests is "how little effort can I get away with and still have a great-tasting loaf". So for this test I tried omitting the "turns" step. Keep in mind that I might be doing the "turns" completely wrong, invalidating this experiment.
+
+# {"type":"header","depth":3}
+
+  Results
+
+# {"type":"normal","depth":4}
+
+  Crumb, rise, and crust all seemed to show no differences.
+
+# {"type":"normal","depth":4}
+
+  The one that had 2 turns tasted a litte more sour. We'd have to do another experiment (maybe with 5 turns vs 0 turns) to nail down the effect.
+
+# {"type":"header","depth":2}
+
+  Test 5: Forgetting to put the lid on the dutch oven
+
+# {"type":"normal","depth":3}
+
+  Dec 10
+
+# {"type":"normal","depth":3}
+
+  This test was going to be "No work but final shaping", but an oversight in the bake changed the nature of the experiment quite a bit.
+
+# {"type":"header","depth":3}
+
+  Results
+
+# {"type":"normal","depth":4}
+
+  Having the lid in the dutch oven makes a huge difference! I don't have access to a "self-steaming" oven, but it would be interesting to evaluate how that works, as I understand the thing that the lid is doing is trapping in steam. I've also heard that you can get yourself a little steam by putting in a tray of water underneath the bread, but I haven't tried that either.
+
+# {"type":"header","depth":2}
+
+  Test 6: No work but final shaping
+
+# {"type":"normal","depth":3}
+
+  Dec 12
+
+# {"type":"normal","depth":3}
+
+  No autolyze, no turns, no bench rest. The only thing that could be more lazy is to omit the final shaping + rise, but I wasn't quite ready for that.
+
+# {"type":"list","depth":3}
+
+  For this test, I used the following steps:
+
+# {"type":"normal","depth":4}
+
+  Mix starter, water, flour, and salt in a bowl.
+
+# {"type":"normal","depth":4}
+
+  Let rest overnight (bulk rise).
+
+# {"type":"normal","depth":4}
+
+  Dump on the counter, [shape](#Shaping) with bench scrapers, and place onto the parchment-paper-lined container for the final rise.
+
+# {"type":"normal","depth":4}
+
+  Continue from step 7 as normal.
+
+# {"type":"header","depth":3}
+
+  Results
+
+# {"type":"normal","depth":4}
+
+  The final shaping was somewhat more difficult with the dough that hadn't been worked at all previously -- it was more sticky, harder to form into a ball.
+
+# {"type":"normal","depth":4}
+
+  However, the final texture, taste, crust, etc. didn't really seem to be impacted.
+
+# {"type":"normal","depth":4}
+
+  I wonder if those steps become more critical when you're working with a lower hydration dough?
+
+# {"type":"header","depth":2}
+
+  Test 7: Seeds
+
+# {"type":"normal","depth":3}
+
+  My previous go-to bread recipe involved a generous addition of seeds -- chia, flax, and sunflower -- and I wanted to see how they would play in this sourdough.
+
+# {"type":"header","depth":3}
+
+  Results
+
+# {"type":"normal","depth":4}
+
+  The dough was rather drier & easier to work with, because the seeds absorbed some of the water. They also broke up the surface, resulting in less "surface tension" development during shaping.
+
+# {"type":"normal","depth":4}
+
+  The resulting crumb and crust were just as good as the plain half, with of course the delightful textural & flavor additions of the seeds.
+
+# {"type":"header","depth":2}
+
+  Test 8: Cranberry Walnut
+
+# {"type":"normal","depth":3}
+
+  My wife's favorite sourdough loaf that we would get from a baker at the local farmer's market in the summer is a cranberry walnut, so I decided to try my hand at it.
+
+# {"type":"header","depth":3}
+
+  Results
+
+# {"type":"normal","depth":4}
+
+  The bread was beyond my wildest dreams. The craisins had partially reconstituted from the overnight rise, and added a wonderful flavor to the whole loaf (and a fetching purple tint), while the walnuts complemented them perfectly.
+
+# {"type":"normal","depth":4}
+
+  In contrast to the seeds loaf, the mixins in this dough didn't substantially impact the shapability (surface tension) or consistency of the dough.
+
+# {"type":"header","depth":2}
+
+  Test 9: Heavy Cream
+
+# {"type":"normal","depth":3}
+
+  I'm a huge fan of heavy cream, and earlier in 2019 I started substituting heavy cream for 1/3 of the water in my standard whole-wheat bread recipe. In that dough, adding cream enhanced the flavor, the crumb, and the crust of the finished bread. This test was to see how it played in a sourdough context.
+
+# {"type":"header","depth":3}
+
+  Results
+
+# {"type":"normal","depth":4}
+
+  The dough was a little firmer, and therefore easier to work with.
+
+# {"type":"normal","depth":4}
+
+  The resulting crumb was wetter, "creamier", but honestly it didn't need it. And the creaminess seemed to get in the way a bit of the natural sourdough flavor. I probably won't be doing this again.
+
+# {"type":"header","depth":2}
+
+  Bonus recipe: discard starter flatbread
+
+# {"type":"normal","depth":3}
+
+  I got this idea from [this youtube video](https://www.youtube.com/watch?v=vVx2oFFptG0) where they make a "scallion sourdough pancake", but I modified it because a) I don't tend to have scallions around, b) I always need more Garam Masala in my life, and c) I'm lazy and tending flatbread on the stove is more work than ~baking it in the toaster oven.
+
+# {"type":"normal","depth":3}
+
+  In our fridge, I've got a lidded glass container where I put my sourdough discard. Each time I feed the starter when I'm not making bread immediately, I add the excess to the container. Then a couple times a week, we take some out to make these flatbreads for breakfast. The starter has kept just fine for multiple weeks without issue.
+
+# {"type":"list","depth":3}
+
+  **Ingredients**
+
+# {"type":"normal","depth":4}
+
+  Some discarded sourdough start (probably between 1/2c and 1c). It doesn't matter how old it is (I've had fine results with start up to 36 hours old on the counter, and up to a couple of weeks in the fridge)
+
+# {"type":"normal","depth":4}
+
+  Some grated pepper jack cheese (cheddar works fine too), like 1/4 cup or so, plus a little more to go on top.
+
+# {"type":"normal","depth":4}
+
+  Spices: garam masala, cumin, salt, pepper, cayanne, garlic powder, onion powder.
+
+# {"type":"normal","depth":4}
+
+  Sometimes I mix in a teaspoon or so of room-temperature butter.
+
+# {"type":"list","depth":3}
+
+  **Equipment**
+
+# {"type":"normal","depth":4}
+
+  A plate to mix things on (or a mixing bowl if you want to be fancy)
+
+# {"type":"normal","depth":4}
+
+  A toaster oven
+
+# {"type":"normal","depth":4}
+
+  A mini cast-iron frying pan
+
+# {"type":"list","depth":3}
+
+  **Instructions**
+
+# {"type":"normal","depth":4}
+
+  Add some butter to the frying pan, and then preheat it in the toaster oven, turning it up as high as it claims to go (mine says 500º but who knows what it's doing).
+
+# {"type":"normal","depth":4}
+
+  Mix all the ingredients on a plate, or in a bowl or something. I generally use a spatula or a metal spoon to mix things.
+
+# {"type":"normal","depth":4}
+
+  Pull out the frying pan, and scrape the mix into it with a spatula. Top with a little more grated cheese.
+
+# {"type":"normal","depth":4}
+
+  Put it back in the toaster oven, close the door, and wait for 10-20 minutes, or until you're tired of waiting. I generally push down the "toast" lever once at the beginning to get things hot, and once at the end to brown the cheese on top.
+
+# {"type":"normal","depth":4}
+
+  You're done! Wait for it to cool before eating, or don't.
+
+# {"type":"normal","depth":3}
+
+  I have no idea how much the little cast-iron frying pan is helping here. You could probably cook it in the little tray in the toaster oven if you wanted to, and it would be fine. Also, I'm sure this will work cooked in a frying pan on the stove (although it might be harder to get the nice crisp on the cheese), or baked in the oven (it just seems like overkill for something this small).
+
+# {"type":"normal","depth":3}
+
+  We've had this for breakfast a number of times in the past weeks, and we love it.

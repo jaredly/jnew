@@ -94,7 +94,7 @@ let rec getChildren = (depth, children, nodes) => switch nodes {
     (children, nodes)
   | [node, ...rest] => 
     let (sub, rest) = getChildren(node.depth, [], rest);
-    getChildren(depth, [{...node, children: sub}, ...children], rest)
+    getChildren(depth, [{...node, children: sub |> List.rev}, ...children], rest)
 }
 
 let organizeNodes = nodes => {

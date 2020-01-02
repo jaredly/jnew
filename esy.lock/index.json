@@ -1,5 +1,5 @@
 {
-  "checksum": "f03b031890ba33912e5265d1a1ceab29",
+  "checksum": "6fd97d2afc6f455d057f47aa371fec15",
   "root": "my-website@link-dev:./package.json",
   "node": {
     "yarn-pkg-config@github:esy-ocaml/yarn-pkg-config#cca65f99674ed2d954d28788edeb8c57fada5ed0@d41d8cd9": {
@@ -793,28 +793,6 @@
         "@opam/uchar@opam:0.0.2@c8218eea"
       ]
     },
-    "@opam/jbuilder@opam:transition@20522f05": {
-      "id": "@opam/jbuilder@opam:transition@20522f05",
-      "name": "@opam/jbuilder",
-      "version": "opam:transition",
-      "source": {
-        "type": "install",
-        "source": [ "no-source:" ],
-        "opam": {
-          "name": "jbuilder",
-          "version": "transition",
-          "path": "esy.lock/opam/jbuilder.transition"
-        }
-      },
-      "overrides": [],
-      "dependencies": [
-        "ocaml@4.6.1000@d41d8cd9", "@opam/dune@opam:1.11.4@a7ccb7ae",
-        "@esy-ocaml/substs@0.0.1@d41d8cd9"
-      ],
-      "devDependencies": [
-        "ocaml@4.6.1000@d41d8cd9", "@opam/dune@opam:1.11.4@a7ccb7ae"
-      ]
-    },
     "@opam/hex@opam:1.4.0@96b78cfa": {
       "id": "@opam/hex@opam:1.4.0@96b78cfa",
       "name": "@opam/hex",
@@ -1223,7 +1201,7 @@
       "overrides": [],
       "dependencies": [
         "ocaml@4.6.1000@d41d8cd9", "@opam/ocamlbuild@opam:0.14.0@6ac75d03",
-        "@opam/jbuilder@opam:transition@20522f05",
+        "@opam/dune@opam:1.11.4@a7ccb7ae",
         "@opam/base-bigarray@opam:base@b03491b0",
         "@esy-ocaml/esy-installer@0.0.0@d41d8cd9"
       ],
