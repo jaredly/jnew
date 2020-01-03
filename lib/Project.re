@@ -189,7 +189,7 @@ let parse = (fileName, opts, rawBody) => {
   ) |> List.sort(((date, _, _), (date2, _, _)) => Shared.dateSort(date2, date));
   {
     title,
-    id: Filename.basename(fileName) |> Filename.chop_extension,
+    id: Filename.basename(fileName) |> Util.chopSuffix,
     github,
     link,
     status,
@@ -260,7 +260,7 @@ let renderList = (tags, projects, contentTitle) => {
       (List.map(
         ({title, tags, status, github, description, longDescription, screenshot, wip, fileName, updates}) => {
           open Types;
-          let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
+          let href = ("/" ++ Util.chopSuffix(fileName) ++ "/");
           let numUpdates = List.length(updates);
           <div>
             <div className=css([

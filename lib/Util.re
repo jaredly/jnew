@@ -8,3 +8,11 @@ let splitFirst = (needle, haystack) => {
   }
 };
 let expectTrue = (message, result) => if (!result) {failwith(message)} else {()};
+
+let chopSuffix = n => {
+  if (Filename.check_suffix(n, ".nm.txt")) {
+    Filename.chop_suffix(n, ".nm.txt")
+  } else {
+    Filename.chop_extension(n)
+  }
+}

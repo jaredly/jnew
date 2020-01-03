@@ -58,7 +58,7 @@ let render = (posts, {config: {Types.title: contentTitle, fileName, description,
       (Shared.hspace(8))
       (List.mapi(
         (i, {config: {Types.title, date: (year, month, day), fileName}}) => {
-          let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
+          let href = ("/" ++ Util.chopSuffix(fileName) ++ "/");
           i < 5 ? <a
             href
             className=css([
@@ -151,7 +151,7 @@ let postList = (posts, tags, contentTitle) => {
       (List.map(
         ({config, intro: teaser}) => {
           open Types;
-          let href = ("/" ++ Filename.chop_extension(config.Types.fileName) ++ "/");
+          let href = ("/" ++ Util.chopSuffix(config.Types.fileName) ++ "/");
           let readTime = Shared.minuteReadText(config.wordCount);
           <div>
             <a href className=css([

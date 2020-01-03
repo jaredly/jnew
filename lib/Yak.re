@@ -31,7 +31,7 @@ let collectPages = (inputDir, outputDir, baseDir, parse) => {
     let fullName = base /+ fileName;
     let contents = Files.readFile(fullName) |> unwrap("Cannot read file");
     let result = parse(baseDir /+ fileName, contents);
-    let dest = outputDir /+ baseDir /+ Filename.chop_extension(fileName);
+    let dest = outputDir /+ baseDir /+ Util.chopSuffix(fileName);
     Files.mkdirp(dest);
     let fullDest = dest /+ "index.html";
     (fullDest, result)
@@ -166,7 +166,7 @@ let setupRedirectsForOldPosts = (outputDir, posts) => {
     ({Post.config: {Types.date}}) => Shared.dateSort(date, (2018, 1, 14)) < 0
   );
   oldPosts |> List.iter(({Post.config: {Types.title, description, fileName, date: (year, month, day)}}) => {
-    let slug = Filename.basename(fileName) |> Filename.chop_extension;
+    let slug = Filename.basename(fileName) |> Util.chopSuffix;
     let path = Printf.sprintf("%04d/%02d/%02d/%s/", year, month, day, slug);
     let fullPath = outputDir /+ path;
     let realPath = "/posts" /+ slug;

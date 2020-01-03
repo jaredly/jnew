@@ -27,7 +27,7 @@ let projectColumn = (css, projects) => {
     <div>
       (List.map(
         ({Project.title, fileName, description, screenshot, github, updates, status, tags}) => {
-          let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
+          let href = ("/" ++ Util.chopSuffix(fileName) ++ "/");
           <div>
             <div
               className=css([
@@ -152,7 +152,7 @@ let blogColumn = (css, posts) => {
     <div>
       (List.map(
         ({Post.config: {Types.fileName, date, wordCount, title}, intro, body}) => {
-          let href = ("/" ++ Filename.chop_extension(fileName) ++ "/");
+          let href = ("/" ++ Util.chopSuffix(fileName) ++ "/");
           let (year, month, day) = date;
           <a href className=css(subtleLink)>
             <div className=css([A("font-size", px(Consts.titleSize))])>
