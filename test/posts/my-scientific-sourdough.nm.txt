@@ -4,7 +4,11 @@
 
 # {"type":"note","depth":1}
 
-  {"categories": ["cooking", "baking"], "date": "2019-12-31 10:49:34", "description": "My current loaf recipe, based on many experiments", "article_image": "/images/bread/cover.jpg", "draft": true, "featured": false, "author": "Jared Forsyth", "title": "My Scientific Sourdough 🍞"}
+  {"categories": ["cooking", "baking"], "date": "2019-12-31 10:49:34", "description": "My current loaf recipe, based on many experiments", "article_image": "/images/sourdough/Best/close up.jpg", "draft": true, "featured": false, "author": "Jared Forsyth", "title": "My Scientific Sourdough 🍞"}
+
+# {"type":"normal","depth":1}
+
+  <img src="/images/sourdough/Best/close up.jpg" />
 
 # {"type":"normal","depth":1}
 
@@ -100,7 +104,7 @@
 
 # {"type":"normal","depth":3}
 
-  Place your [dutch oven in the oven](#Dutch-Oven-Oven), and preheat the oven to 500º. (If you don't preheat the dutch oven, the crust will still be good, but not mind-blowingly good see [test 6]())
+  Place your [dutch oven in the oven](#Dutch-Oven-Oven), and preheat the oven to 500º. (If you don't preheat the dutch oven, the crust will still be good, but not mind-blowingly good see [Test 6](#Test-6-No-work-but-final-shaping))
 
 # {"type":"normal","depth":3}
 
@@ -108,7 +112,7 @@
 
 # {"type":"normal","depth":3}
 
-  Bake, covered, for 30 minutes. (If you forget to put the cover on, the crust will be much less awesome, see [test 5]())
+  Bake, covered, for 30 minutes. (If you forget to put the cover on, the crust will be much less awesome, see [Test 5](#Test-5-Forgetting-to-put-the-lid-on-the-dutch-oven))
 
 # {"type":"normal","depth":3}
 
@@ -138,6 +142,10 @@
 # {"type":"header","depth":2}
 
   Starter
+
+# {"type":"normal","depth":3}
+
+  <img src="/images/sourdough/more starter/after.jpg"/>
 
 # {"type":"normal","depth":3}
 
@@ -221,6 +229,10 @@
 
 # {"type":"normal","depth":3}
 
+  <img src="/images/sourdough/test 7 seeds/shape 1.jpg"/>
+
+# {"type":"normal","depth":3}
+
   The method that I've adopted is: after dumping the dough on the table, use the bench scraper to fold the dough over itself, starting at one side putting the scraper an inch or two under the dough and then dragging it over to the other side. Having a second bench scraper is quite helpful in extricating the first scraper from the dough after folding. Then go around the circle 2-4 more times until it has formed a rough ball. Then push your bench scraper along the table into the dough, pushing the dough across the table for a foot or so, so that it "rolls up" a bit, forming some surface tension. Do this several more times from different angles, using the second bench scraper to help remove the first from the sticky dough each time. After the bench rest, repeat the same process once more. You can also find a number of youtube videos demonstrating this shaping technique.
 
 # {"type":"header","depth":2}
@@ -229,11 +241,19 @@
 
 # {"type":"normal","depth":3}
 
+  <img src="/images/sourdough/test 6 no work/final rise.jpg"/>
+
+# {"type":"normal","depth":3}
+
   My current process involves letting the dough do the final rise in a pyrex cake pan lined with parchment paper (8'' round, ~4'' high), and then using the parchment paper to transfer it into the preheated cast iron dutch oven. The hope is that this minimizes volume loss in the transfer, but I don't love that it requires using a lot of parchment paper.
 
 # {"type":"header","depth":2}
 
   Dutch Oven + Oven
+
+# {"type":"normal","depth":3}
+
+  <img src="/images/sourdough/test 3 dec 6/baked in oven.jpg"/>
 
 # {"type":"normal","depth":3}
 
@@ -277,7 +297,11 @@
 
 # {"type":"normal","depth":3}
 
-  In addition to testing the ratios, I also wanted to see how all-purpose flour stacked up to my home-ground whole-wheat flour (hard white wheat, ground in my grandma's old excaliber flour mill).
+  <img src="/images/sourdough/starter/just mixed.jpg"/>
+
+# {"type":"normal","depth":3}
+
+  In addition to testing the ratios, I also wanted to see how all-purpose flour stacked up to my home-ground [whole-wheat flour](#Whole-Wheat-Flour).
 
 # {"type":"list","depth":3}
 
@@ -333,6 +357,10 @@
 
 # {"type":"normal","depth":3}
 
+  <img src="/images/sourdough/test 1 focaccia/baked.jpg"/>
+
+# {"type":"normal","depth":3}
+
   At the beginning, the prospect of a multi-day dough was a little off-putting, so I looked around for a sourdough recipe that could be started & finished on the same day, and landed on [this recipe for sourdough focaccia](https://www.theperfectloaf.com/a-simple-focaccia/).
 
 # {"type":"normal","depth":3}
@@ -349,19 +377,19 @@
 
 # {"type":"normal","depth":3}
 
-  Dec 3-4
+  With that win under my belt, I decided to try out a loaf.
 
 # {"type":"normal","depth":3}
 
-  With that win under my belt, I decided to try out a loaf. I used the recipe my mom got from the presentation, which is as follows:
-
-# {"type":"normal","depth":3}
-
-  For my first bake, I did two 1/3-batches of the dough (so 37g starter, 84g all-purpose flour, etc.), where one was using the all-purpose (20/100/100), and one was using the whole-wheat (20/100/100) starter.
+  I did two 1/3-batches of the dough (so 37g starter, 84g all-purpose flour, etc.), where one was using the all-purpose (20/100/100), and one was using the whole-wheat (20/100/100) starter.
 
 # {"type":"normal","depth":3}
 
   The resulting bread was ridiculously tasty. I couldn't remember ever having bread taste this good (and I'm used to delicious home-made bread!).
+
+# {"type":"normal","depth":3}
+
+  <img src="/images/sourdough/test 2 dec 4/top.jpg"/>
 
 # {"type":"header","depth":3}
 
@@ -373,15 +401,11 @@
 
 # {"type":"normal","depth":4}
 
-  Rise: the all-purpose starter appears to have a rather better rise than the whole-wheat starter.
+  Rise: the all-purpose starter appears to have had a rather better rise than the whole-wheat starter.
 
 # {"type":"header","depth":2}
 
   Test 3: "Young starter" vs "old starter"
-
-# {"type":"normal","depth":3}
-
-  Dec 5-6
 
 # {"type":"normal","depth":3}
 
@@ -394,6 +418,10 @@
 # {"type":"normal","depth":3}
 
   However, when it came time to shape them, the young dough was much easier to work with. The old dough had lost its tension, and so was rather stickier.
+
+# {"type":"normal","depth":3}
+
+  <img src="/images/sourdough/test 3 dec 6/baked.jpg"/>
 
 # {"type":"header","depth":3}
 
@@ -413,11 +441,11 @@
 
 # {"type":"normal","depth":3}
 
-  Dec 7-8
+  A main motivation for my tests is "how little effort can I get away with and still have a great-tasting loaf". So for this test I tried omitting the "turns" step. Keep in mind that I might be doing the "turns" completely wrong, invalidating this experiment.
 
 # {"type":"normal","depth":3}
 
-  A main motivation for my tests is "how little effort can I get away with and still have a great-tasting loaf". So for this test I tried omitting the "turns" step. Keep in mind that I might be doing the "turns" completely wrong, invalidating this experiment.
+  <img src="/images/sourdough/test 4 turns/crumb.jpg"/>
 
 # {"type":"header","depth":3}
 
@@ -437,11 +465,11 @@
 
 # {"type":"normal","depth":3}
 
-  Dec 10
+  This test was going to be "No work but final shaping", but an oversight in the bake changed the nature of the experiment quite a bit.
 
 # {"type":"normal","depth":3}
 
-  This test was going to be "No work but final shaping", but an oversight in the bake changed the nature of the experiment quite a bit.
+  <img src="/images/sourdough/test 5 cover/baked.jpg"/>
 
 # {"type":"header","depth":3}
 
@@ -454,10 +482,6 @@
 # {"type":"header","depth":2}
 
   Test 6: No work but final shaping
-
-# {"type":"normal","depth":3}
-
-  Dec 12
 
 # {"type":"normal","depth":3}
 
@@ -483,6 +507,10 @@
 
   Continue from step 7 as normal.
 
+# {"type":"normal","depth":3}
+
+  <img src="/images/sourdough/test 6 no work/crumb.jpg"/>
+
 # {"type":"header","depth":3}
 
   Results
@@ -507,6 +535,10 @@
 
   My previous go-to bread recipe involved a generous addition of seeds -- chia, flax, and sunflower -- and I wanted to see how they would play in this sourdough.
 
+# {"type":"normal","depth":3}
+
+  <img src="/images/sourdough/test 7 seeds/buttered.jpg"/>
+
 # {"type":"header","depth":3}
 
   Results
@@ -526,6 +558,10 @@
 # {"type":"normal","depth":3}
 
   My wife's favorite sourdough loaf that we would get from a baker at the local farmer's market in the summer is a cranberry walnut, so I decided to try my hand at it.
+
+# {"type":"normal","depth":3}
+
+  <img src="/images/sourdough/test 8 cranberry walnut/crumb split.jpg"/>
 
 # {"type":"header","depth":3}
 
@@ -547,6 +583,10 @@
 
   I'm a huge fan of heavy cream, and earlier in 2019 I started substituting heavy cream for 1/3 of the water in my standard whole-wheat bread recipe. In that dough, adding cream enhanced the flavor, the crumb, and the crust of the finished bread. This test was to see how it played in a sourdough context.
 
+# {"type":"normal","depth":3}
+
+  <img src="/images/sourdough/test 9 heavy cream/crumb.jpg"/>
+
 # {"type":"header","depth":3}
 
   Results
@@ -566,6 +606,10 @@
 # {"type":"normal","depth":3}
 
   I got this idea from [this youtube video](https://www.youtube.com/watch?v=vVx2oFFptG0) where they make a "scallion sourdough pancake", but I modified it because a) I don't tend to have scallions around, b) I always need more Garam Masala in my life, and c) I'm lazy and tending flatbread on the stove is more work than ~baking it in the toaster oven.
+
+# {"type":"normal","depth":3}
+
+  <img src="/images/sourdough/discard flatbread/full.jpg"/>
 
 # {"type":"normal","depth":3}
 
@@ -634,6 +678,10 @@
 # {"type":"normal","depth":3}
 
   I have no idea how much the little cast-iron frying pan is helping here. You could probably cook it in the little tray in the toaster oven if you wanted to, and it would be fine. Also, I'm sure this will work cooked in a frying pan on the stove (although it might be harder to get the nice crisp on the cheese), or baked in the oven (it just seems like overkill for something this small).
+
+# {"type":"normal","depth":3}
+
+  <img src="/images/sourdough/discard flatbread/baked and cut.jpg"/>
 
 # {"type":"normal","depth":3}
 
