@@ -20,7 +20,7 @@
 
 # {"type":"normal","depth":1}
 
-  What I've included here is my current sourdough recipe, annotated with the various changes I've made, and with links to posts about the results of my experiments.
+  This post is the result of my experimentations -- starting with the recipe, as I wish all food bloggers would -- with links to discriptions of the various tools and techniques involved in making sourdough bread. I've also written up a summary of each of the tests I've done, and at the end you get [my favorite way to use discarded starter](#Bonus-recipe-discard-starter-flatbread).
 
 # {"type":"header","depth":1}
 
@@ -137,7 +137,7 @@
 
 # {"type":"normal","depth":3}
 
-  In my (certainly uninformed) opinion, there is just no substitutte for freshly-ground whole wheat flour. Any whole wheat flour I've bought from a store tastes terrible in comparison -- if it's a choice between store-bought all-purpose and store-bought whole-wheat, I'd go will all-purpose (in the US at least. I've had good experiences with store-bought whole-wheat in Germany). But in a contest between home-ground whole-wheat and any all-purpose or bread flour, bread made with the whole wheat flour tastes so much better, you can't even imagine.
+  In my (certainly uninformed) opinion, there is just no substitute for freshly-ground whole wheat flour. Any whole wheat flour I've bought from a store tastes terrible in comparison -- if it's a choice between store-bought all-purpose and store-bought whole-wheat, I'd go will all-purpose (in the US at least. I've had good experiences with store-bought whole-wheat in Germany). But in a contest between home-ground whole-wheat and any all-purpose or bread flour, bread made with the whole wheat flour tastes so much better, you can't even imagine.
 
 # {"type":"header","depth":2}
 
@@ -205,7 +205,7 @@
 
 # {"type":"normal","depth":3}
 
-  "Turns" seem to be a mix between "punching down the dough" and "kneading", and many people talk about the "stretch and fold" method (you can find many youtube videos of people demonstrating this). I've never yet tried this method, because I'm lazy and would rather not get my hands dirty 🤷. What I do is use a firm plastic spatula to fold the dough over itself & push it around, similar to waht I do during the inital mixing. I've tested [doing these turns vs not doing them](#Test-4-Two-turns-vs-no-turns), and it didn't seem to make an important difference, so I've dropped this step from my practice. Of course, it's possible that if I used the more standard method I would get different results.
+  "Turns" seem to be a mix between "punching down the dough" and "kneading", and many people talk about the "stretch and fold" method (you can find many youtube videos of people demonstrating this). I've never yet tried this method, because I'm lazy and would rather not get my hands dirty 🤷. What I do is use a firm plastic spatula to fold the dough over itself & push it around, similar to what I do during the initial mixing. I've tested [doing these turns vs not doing them](#Test-4-Two-turns-vs-no-turns), and it didn't seem to make an important difference, so I've dropped this step from my practice. Of course, it's possible that if I used the more standard method I would get different results.
 
 # {"type":"header","depth":2}
 
