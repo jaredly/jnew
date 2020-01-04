@@ -12,7 +12,7 @@
 
 # {"type":"normal","depth":1}
 
-  Just after thanksgiving, I decided to try my hand at sourdough. My general approach to a new recipe or technique is to take a look at the top several search results, weigh the varying advice and ingredients lists, and make an amalgum. When I tried this for sourdough, I was struck by that large variety of techniques espoused by various bloggers and youtubers. Many seemed quite committed to the precise measurements & steps involved, but they were short on explanation for why or how these were so important. I looked around for someone who had done the testing to determine the impact of, for example, a bench rest, and came up empty.
+  Just after Thanksgiving, I decided to try my hand at sourdough. My general approach to a new recipe or technique is to take a look at the top several search results, weigh the varying advice and ingredients lists, and make an amalgum. When I tried this for sourdough, I was struck by the large variety of techniques espoused by various bloggers and youtubers. Many seemed quite committed to the precise measurements & steps involved, but they were short on explanation for why or how these were so important. I looked around for someone who had done the testing to determine the impact of, for example, a bench rest, and came up empty.
 
 # {"type":"normal","depth":1}
 
@@ -56,7 +56,7 @@
 
 # {"type":"list","depth":2}
 
-  **Optional mixins**
+  **Optional mix-ins**
 
 # {"type":"normal","depth":3}
 
@@ -84,7 +84,7 @@
 
 # {"type":"normal","depth":3}
 
-  At salt and remaining water, mix until combined, cover again and leave on the counter.
+  Add salt and remaining water, mix until combined, cover again and leave on the counter.
 
 # {"type":"normal","depth":3}
 
@@ -96,7 +96,7 @@
 
 # {"type":"normal","depth":3}
 
-  Dump onto the counter, do an [initial shaping](#Shaping) using some [bench scrapers](#Bench-Scrapers). "bench rest" for 30 minutes.
+  Dump onto the counter, do an [initial shaping](#Shaping) using some [bench scrapers](#Bench-Scrapers). "Bench rest" for 30 minutes.
 
 # {"type":"normal","depth":3}
 
@@ -104,7 +104,7 @@
 
 # {"type":"normal","depth":3}
 
-  Place your [dutch oven in the oven](#Dutch-Oven-Oven), and preheat the oven to 500º. (If you don't preheat the dutch oven, the crust will still be good, but not mind-blowingly good see [Test 6](#Test-6-No-work-but-final-shaping))
+  Place your [dutch oven in the oven](#Dutch-Oven-Oven), and preheat the oven to 500º. (If you don't preheat the dutch oven, the crust will still be good, but not mind-blowingly good, see [Test 6](#Test-6-No-work-but-final-shaping))
 
 # {"type":"normal","depth":3}
 
@@ -132,7 +132,7 @@
 
 # {"type":"normal","depth":3}
 
-  I grind my own flour, using a hand-me-down excalibur wheat grinder from my grandmother that's probably 50 years old. I get hard white
+  I grind my own flour, using a hand-me-down Excalibur wheat grinder from my grandmother that's probably 50 years old. I get hard white
    wheat in 25lb bags from the local supermarket, which lasts me 4-8 months, depending on how much I'm baking.
 
 # {"type":"normal","depth":3}
@@ -149,7 +149,7 @@
 
 # {"type":"normal","depth":3}
 
-  At the beginning of my sourdough journey, I did a bit of [experimenting with different starter formulas](#Test-1-Starter), but at the moment I've settled on 1:5:5, fed with unbleached white flour.
+  At the beginning of my sourdough journey, I did a bit of [experimenting with different starter formulas](#Test-1-Starter), but at the moment I've settled on 1:5:5, fed with unbleached all-purpose flour.
 
 # {"type":"normal","depth":3}
 
@@ -161,7 +161,7 @@
 
 # {"type":"normal","depth":3}
 
-  People talk about "the float test" as the way to determine whether your starter is "ready" to leaven some dough. I believe the theory is that once starter has "risen", it has a lot of trapped gas bubbles, and those will cause it to float. I don't use it at all, mostly because it seems like a waste of starter, but also because I've just never had dough fail to rise. I've used starter that's "old" and would fail the test because the gasses have escaped, and it worked fine. It's possible that the float test is more critical when you're first developing your starter from scratch (a step I skipped by being gifted some already-mature starter).
+  People talk about "the float test" as the way to determine whether your starter is "ready" to leaven some dough. I believe the theory is that once starter has "risen," it has a lot of trapped gas bubbles, and those will cause it to float. I don't use it at all, mostly because it seems like a waste of starter, but also because I've just never had dough fail to rise. I've used starter that's "old" and would fail the test because the gases have escaped, and it worked fine. It's possible that the float test is more critical when you're first developing your starter from scratch (a step I skipped by being gifted some already-mature starter).
 
 # {"type":"list","depth":3}
 
@@ -317,7 +317,7 @@
 
 # {"type":"normal","depth":4}
 
-  cover it (to keep out bugs), but don't seal it, so that gasses can escape
+  cover it (to keep out bugs), but don't seal it, so that gases can escape
 
 # {"type":"normal","depth":4}
 
@@ -325,7 +325,7 @@
 
 # {"type":"note","depth":3}
 
-  As I went through the work of feeding all of these starters twice a day, I gradually understood that a) the ratios are what this is about, not the exact number of grams (which, of course when you think about it makes sense), and even more than that b) the % hydration is the real difference between these things. If I were to do this again, I would have a very different set of tests to run. But this was my first foray into sourdough, so I was mostly just taking the top several formulas that I found suggested :)
+  As I went through the work of feeding all of these starters twice a day, I gradually understood that a) the ratios are what this is about, not the exact number of grams (which makes sense when you think about it), and more importantly b) the % hydration is the real difference between these things. If I were to do this again, I would have a very different set of tests to run. But this was my first foray into sourdough, so I was mostly just taking the top several formulas that I found suggested :)
 
 # {"type":"normal","depth":3}
 
@@ -441,7 +441,7 @@
 
 # {"type":"normal","depth":3}
 
-  A main motivation for my tests is "how little effort can I get away with and still have a great-tasting loaf". So for this test I tried omitting the "turns" step. Keep in mind that I might be doing the "turns" completely wrong, invalidating this experiment.
+  A main motivation for my tests is "how little effort can I get away with and still have a great-tasting loaf." So for this test I tried omitting the "turns" step. Keep in mind that I might be doing the "turns" completely wrong, invalidating this experiment.
 
 # {"type":"normal","depth":3}
 
@@ -477,7 +477,7 @@
 
 # {"type":"normal","depth":4}
 
-  Having the lid in the dutch oven makes a huge difference! I don't have access to a "self-steaming" oven, but it would be interesting to evaluate how that works, as I understand the thing that the lid is doing is trapping in steam. I've also heard that you can get yourself a little steam by putting in a tray of water underneath the bread, but I haven't tried that either.
+  Having the lid in the dutch oven makes a huge difference! I don't have access to a "self-steaming" oven, but it would be interesting to evaluate how that works, as I understand the thing that the lid is doing is trapping steam. I've also heard that you can get yourself a little steam by putting in a tray of water underneath the bread, but I haven't tried that either.
 
 # {"type":"header","depth":2}
 
@@ -625,7 +625,7 @@
 
 # {"type":"normal","depth":4}
 
-  Some grated pepper jack cheese (cheddar works fine too), like 1/4 cup or so, plus a little more to go on top.
+  Some grated pepper jack cheese (cheddar works fine, too), like 1/4 cup or so, plus a little more to go on top.
 
 # {"type":"normal","depth":4}
 
