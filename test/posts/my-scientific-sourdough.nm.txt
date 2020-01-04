@@ -8,7 +8,7 @@
 
 # {"type":"normal","depth":1}
 
-  <img src="/images/sourdough/Best/close up.jpg" />
+  ![head](/images/sourdough/Best/close%20up.jpg)
 
 # {"type":"normal","depth":1}
 
@@ -145,7 +145,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/more starter/after.jpg"/>
+  ![after](/images/sourdough/more%20starter/after.jpg)
 
 # {"type":"normal","depth":3}
 
@@ -229,7 +229,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 7 seeds/shape 1.jpg"/>
+  ![shape 1](/images/sourdough/test%207%20seeds/shape%201.jpg)
 
 # {"type":"normal","depth":3}
 
@@ -241,7 +241,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 6 no work/final rise.jpg"/>
+  ![final rise](/images/sourdough/test%206%20no%20work/final rise.jpg)
 
 # {"type":"normal","depth":3}
 
@@ -253,7 +253,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 3 dec 6/baked in oven.jpg"/>
+  ![baked in oven](/images/sourdough/test%203%20dec%206/baked%20in%20oven.jpg)
 
 # {"type":"normal","depth":3}
 
@@ -297,7 +297,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/starter/just mixed.jpg"/>
+  ![just mixed](/images/sourdough/starter/just%20mixed.jpg)
 
 # {"type":"normal","depth":3}
 
@@ -357,7 +357,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 1 focaccia/baked.jpg"/>
+  ![baked](/images/sourdough/test%201%20focaccia/baked.jpg)
 
 # {"type":"normal","depth":3}
 
@@ -389,7 +389,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 2 dec 4/top.jpg"/>
+  ![top](/images/sourdough/test%202%20dec%204/top.jpg)
 
 # {"type":"header","depth":3}
 
@@ -421,7 +421,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 3 dec 6/baked.jpg"/>
+  ![baked](/images/sourdough/test%203%20dec%206/baked.jpg)
 
 # {"type":"header","depth":3}
 
@@ -445,7 +445,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 4 turns/crumb.jpg"/>
+  ![crumb](/images/sourdough/test%204%20turns/crumb.jpg)
 
 # {"type":"header","depth":3}
 
@@ -469,7 +469,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 5 cover/baked.jpg"/>
+  ![baked](/images/sourdough/test%205%20cover/baked.jpg)
 
 # {"type":"header","depth":3}
 
@@ -509,7 +509,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 6 no work/crumb.jpg"/>
+  ![crumb](/images/sourdough/test%206%20no%20work/crumb.jpg)
 
 # {"type":"header","depth":3}
 
@@ -537,7 +537,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 7 seeds/buttered.jpg"/>
+  ![buttered](/images/sourdough/test%207%20seeds/buttered.jpg)
 
 # {"type":"header","depth":3}
 
@@ -561,7 +561,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 8 cranberry walnut/crumb split.jpg"/>
+  ![crumb](/images/sourdough/test%208%20cranberry%20walnut/crumb%20split.jpg)
 
 # {"type":"header","depth":3}
 
@@ -585,7 +585,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/test 9 heavy cream/crumb.jpg"/>
+  ![crumb](/images/sourdough/test%209%20heavy%20cream/crumb.jpg)
 
 # {"type":"header","depth":3}
 
@@ -609,7 +609,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/discard flatbread/full.jpg"/>
+  ![full](/images/sourdough/discard%20flatbread/full.jpg)
 
 # {"type":"normal","depth":3}
 
@@ -681,7 +681,7 @@
 
 # {"type":"normal","depth":3}
 
-  <img src="/images/sourdough/discard flatbread/baked and cut.jpg"/>
+  ![baked and cut](/images/sourdough/discard%20flatbread/baked%20and%20cut.jpg)
 
 # {"type":"normal","depth":3}
 

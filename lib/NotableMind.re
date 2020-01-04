@@ -73,7 +73,11 @@ let collectNodes = content => {
     switch lines {
       | [attrsRaw, ...rest] =>
         let attrs = Yojson.Basic.from_string(attrsRaw);
-        let content = rest |> List.map(line => Str.replace_first(Str.regexp("^  "), "", line)) |> String.concat("\n") |> String.trim;
+        let content = rest |> List.map(line => Str.global_replace(Str.regexp("^  "), "", line)) |> String.concat("\n") |> String.trim;
+        // print_endline("Input contents");
+        // print_endline(rest |> String.concat("\n"));
+        // print_endline("Content");
+        // print_endline(content);
         open Json.Infix;
         let node = {
           typ: attrs |> Json.get("type") |?> Json.string |! "nm node type " ++ attrsRaw,

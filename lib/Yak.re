@@ -155,10 +155,6 @@ let redirect = (url, contentTitle, description) => {
       ("This page has moved to " ++ url)
     </body>
   </html>;
-  /* {|<!doctype html>
-  <meta http-equiv="refresh" content="0; URL='|} ++ url ++ {|'" />
-  <title>Redirecting to |} ++ url ++ {|</title>
-  <body> This page has moved to |} ++ url ++ {| </body>|}; */
 };
 
 let setupRedirectsForOldPosts = (outputDir, posts) => {
@@ -176,20 +172,3 @@ let setupRedirectsForOldPosts = (outputDir, posts) => {
   });
 };
 
-
-let run = () => {
-  let outputDir = "./test/pages/";
-  let inputDir = "./test";
-
-  let projects = processProjects(inputDir, outputDir);
-  let posts = processBlog(inputDir, outputDir);
-  let talks = processTalks(inputDir, outputDir);
-
-  setupRedirectsForOldPosts(outputDir, posts);
-
-  /* Home page */
-  Files.writeFile(outputDir /+ "index.html", Home.render(~projects, ~posts, ~talks)) |> ignore;
-
-  MarkdownParser.saveTwitterCache();
-  print_endline("Finished!");
-};
