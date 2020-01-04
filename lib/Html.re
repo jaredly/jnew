@@ -1,7 +1,14 @@
 
 let props = "";
 
-let formatAttributes = (attrs) => String.concat("", List.map(((name, v)) => " " ++ name ++ "=\"" ++ String.escaped(v) ++ "\"", attrs));
+let escapeAttributeValue = value => {
+  value
+  |> Str.global_replace(Str.regexp_string("&"), "&amp;")
+  |> Str.global_replace(Str.regexp_string("\""), "&quot;")
+  |> Str.global_replace(Str.regexp_string("&"), "&amp;")
+}
+
+let formatAttributes = (attrs) => String.concat("", List.map(((name, v)) => " " ++ name ++ "=\"" ++ escapeAttributeValue(v) ++ "\"", attrs));
 
 let selfClosing = tag => switch tag {
 | "meta" => true

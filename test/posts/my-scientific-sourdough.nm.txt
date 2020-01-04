@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"categories": ["cooking", "baking"], "date": "2019-12-31 10:49:34", "description": "My current loaf recipe, based on many experiments", "article_image": "/images/sourdough/Best/close up.jpg", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "My Scientific Sourdough 🍞"}
+  {"categories": ["cooking", "baking"], "date": "2019-12-31 10:49:34", "description": "My current loaf recipe, based on many experiments", "article_image": "https://jaredforsyth.com/images/sourdough/Best/close%20up.jpg", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "My Scientific Sourdough 🍞"}
 
 # {"type":"normal","depth":1}
 
