@@ -22,6 +22,10 @@
 
   This post is the result of my experimentations -- starting with the recipe, as I wish all food bloggers would -- with links to discriptions of the various tools and techniques involved in making sourdough bread. I've also written up a summary of each of the tests I've done, and at the end you get [my favorite way to use discarded starter](#Bonus-recipe-discard-starter-flatbread).
 
+# {"type":"normal","depth":1}
+
+  In case you don't already have a sourdough start maintenance rhythm, [here's mine](#My-current-starter-maintenance-process).
+
 # {"type":"header","depth":1}
 
   The Loaf Recipe
@@ -163,25 +167,37 @@
 
   People talk about "the float test" as the way to determine whether your starter is "ready" to leaven some dough. I believe the theory is that once starter has "risen," it has a lot of trapped gas bubbles, and those will cause it to float. I don't use it at all, mostly because it seems like a waste of starter, but also because I've just never had dough fail to rise. I've used starter that's "old" and would fail the test because the gases have escaped, and it worked fine. It's possible that the float test is more critical when you're first developing your starter from scratch (a step I skipped by being gifted some already-mature starter).
 
-# {"type":"list","depth":3}
+# {"type":"header","depth":3}
 
-  My current starter maintenance process is:
+  My current starter maintenance process
 
-# {"type":"normal","depth":4}
+# {"type":"list","depth":4}
+
+
+
+# {"type":"normal","depth":5}
 
   in the morning, or at night, either when I'm making bread, or it's been long enough that I feel I should feed the start (I draw the line around 36 hours), I take most of the starter out of my wide-mouthed pint glass jar, shooting for a combined weight of ~285g. The jar weighs 275g, so that means there's about 10g starter left in the jar.
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
   I then add 50g of unbleached all-purpose flour and 50g water, and mix it up.
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
   If I'll be making a larger loaf that night, I use 60g water and 60g flour, and might leave as much as 20g of starter.
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
-  If I'm not making bread with the starter I've taken out, I put it into the glass container I keep in the fridge of old starter, to be turned into a savory sourdough flatbread later (recipe pending).
+  If I'm not making bread with the starter I've taken out, I put it into the glass container I keep in the fridge of old starter, to be turned into a [savory sourdough flatbread](#Bonus-recipe-discard-starter-flatbread) later.
+
+# {"type":"normal","depth":5}
+
+  The mixed starter will then double over the course of the next ~8-16 hours, and then slowly fall back down to its original height (taking on a more soupy consistency) in the 16-24 hours after that.
+
+# {"type":"normal","depth":3}
+
+  For the past several weeks I've been making a loaf every other day or so, so this rythm has been working quite well. If you want your starter to grow more slowly, so you feed it less often, leave it in the fridge. At some point I want to do a test where I compare bread from starter that's been incubating in the fridge to starter that was just recently fed on the counter, to see if there's a noticable difference.
 
 # {"type":"header","depth":2}
 
