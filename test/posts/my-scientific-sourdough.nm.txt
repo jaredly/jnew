@@ -257,7 +257,7 @@
 
 # {"type":"normal","depth":3}
 
-  ![final rise](/images/sourdough/test%206%20no%20work/final rise.jpg)
+  ![final rise](/images/sourdough/test%206%20no%20work/final%20rise.jpg)
 
 # {"type":"normal","depth":3}
 
