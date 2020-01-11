@@ -101,6 +101,19 @@ let rec getChildren = (depth, children, nodes) => switch nodes {
     getChildren(depth, [{...node, children: sub |> List.rev}, ...children], rest)
 }
 
+let countMarkdownWords = content => Str.split(Str.regexp("[^a-zA-Z0-9-]+"), content) |> List.length;
+
+let rec wordCount = (node) => {
+  switch (node.typ) {
+  | "list"
+  | "orderedList"
+  | "normal" | "header" => List.fold_left((c, a) => c + wordCount(a), countMarkdownWords(node.content), node.children)
+  | "note" => countMarkdownWords(node.content)
+  | "code" => 0
+  | _ => failwith("Unexpected node type")
+  };
+}
+
 let organizeNodes = nodes => {
     // print_endline("org")
   let rec loop = (organized, list) => switch list {
@@ -135,6 +148,14 @@ let makeList = (el, items) => {
 
 Printexc.record_backtrace(true)
 
+let escapeCode = value => {
+  value
+  |> Str.global_replace(Str.regexp_string("&"), "&amp;")
+  |> Str.global_replace(Str.regexp_string("\""), "&quot;")
+  |> Str.global_replace(Str.regexp_string("<"), "&lt;")
+  |> Str.global_replace(Str.regexp_string(">"), "&gt;")
+}
+
 let rec renderNode = (~ids, depth, node) => {
   switch (node.typ) {
   | "list" => [
@@ -160,6 +181,9 @@ let rec renderNode = (~ids, depth, node) => {
       MarkdownParser.process(~ids, header(depth) ++ node.content),
       ...List.map(renderNode(~ids, depth + 1), node.children) |> List.concat,
     ]
+  | "code" => [
+    "<pre><code>" ++ escapeCode(node.content) ++ "</code></pre>"
+  ]
   | _ => failwith("Unexpected node type")
   };
 };

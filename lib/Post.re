@@ -279,5 +279,5 @@ let parseNm = (fileName, content) => {
       )
     | _ => (nodes, config)
     };
-  {config, intro: None, body: Nm(nodes)};
+  {config: {...config, wordCount: Some(List.fold_left((a, n) => a + NotableMind.wordCount(n), 0, nodes))}, intro: None, body: Nm(nodes)};
 };
