@@ -62,7 +62,7 @@ module Json = {
   }
 }
 
-type nmNode = {typ: string, depth: int, content: string, children: list(nmNode)};
+type nmNode = {typ: string, depth: int, content: string, children: list(nmNode), types: option(Yojson.Basic.t)};
 
 let collectNodes = content => {
     print_endline("Collect");
@@ -82,6 +82,7 @@ let collectNodes = content => {
         let node = {
           typ: attrs |> Json.get("type") |?> Json.string |! "nm node type " ++ attrsRaw,
           depth: attrs |> Json.get("depth") |?> Json.int |! "nm node depth " ++ attrsRaw,
+          types: attrs |> Json.get("types") |> opt,
           content,
           children: []
         }
@@ -154,7 +155,32 @@ let escapeCode = value => {
   |> Str.global_replace(Str.regexp_string("\""), "&quot;")
   |> Str.global_replace(Str.regexp_string("<"), "&lt;")
   |> Str.global_replace(Str.regexp_string(">"), "&gt;")
+};
+
+let getLanguage = types => {
+  switch types {
+    | Some(`Assoc(items)) => switch (List.assoc_opt("code", items)) {
+      | Some(`Assoc(items)) => switch (List.assoc_opt("language", items)) {
+        | Some(`String(v)) => Some(v)
+        | _ => None
+      }
+      | _ => None
+    }
+    | _ => None
+  }
 }
+
+let highlightCode = (code, language) => {
+  let highlighter = "highlighter/highlight.js";
+  let language = switch language {
+    | None => "javascript"
+    | Some(x) => x
+  };
+  let (stdout, stderr, _) = Commands.execFull(~input=code, Printf.sprintf({|%s %s|}, highlighter, Filename.quote(language)));
+  print_endline(String.concat("\n", stderr));
+  let output = String.concat("\n", stdout);
+  output
+};
 
 let rec renderNode = (~ids, depth, node) => {
   switch (node.typ) {
@@ -172,7 +198,7 @@ let rec renderNode = (~ids, depth, node) => {
         List.map(renderNode(~ids, depth + 1), node.children) |> List.concat,
       ),
     ]
-  | "note" => ["<note>" ++ MarkdownParser.process(~ids, node.content) ++ "</note>"]
+  | "note" => ["<div class='note'>" ++ MarkdownParser.process(~ids, node.content) ++ "</div>"]
   | "normal" => [
       MarkdownParser.process(~ids, node.content),
       ...List.map(renderNode(~ids, depth + 1), node.children) |> List.concat,
@@ -182,7 +208,7 @@ let rec renderNode = (~ids, depth, node) => {
       ...List.map(renderNode(~ids, depth + 1), node.children) |> List.concat,
     ]
   | "code" => [
-    "<pre><code>" ++ escapeCode(node.content) ++ "</code></pre>"
+    "<pre><code>" ++ highlightCode(node.content, getLanguage(node.types)) ++ "</code></pre>"
   ]
   | _ => failwith("Unexpected node type")
   };

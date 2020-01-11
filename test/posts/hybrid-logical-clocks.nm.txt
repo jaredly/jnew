@@ -6,6 +6,10 @@
 
   {"categories": ["local-first"], "date": "2020-1-10 10:39:34", "description": "A deep dive on hybrid logical clocks", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Hybrid Logical Clocks"}
 
+# {"type":"note","depth":1}
+
+  This is the first in a series of posts digging into James Long's talk [CRDTs for Mortals](https://www.dotconferences.com/2019/12/james-long-crdts-for-mortals), and the accompanying [demo app](https://github.com/jlongster/crdt-example-app) he created.
+
 # {"type":"normal","depth":1}
 
   So, you're writing a ~~destributed system~~ local-first app, and you're sending events back and forth between various clients and the server. One thing you'd really like to be able to do is determine **the order in which events happened** -- this is important for the "last" part of "last-write-wins" CRDTs, for example. So you add a timestamp to each event as it's created, and all is well.
@@ -20,11 +24,11 @@
 
 # {"type":"normal","depth":1}
 
-  Fortunately, there's a tight little algorithm that does a pretty good approximation of telling you "the order in which events happened" in a distributed system: the Hybrid Logical Clock.
+  Fortunately, there's a tight little algorithm that does a pretty good approximation of telling you "the order in which events happened" in a distributed system: the Hybrid Logical Clock (HLC).
 
 # {"type":"orderedList","depth":1}
 
-  Let's be clear up-front about the promises this clock is making; it cannot divine the actual real-life ordering of all events. It does however make the following guarentees:
+  Let's be clear up-front about the promises this clock is making; it cannot divine the actual real-life ordering of all events. It does however make the following guarantees:
 
 # {"type":"normal","depth":2}
 
@@ -46,7 +50,7 @@
 
   The Hybric Logical Clock consists of two elements -- a timestamp (ts) and a counter (count).
 
-# {"type":"code","depth":2,"types":{"code":{"lastRun":null,"kernelId":null,"language":"javascript"}}}
+# {"type":"code","depth":2,"types":{"code":{"kernelId":null,"language":"javascript","lastRun":null}}}
 
   export const init = (node: string, now: number): HLC => ({
       ts: now,
@@ -70,7 +74,7 @@
 
   When an event occurs, you call `inc` on the HLC to get an updated version to attach to that event. This function gives us guarantee #1.
 
-# {"type":"code","depth":3,"types":{"code":{"lastRun":null,"kernelId":null,"language":"javascript"}}}
+# {"type":"code","depth":3,"types":{"code":{"kernelId":null,"language":"javascript","lastRun":null}}}
 
   export const inc = (local: HLC, now: number): HLC => {
       if (now > local.ts) {
@@ -92,7 +96,7 @@
 
   When receiving events from another node, we'll need to update our HLC using the HLC from that other node. This function gives us guarantee #2.
 
-# {"type":"code","depth":3,"types":{"code":{"lastRun":null,"kernelId":null,"language":"javascript"}}}
+# {"type":"code","depth":3,"types":{"code":{"kernelId":null,"language":"javascript","lastRun":null}}}
 
   export const recv = (local: HLC, remote: HLC, now: number): HLC => {
       if (now > local.ts && now > remote.ts) {
@@ -108,7 +112,7 @@
       }
   };
 
-# {"type":"normal","depth":3,"types":{"code":{"lastRun":null,"kernelId":null,"language":"javascript"}}}
+# {"type":"normal","depth":3,"types":{"code":{"kernelId":null,"language":"javascript","lastRun":null}}}
 
   If the local wall clock is later than both the local and remote timestamps, great! Use it, and reset the count to `0`.
 
@@ -124,11 +128,11 @@
 
   Cmp
 
-# {"type":"normal","depth":3,"types":{"code":{"lastRun":null,"kernelId":null,"language":"javascript"}}}
+# {"type":"normal","depth":3,"types":{"code":{"kernelId":null,"language":"javascript","lastRun":null}}}
 
   Comparing HLCs is quite simple: first compare the timestamps, then the counts, then the node ids as the final tie-breaker.
 
-# {"type":"code","depth":3,"types":{"code":{"lastRun":null,"kernelId":null,"language":"javascript"}}}
+# {"type":"code","depth":3,"types":{"code":{"kernelId":null,"language":"javascript","lastRun":null}}}
 
   export const cmp = (one: HLC, two: HLC) => {
       if (one.ts === two.ts) {
@@ -157,7 +161,7 @@
 
 # {"type":"normal","depth":2}
 
-  A real world example of this issue would be if a user has two devices, both offline, but device A is somehow an hour ahead of device B. The user makes a change on device A, then walks over to device B and makes a conflicting change, logically thinking that the change on B will win, because it is "last". Once both devices come online, the change from device A has won, much to the user's chagrin. In practice, you'll want to do some sanity checks on timestamps your server is getting from clients, and raise a red flag if their too out of sync.
+  A real world example of this issue would be if a user has two devices, both offline, but device A is somehow an hour ahead of device B. The user makes a change on device A, then walks over to device B and makes a conflicting change, logically thinking that the change on B will win, because it is "last". Once both devices come online, the change from device A has won, much to the user's surprise. In practice, you'll want to do some sanity checks on timestamps your server is getting from clients, and raise a red flag if their too out of sync.
 
 # {"type":"header","depth":1}
 

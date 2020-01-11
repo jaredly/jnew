@@ -106,6 +106,7 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~article_i
     /* <link rel="stylesheet" href="/js/styles/obsidian.css"/> */
     <link rel="stylesheet" href="//brick.a.ssl.fastly.net/Linux+Libertine:400,400i,700,700i/Open+Sans:400,400i,700,700i"/>
     <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css" rel="stylesheet"/>
     /* <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/> */
 
     /* <link rel="stylesheet" media="screen" href="/css/main.css" />
@@ -166,6 +167,26 @@ let pageHead = (~title as contentTitle, ~description=?, ~thumbnail=?, ~article_i
         border-radius: 4px;
         padding: 8px 16px;
         font-size: 20px;
+      }
+      div.note {
+        font-style: italic;
+        flex-wrap: nowrap;
+        display: flex;
+        align-items: flex-start;
+        font-size: 90%;
+      }
+      div.note::before {
+        margin-right: 8px;
+        content: 'i';
+        border: 1px solid #ccc;
+        padding: 2px 10px;
+        border-radius: 50px;
+        font-family: arial;
+        font-style: normal;
+        font-size: 20px;
+        display: inline;
+        line-height: 1;
+        margin-top: 5px;
       }
       a {
         color: |} ++ Colors.green ++ {|;
