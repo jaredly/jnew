@@ -16,7 +16,7 @@
 
 # {"type":"normal","depth":1}
 
-  Until someone points out to you that the source you're using for a timestamp -- the local machine's "wall clock" -- isn't completely reliable. Clocks drift, sometimes they go backward, and a malicious or particularly incompetent user could set their devices clock to a wildly inaccurate value. For example, if one client's clock is a day ahead, and they send some changes to an object, other clients would be completely unable to make changes to that object until the following day, when their local timestamps finally become "later" than the bad-actor's timestamps.
+  Until someone points out to you that the source you're using for a timestamp -- the local machine's "wall clock" -- isn't completely reliable. Clocks drift, sometimes they go backward, and a malicious or particularly incompetent user could set their device's clock to a wildly inaccurate value. For example, if one client's clock is a day ahead, and they send some changes to an object, other clients would be completely unable to make changes to that object until the following day, when their local timestamps finally become "later" than the bad-actor's timestamps.
 
 # {"type":"normal","depth":1}
 
@@ -24,7 +24,7 @@
 
 # {"type":"normal","depth":1}
 
-  Fortunately, there's a tight little algorithm that does a pretty good approximation of telling you "the order in which events happened" in a distributed system: the Hybrid Logical Clock (HLC).
+  Fortunately, there's a tight little algorithm that does a pretty good approximation of telling you "the order in which events happened" in a distributed system: the [Hybrid Logical Clock (HLC)](https://muratbuffalo.blogspot.com/2014/07/hybrid-logical-clocks.html).
 
 # {"type":"orderedList","depth":1}
 

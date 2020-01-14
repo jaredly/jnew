@@ -6,7 +6,7 @@
   "scripts": {
     "test": "esy build && sh -c $(esy x which Hello)",
     "start": "watchexec -w lib -w bin -w test/posts npm test",
-    "publish": "esy x hello && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets"
+    "publish": "sh -c $(esy x which Hello) && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets"
   },
   "esy": {
     "build": "dune build -p #{self.name}"
