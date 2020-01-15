@@ -8,7 +8,7 @@ let (|!) = (x, y) => switch x { | None => failwith(y) | Some(x) => x };
 let spacer = Shared.spacer;
 let showDate = Shared.showDate;
 
-let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
+let postAbout = (~draft=false, ~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
   open Html;
   open Css;
   <div className=css([
@@ -22,12 +22,15 @@ let postAbout = (~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
   ])>
     <showDate date />
     (spacer(8))
-    " · "
+    {tags |> List.length > 0 ? " · " : ""}
     (spacer(8))
     (String.concat(", " ++ spacer(4), List.map(tag => <a
       href=("/tags/" ++ tag ++ "/")
       className=css([A("text-decoration", "none")])
     >tag</a>, tags)))
+    {draft
+    ? <span style="background-color: red; padding: 4px 8px; display: inline-block; color: white; border-radius: 4px">"draft"</span>
+    : ""}
   </div>
 };
 
@@ -43,7 +46,7 @@ let renderBody = fun
   | Html(html) => html
   | Nm(nodes) => NotableMind.render(nodes)
 
-let render = (posts, {config: {Types.title: contentTitle, fileName, description, date, tags, thumbnail, article_image}, body: postBody}) => {
+let render = (posts, {config: {Types.title: contentTitle, fileName, description, date, tags, thumbnail, article_image, draft}, body: postBody}) => {
   let (css, inlineCss) = Css.startPage();
   open Html;
   open Css;
@@ -88,7 +91,7 @@ let render = (posts, {config: {Types.title: contentTitle, fileName, description,
   )>
 
     <h1 className=css(Shared.Styles.titleWithTopMargin)>contentTitle</h1>
-    <postAbout css date tags />
+    <postAbout draft css date tags />
     (Shared.hspace(32))
     <div className=css(Shared.Styles.bodyText)>
       (renderBody(postBody))
