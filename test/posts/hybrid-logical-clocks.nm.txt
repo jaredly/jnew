@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"categories": ["local-first"], "date": "2020-1-10 10:39:34", "description": "A deep dive on hybrid logical clocks", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Hybrid Logical Clocks"}
+  {"tags": ["local-first"], "date": "2020-1-10 10:39:34", "description": "A deep dive on hybrid logical clocks", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Hybrid Logical Clocks"}
 
 # {"type":"note","depth":1}
 

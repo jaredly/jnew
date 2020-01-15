@@ -330,7 +330,7 @@ let monthName = month => switch month {
 | 10 => "October"
 | 11 => "November"
 | 12 => "December"
-| _ => failwith("Invalid month")
+| _ => failwith("Invalid month " ++ string_of_int(month))
 };
 
 let showDate = (~date as (year, month, day), ~children, ()) => {

@@ -28,6 +28,7 @@ let postAbout = (~draft=false, ~css, ~date, ~tags, ~withPic=true, ~children, ())
       href=("/tags/" ++ tag ++ "/")
       className=css([A("text-decoration", "none")])
     >tag</a>, tags)))
+    (spacer(8))
     {draft
     ? <span style="background-color: red; padding: 4px 8px; display: inline-block; color: white; border-radius: 4px">"draft"</span>
     : ""}
