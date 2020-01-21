@@ -188,14 +188,14 @@ let rec renderNode = (~ids, depth, node) => {
       MarkdownParser.process(~ids, node.content),
       makeList(
         "ul",
-        List.map(renderNode(~ids, depth + 1), node.children) |> List.concat,
+        List.map(renderNode(~ids, depth + 1), node.children) |> List.map(items => "<div>" ++ String.concat("\n", items) ++ "</div>"),
       ),
     ]
   | "orderedList" => [
       MarkdownParser.process(~ids, node.content),
       makeList(
         "ol",
-        List.map(renderNode(~ids, depth + 1), node.children) |> List.concat,
+        List.map(renderNode(~ids, depth + 1), node.children) |> List.map(items => "<div>" ++ String.concat("\n", items) ++ "</div>"),
       ),
     ]
   | "note" => ["<div class='note'>" ++ MarkdownParser.process(~ids, node.content) ++ "</div>"]
