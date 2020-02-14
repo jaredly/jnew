@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first"], "date": "2020-1-10 10:39:34", "description": "A deep dive on hybrid logical clocks", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Hybrid Logical Clocks"}
+  {"tags": ["local-first"], "date": "2020-1-10 10:39:34", "description": "A deep dive on hybrid logical clocks", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "Hybrid Logical Clocks"}
 
 # {"type":"note","depth":1}
 
@@ -151,6 +151,33 @@
 
   If you're unfamiliar with the `cmp` function convention, it's a function that takes two arguments, and returns a negative number if the first argument is "less", a positive number if the second argument is "less", and `0` if they are equal. You can pass this `cmp` function to `.sort()` of an array of `HLC`s, and it will order them from "earliest" to "latest".
 
+# {"type":"normal","depth":3}
+
+  In practice, it's convenient to "pack" the HLC into a string representation, such that you can do normal lexical comparisons (< and >) on them, and generally pass them around more easily. The original paper sacrifices some precision on the timestamp to pack all the information into an integer, but for my purposes strings generally work fine.
+
+# {"type":"code","depth":3,"types":{"code":{"lastRun":null,"kernelId":null,"language":"javascript"}}}
+
+  export const pack = ({ ts, count, node }: HLC) => {
+      // 13 digits is enough for the next 100 years, so 15 is plenty.
+      // And 5 digits base 36 is enough for more than 6 million "out of order" changes.
+      return (
+          ts.toString().padStart(15, '0') +
+          ':' +
+          count.toString(36).padStart(5, '0') +
+          ':' +
+          node
+      );
+  };
+  
+  export const unpack = (serialized: string) => {
+      const [ts, count, ...node] = serialized.split(':');
+      return {
+          ts: parseInt(ts),
+          count: parseInt(count, 36),
+          node: node.join(':'),
+      };
+  };
+
 # {"type":"header","depth":1}
 
   But wait
@@ -161,7 +188,11 @@
 
 # {"type":"normal","depth":2}
 
-  A real world example of this issue would be if a user has two devices, both offline, but device A is somehow an hour ahead of device B. The user makes a change on device A, then walks over to device B and makes a conflicting change, logically thinking that the change on B will win, because it is "last". Once both devices come online, the change from device A has won, much to the user's surprise. In practice, you'll want to do some sanity checks on timestamps your server is getting from clients, and raise a red flag if their too out of sync.
+  A real world example of this issue would be if a user has two devices, both offline, but device A is somehow an hour ahead of device B. The user makes a change on device A, then walks over to device B and makes a conflicting change, logically thinking that the change on B will win, because it is "last". Once both devices come online, the change from device A has won, much to the user's surprise. In practice, you'll want to do some checks on timestamps your server is getting from clients, and raise a red flag if their too out of sync.
+
+# {"type":"normal","depth":2}
+
+  For the most part, if users clocks aren't too far off, then changes that happen "in parallel" (while both are offline, for example) will be ordered correctly.
 
 # {"type":"header","depth":1}
 
