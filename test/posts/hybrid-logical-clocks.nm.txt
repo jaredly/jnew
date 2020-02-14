@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first"], "date": "2020-1-10 10:39:34", "description": "A deep dive on hybrid logical clocks", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "Hybrid Logical Clocks"}
+  {"tags": ["local-first"], "date": "2020-2-14 8:21:12", "description": "A deep dive on hybrid logical clocks - how to determine the 'true' ordering of events in a distributed system", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "Hybrid Logical Clocks"}
 
 # {"type":"note","depth":1}
 
@@ -13,6 +13,10 @@
 # {"type":"normal","depth":1}
 
   So, you're writing a ~~destributed system~~ local-first app, and you're sending events back and forth between various clients and the server. One thing you'd really like to be able to do is determine **the order in which events happened** -- this is important for the "last" part of "last-write-wins" CRDTs, for example. So you add a timestamp to each event as it's created, and all is well.
+
+# {"type":"normal","depth":1}
+
+  <!-- more -->
 
 # {"type":"normal","depth":1}
 
