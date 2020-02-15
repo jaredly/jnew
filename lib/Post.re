@@ -158,7 +158,7 @@ let render =
       </h1>
       <postAbout draft css date tags />
       {Shared.hspace(32)}
-      <div className={css(Shared.Styles.bodyText)}>
+      <div className={"post-body " ++ css(Shared.Styles.bodyText)}>
         {renderBody(postBody)}
       </div>
     </main>;
@@ -189,22 +189,21 @@ let postList = (posts, tags, contentTitle) => {
           ])}>
           {List.map(
              ((tag, count)) =>
-               Types.
-                 (
-                   <a
-                     href={"/tags/" ++ tag ++ "/"}
-                     className={css([
-                       A("color", "currentColor"),
-                       A("white-space", "nowrap"),
-                       A("margin-right", "8px"),
-                       ...Shared.Styles.hoverUnderline,
-                     ])}>
-                     tag
-                     {"" ++ string_of_int(count) ++ ""}
-                   </a>
-                 ),
-                 /* <postAbout css date=config.date tags=config.tags withPic=false />
-                    <a className=css([A("font-size", "24px")]) href>readTime</a> */
+               Types.(
+                 <a
+                   href={"/tags/" ++ tag ++ "/"}
+                   className={css([
+                     A("color", "currentColor"),
+                     A("white-space", "nowrap"),
+                     A("margin-right", "8px"),
+                     ...Shared.Styles.hoverUnderline,
+                   ])}>
+                   tag
+                   {"" ++ string_of_int(count) ++ ""}
+                 </a>
+               ),
+             /* <postAbout css date=config.date tags=config.tags withPic=false />
+                <a className=css([A("font-size", "24px")]) href>readTime</a> */
              tags,
            )
            |> String.concat("\n")}
@@ -249,8 +248,9 @@ let postList = (posts, tags, contentTitle) => {
                       A("padding-top", "16px"),
                       ...Shared.Styles.bodyText,
                     ])}>
-                     {renderBody(teaser)} </div>
-                    // (Omd.to_html(Omd.of_string(teaser)))
+                    {renderBody(teaser)}
+                  </div>
+                // (Omd.to_html(Omd.of_string(teaser)))
                 }}
                <a className={css([A("font-size", "24px")])} href>
                  readTime
