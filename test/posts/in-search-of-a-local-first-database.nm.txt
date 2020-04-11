@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first"], "date": "2020-2-14 22:23:14", "description": "My criteria for evaluating syncing solutions", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "In Search of a Local-First Database"}
+  {"tags": ["local-first"], "date": "2020-4-11 10:52:04", "description": "My criteria for evaluating syncing solutions", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "In Search of a Local-First Database"}
 
 # {"type":"normal","depth":1}
 
@@ -24,7 +24,7 @@
 
 # {"type":"list","depth":1}
 
-  To start, here's what I mean by "local-first" -- a data-storage solution must meet four requirements:
+  To start, by my definition of "local-first", a data-storage solution must meet three requirements:
 
 # {"type":"normal","depth":2}
 
@@ -32,7 +32,7 @@
 
 # {"type":"normal","depth":2}
 
-  My data must be *available*. If I make a change (or create a document) on one device that's connected to the internet, I should be able to go to another device and access that data, independent of whether the first device happens to be connected at the time. (in short, we need server-side persistence & full data replication)
+  My data must be *available*. If I make a change (or create a document) on one device that's connected to the internet, I should be able to go to another device and access that data, independent of whether the first device happens to be connected at the time. (we need server-side persistence & full data replication)
 
 # {"type":"note","depth":3}
 
@@ -80,7 +80,7 @@
 
 # {"type":"normal","depth":4}
 
-  How well does sync preserve intent? In what cases would a user's work be "lost" unexpectedly, or a change that was made "later" get overridden by a change made before?
+  How well does sync preserve intent? In what cases would a user's work be "lost" unexpectedly, or a change that was made "later" get overridden by a change made before? Can a sync result in data that doesn't make logical sense / is outside of the app's logical schema?
 
 # {"type":"header","depth":2}
 
@@ -96,7 +96,7 @@
 
 # {"type":"normal","depth":4}
 
-  How much data does the server need to store? If it needs to store history, does it support periodic garbage collection / compaction?
+  How much data does the server need to store? If it needs to store a full change history, does it support periodic garbage collection / compaction?
 
 # {"type":"normal","depth":4}
 
@@ -132,19 +132,11 @@
 
 # {"type":"normal","depth":4}
 
-  Does it correctly handle working on multiple tabs in the same browser session?
-
-# {"type":"normal","depth":4}
-
   Does it require all data to live in memory, or can it work with mostly-persisted data? (such that large datasets are usable)
 
 # {"type":"normal","depth":4}
 
   Does it support e2e encryption? (zero-knowledge server persistence)
-
-# {"type":"normal","depth":4}
-
-  Does it bake in auth, or can you use an existing authentication setup?
 
 # {"type":"normal","depth":4}
 
@@ -161,6 +153,22 @@
 # {"type":"normal","depth":4}
 
   Does it support a fully p2p network setup (no central authority / server)?
+
+# {"type":"header","depth":2}
+
+  Production-ready
+
+# {"type":"list","depth":3}
+
+
+
+# {"type":"normal","depth":4}
+
+  Does it correctly handle working on multiple tabs in the same browser session?
+
+# {"type":"normal","depth":4}
+
+  Does it bake in auth, or can you use an existing authentication setup?
 
 # {"type":"header","depth":1}
 
@@ -216,7 +224,7 @@
 
 # {"type":"normal","depth":4}
 
-  yjs - tried following the tutorial, looks like various information has gotten out of date such that I was unable to get it running 😢
+  yjs - tried following the tutorial, looks like various information has gotten out of date such that I was unable to get it running 😢. The CRDT impl looks really cool, but I couldn't get server-side persistence working.
 
 # {"type":"normal","depth":4}
 
