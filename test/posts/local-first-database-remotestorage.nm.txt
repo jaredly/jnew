@@ -1,0 +1,303 @@
+# {"type":"header","depth":0}
+
+  Local-first database: remoteStorage
+
+# {"type":"note","depth":1}
+
+  {"tags": ["local-first"], "date": "2020-4-14 10:39:34", "description": "Evaluating remoteStorage for correctness, cost, and flexibility", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: remoteStorage"}
+
+# {"type":"normal","depth":1}
+
+  [remoteStorage](https://remotestorage.io/) is an offline-first solution that's been around for quite some time, and stands out for having a [formal spec](https://datatracker.ietf.org/doc/draft-dejong-remotestorage/), first drafted in 2012. It would be really cool if it took off, but unfortunately there are only [one or two commercial providers](https://wiki.remotestorage.io/Servers), and the most-promising-looking [open-source remotestorage server](https://github.com/untitaker/mysteryshack) has been [unmaintained](https://github.com/untitaker/mysteryshack) since early 2018. Despite this apparent stagnation, I figured it would be interesting to see how it stacks up according to my [local-first database criteria]().
+
+# {"type":"header","depth":1}
+
+  Correctness
+
+# {"type":"list","depth":2}
+
+
+
+# {"type":"normal","depth":3}
+
+  How are conflicts handled? Does it require the client (programmer) to write bespoke conflict resolution code?
+
+# {"type":"normal","depth":4}
+
+  Conflicts are, well, not handled. If two clients change the same document, whichever syncs to the server first wins.
+
+# {"type":"normal","depth":3}
+
+  How "bullet proof" is it? How easy is it to get it into a broken state (e.g. where different clients continue to see inconsistent data dispite syncing)?
+
+# {"type":"normal","depth":4}
+
+  With such a simple protocol you'd think it would be pretty robust, but in my short time integrating it into my app I managed to get into a state where refreshing the page and logging out & in again failed to show me the right data. Only when I opened devtools and disabled the browser cache was I able to get the right information to load. That's one hazard of relying so heavily on the browser cache I guess. It's possible that the fault was in the [server implementation](https://github.com/remotestorage/armadietto) that I used, who knows.
+
+# {"type":"normal","depth":3}
+
+  Is there consistency verification built-in, to detect if you're in a broken state? 
+
+# {"type":"normal","depth":4}
+
+  Nope, the server is trusted to calculate etags correctly, and there's no verification that the data loaded is consistent.
+
+# {"type":"normal","depth":3}
+
+  How well does sync preserve intent? In what cases would a user's work be "lost" unexpectedly?
+
+# {"type":"normal","depth":4}
+
+  If a user makes changes to a single "document" on two devices while offline, their changes on one of the devices (the one that *syncs* second) will be completely lost.
+
+# {"type":"header","depth":1}
+
+  Cost
+
+# {"type":"list","depth":2}
+
+  Storage
+
+# {"type":"normal","depth":3}
+
+  How much data does the client need to store to fully replicate?
+
+# {"type":"normal","depth":4}
+
+  It appears to grow somewhat nonlinearly with the number of documents. At 100 documents, it was 58x the size of a naive jsonified version of the data, at 300 documents it was 108x.
+
+# {"type":"normal","depth":3}
+
+  How much data does the server need to store?
+
+# {"type":"normal","depth":4}
+
+  At 100 documents, 58x; at 200 documents, 36x; at 300 documents, 78x
+
+# {"type":"normal","depth":3}
+
+  How complicated is the server logic?
+
+# {"type":"normal","depth":4}
+
+  It seems fairly simple conceptually. The server needs to calculate etags for each collection (folder), and stores each document as a plain json file.
+
+# {"type":"list","depth":2}
+
+  Network transfer
+
+# {"type":"normal","depth":3}
+
+  Adding data:
+
+# {"type":"normal","depth":4}
+
+  client -> server is O(size of data)
+
+# {"type":"normal","depth":4}
+
+  server -> client is O(size of data)
+
+# {"type":"normal","depth":3}
+
+  Cold start:
+
+# {"type":"normal","depth":4}
+
+  server -> client is ~3x size of data
+
+# {"type":"normal","depth":4}
+
+  client -> server is O(1)
+
+# {"type":"normal","depth":3}
+
+  Modifying an attribute:
+
+# {"type":"normal","depth":4}
+
+  client -> server O(messages)
+
+# {"type":"normal","depth":4}
+
+  server -> client O(messages)
+
+# {"type":"list","depth":2}
+
+  Code / implementation
+
+# {"type":"list","depth":3}
+
+  remoteStorage.js
+
+# {"type":"normal","depth":4}
+
+  tests: looks like over 3000? All passing on master.
+
+# {"type":"normal","depth":4}
+
+  coverage: not tracked (although there is a [6-year-old issue](https://github.com/remotestorage/remotestorage.js/issues/702) about it)
+
+# {"type":"normal","depth":4}
+
+  community: 3 contributors in the past month
+
+# {"type":"list","depth":3}
+
+  armadietto (the node.js server I evaluated)
+
+# {"type":"normal","depth":4}
+
+  tests: 105 tests, all passing on master
+
+# {"type":"normal","depth":4}
+
+  coverage: not reported
+
+# {"type":"normal","depth":4}
+
+  community: no commits in the past 9 months.
+
+# {"type":"header","depth":2}
+
+  Other notes
+
+# {"type":"normal","depth":3}
+
+  When replicating, the client will make **1 request per document**. Which, if you have several documents, ends up being a ton of network requests, and a long wait from cold start.
+
+# {"type":"normal","depth":3}
+
+  Also, synchronization is done via simple polling (every 10 seconds or so).
+
+# {"type":"header","depth":1}
+
+  Flexibility
+
+# {"type":"list","depth":2}
+
+
+
+# {"type":"normal","depth":3}
+
+  How does it react to schema changes? If you need to add an attribute to an object, can you?
+
+# {"type":"normal","depth":4}
+
+  With remoteStorage, the schema is defined by the client, and the server has no knowledge or opinions about data shape. So if you deploy a new version of the client with a new attribute, it can add that, but I haven't seen any accounting for data migration.
+
+# {"type":"normal","depth":3}
+
+  Is the shape of data restricted to anything less than full JSON? e.g. are nested objects, and arrays supported?
+
+# {"type":"normal","depth":4}
+
+  Nope, full JSON.
+
+# {"type":"normal","depth":3}
+
+  Can it be used with an existing (server-side or client-side) database (sqlite, postgres, etc.) or do you have to use a whole new data storage solution?
+
+# {"type":"normal","depth":4}
+
+  It certainly could, but the whole point of remoteStorage is that the app develop has zero control over the backend.
+
+# {"type":"normal","depth":3}
+
+  Can it sync with Google Drive, Dropbox, etc. such that each user manages their own backend storage?
+
+# {"type":"normal","depth":4}
+
+  Technically it can sync to Google Drive or Dropbox, but I've found the implementations to be extremely buggy. However, the whole thing of remoteStorage is that each user manages their own backend storage -- it's just that the users need to have an account with a remoteStorage provider, and the options there are quite limited.
+
+# {"type":"normal","depth":3}
+
+  Does it require all data to live in memory, or can it work with mostly-persisted data? (such that large datasets are possible)
+
+# {"type":"normal","depth":4}
+
+  Large datasets aren't advisable due to the simplicity of the syncing mechanism.
+
+# {"type":"normal","depth":3}
+
+  Does it support e2e encryption?
+
+# {"type":"normal","depth":4}
+
+  No.
+
+# {"type":"normal","depth":3}
+
+  Is multi-user collaboration possible, where some users only have access to a subset of the data? (think firebase access rules)
+
+# {"type":"normal","depth":4}
+
+  No. remoteStorage is a very personal protocol, with no accounting for multi-user data-sharing situations.
+
+# {"type":"normal","depth":3}
+
+  Is collaborative text editing *possible*? (I'm fine paying more for it, in terms of server requirements, data overhead, etc.)
+
+# {"type":"normal","depth":4}
+
+  No.
+
+# {"type":"normal","depth":3}
+
+  Does it have the concept of "undo" built-in? At what cost?
+
+# {"type":"normal","depth":4}
+
+  No.
+
+# {"type":"normal","depth":3}
+
+  Does it support a fully p2p network setup (no central authority / server)?
+
+# {"type":"normal","depth":4}
+
+  No.
+
+# {"type":"header","depth":1}
+
+  Production-ready
+
+# {"type":"list","depth":2}
+
+
+
+# {"type":"normal","depth":3}
+
+  How well does it handle offline behavior?
+
+# {"type":"normal","depth":4}
+
+  Quite well.
+
+# {"type":"normal","depth":3}
+
+  Does it correctly handle working on multiple tabs in the same browser session?
+
+# {"type":"normal","depth":4}
+
+  Not when offline. When online, each tab syncs via polling separately, and so the tabs with synchronize within 10 seconds of each other.
+
+# {"type":"normal","depth":3}
+
+  Does it bake in auth, or can you use an existing authentication setup?
+
+# {"type":"normal","depth":4}
+
+  It bakes in auth, and you wouldn't use existing authentication because each user brings their own backend.
+
+# {"type":"header","depth":1}
+
+  Conclusion
+
+# {"type":"normal","depth":2}
+
+  remoteStorage occupies an interesting place in my mind. On the one hand, it's an 8 year old project that still receives active maintenance, which is a pretty big achievement in and of itself. On the other hand, its simplicity means that it's lacking a lot of features that people have come to expect from modern web applications. Overall, given that it's still actively being developed, it could very well gain some of those features and become a strong solution for building modern local-first apps in the future.
+
+# {"type":"normal","depth":2}
+
+  Please drop me a note [on twitter](https://twitter.com/jaredforsyth) if there's anything I should add or correct!

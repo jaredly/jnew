@@ -1,0 +1,275 @@
+# {"type":"header","depth":0}
+
+  Local-first database: gun.js
+
+# {"type":"note","depth":1}
+
+  {"tags": ["local-first"], "date": "2020-4-11 16:16:34", "description": "Evaluating gun.js for correctness, cost, and flexibility", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: gun.js"}
+
+# {"type":"normal","depth":1}
+
+  [Gun.js]() is an open-source project I've had my eye on for several years now, every once in a while checking back to see how it's progressed, and whether the project I'm working on at the time is a good fit for it.
+
+# {"type":"normal","depth":1}
+
+  Gun bills itself as decentralized, offline-first, and privacy focused.
+
+# {"type":"normal","depth":1}
+
+  Using my [criteria for a local-first database](https://jaredforsyth.com/posts/in-search-of-a-local-first-database/), here's how it stacks up:
+
+# {"type":"normal","depth":1}
+
+  <!-- more -->
+
+# {"type":"header","depth":1}
+
+  Correctness
+
+# {"type":"list","depth":2}
+
+
+
+# {"type":"normal","depth":3}
+
+  How are conflicts handled?
+
+# {"type":"normal","depth":4}
+
+   Looks like they've got a CRDT setup where they denormalize any nested data structures, so you can modify one attribute on one client and another attribute on another, and the changes will be merged. For a given atomic attribute, it uses "last-write-wins".
+
+# {"type":"normal","depth":3}
+
+  Is there consistency verification built-in, to detect if you're in a boken state?
+
+# {"type":"normal","depth":4}
+
+  I couldn't see anything in the docs about this, and couldn't figure out anything from the source code.
+
+# {"type":"normal","depth":3}
+
+  How well does sync preserve intent?
+
+# {"type":"normal","depth":4}
+
+   From their [CRDT docs](https://github.com/amark/gun/wiki/Conflict-Resolution-with-Guns) it looks like they use a [hybrid logical clock](https://jaredforsyth.com/posts/hybrid-logical-clocks/), so intent should be preserved pretty well.
+
+# {"type":"header","depth":1}
+
+  Cost
+
+# {"type":"list","depth":2}
+
+  Storage
+
+# {"type":"normal","depth":3}
+
+  How much data does the client need to store to fully replicate?
+
+# {"type":"normal","depth":4}
+
+  O(size of the data)
+
+# {"type":"normal","depth":3}
+
+  How much data does the server need to store?
+
+# {"type":"normal","depth":4}
+
+  O(size of the data)
+
+# {"type":"normal","depth":3}
+
+  How complicated is the server logic?
+
+# {"type":"normal","depth":4}
+
+  It appears there's a fair amount of communication back & forth, negotiating what nodes need to be replicated.
+
+# {"type":"list","depth":2}
+
+  Network transfer
+
+# {"type":"normal","depth":3}
+
+  Adding data:
+
+# {"type":"normal","depth":4}
+
+  client -> server is O(size of data)
+
+# {"type":"normal","depth":4}
+
+  server -> client is O(size of data)
+
+# {"type":"normal","depth":3}
+
+  Modifying an attribute:
+
+# {"type":"normal","depth":4}
+
+  client -> server O(messages)
+
+# {"type":"normal","depth":4}
+
+  server -> client O(messages)
+
+# {"type":"list","depth":2}
+
+  Code / implementation
+
+# {"type":"normal","depth":3}
+
+  tests: `npm test` runs 130 tests, with 12 failing on master
+
+# {"type":"normal","depth":3}
+
+  coverage: not reported
+
+# {"type":"normal","depth":3}
+
+  community: 4 committers in the past month, pretty active discord server.
+
+# {"type":"header","depth":1}
+
+  Flexibility
+
+# {"type":"list","depth":2}
+
+
+
+# {"type":"normal","depth":3}
+
+  How does it react to schema changes?
+
+# {"type":"normal","depth":4}
+
+  Looks like it puts no restrictions on schema changes.
+
+# {"type":"normal","depth":3}
+
+  is the shape of data restricted to anything less than full JSON?
+
+# {"type":"normal","depth":4}
+
+  Yes, no nested arrays. Additionally, GUN enforces denormalization, so when you retrieve an object that has "nested" objects inside of it, you need to make another async call to fetch the nested object.
+
+# {"type":"normal","depth":3}
+
+  Can it be used with an existing database?
+
+# {"type":"normal","depth":4}
+
+  Not sure, certainly not something that's documented.
+
+# {"type":"normal","depth":3}
+
+  Can it sync with Google Drive, Dropbox, etc.?
+
+# {"type":"normal","depth":4}
+
+  Nope, it requires an active server.
+
+# {"type":"normal","depth":3}
+
+  Does it require all data to live in memory, or can it work with mostly-persisted data?
+
+# {"type":"normal","depth":4}
+
+  Hard to tell, but it looks like currently all data lives in memory.
+
+# {"type":"normal","depth":3}
+
+  Does it support e2e encryption?
+
+# {"type":"normal","depth":4}
+
+  Yes! When you are logged in (which involves decrypting a pub/priv keypair from the replicated graph), all data that you add under your user is encrypted.
+
+# {"type":"normal","depth":3}
+
+  Is multi-user collaboration possible, where some users only have access to a subset of the data?
+
+# {"type":"normal","depth":4}
+
+  Theoretically? I haven't found anything in the docs detailing how this would work, only vague mentions to ideas about how to do it.
+
+# {"type":"normal","depth":3}
+
+  Is collaborative text editing supported?
+
+# {"type":"normal","depth":4}
+
+  Not currently.
+
+# {"type":"normal","depth":3}
+
+  Does it have the concept of "undo" built-in?
+
+# {"type":"normal","depth":4}
+
+  No.
+
+# {"type":"normal","depth":3}
+
+  Does it support a fully p2p network setup?
+
+# {"type":"normal","depth":4}
+
+  Yes, that's what it's designed for.
+
+# {"type":"normal","depth":2}
+
+
+
+# {"type":"header","depth":1}
+
+  Production-ready
+
+# {"type":"list","depth":2}
+
+
+
+# {"type":"normal","depth":3}
+
+  How well does it handle offline behavior?
+
+# {"type":"normal","depth":4}
+
+  Gun.js requires a connection for the first time the database is created, but once the initial sync has happened it is able to function without a network connection.
+
+# {"type":"normal","depth":3}
+
+  Does it correctly handle working on multiple tabs in the same browser session?
+
+# {"type":"normal","depth":4}
+
+  Not when disconnected from a central server. When connected to a central server, updates between tabs works.
+
+# {"type":"normal","depth":3}
+
+  Does it bake in auth, or can you use an existing authentication setup?
+
+# {"type":"normal","depth":4}
+
+  Auth is included as an integral part of the system. Some interesting aspects of the authentication system is that usernames are not guarenteed to be unique, and there is no recourse for lost passwords. If you wanted to have a "private graph", you could probably gate the synchronization with some custom authentication, but it's clearly not something that's been designed for.
+
+# {"type":"header","depth":1}
+
+  Other notes
+
+# {"type":"normal","depth":2}
+
+  It appears that, under the default configuration, a "server" that you might stand up to support your app will replicate *any data that anyone wants to put there*. E.g. some random developer could point their gunjs app to your server, and your server would happily store all their data as well; there's no "schema validation", where you would limit the shape of data that a peer is willing to replicate. Such is the nature of this mesh / p2p network, there's not the notion of an individual "app" that has its own data and servers.
+
+# {"type":"header","depth":1}
+
+  Conclusion
+
+# {"type":"normal","depth":2}
+
+  Gun.js has put a lot of work into this area, but it seems is aimed at a slightly different target than [what I'm looking for](https://jaredforsyth.com/posts/in-search-of-a-local-first-database/) -- while my "local-first" emphasis is on robustness to intermittent connectivity, packaged up in a way that it can be easily integrated with current apps, Gun.js is focused on mesh-networking with no central authority, where apps are written around a new decentralized paradigm. Perhaps at some point we'll converge in the middle :).
+
+# {"type":"normal","depth":2}
+
+  Please drop me a note [on twitter](https://twitter.com/jaredforsyth) if there's anything I should add or correct!
