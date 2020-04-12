@@ -148,11 +148,11 @@
 
 # {"type":"normal","depth":3}
 
-  is the shape of data restricted to anything less than full JSON?
+  Is the shape of data restricted to anything less than full JSON?
 
 # {"type":"normal","depth":4}
 
-  Yes, no nested arrays. Additionally, GUN enforces denormalization, so when you retrieve an object that has "nested" objects inside of it, you need to make another async call to fetch the nested object.
+  Yes, no arrays. Additionally, GUN enforces denormalization, so when you retrieve an object that has "nested" objects inside of it, you need to make another async call to fetch the nested object.
 
 # {"type":"normal","depth":3}
 
@@ -261,6 +261,10 @@
 # {"type":"normal","depth":2}
 
   It appears that, under the default configuration, a "server" that you might stand up to support your app will replicate *any data that anyone wants to put there*. E.g. some random developer could point their gunjs app to your server, and your server would happily store all their data as well; there's no "schema validation", where you would limit the shape of data that a peer is willing to replicate. Such is the nature of this mesh / p2p network, there's not the notion of an individual "app" that has its own data and servers.
+
+# {"type":"normal","depth":2}
+
+  The web client uses localStorage for persistence, which has a 5-10mb limit in most browsers. I haven't seen any mention of moving to or supporting indexeddb, which would allow storage of much more data.
 
 # {"type":"header","depth":1}
 
