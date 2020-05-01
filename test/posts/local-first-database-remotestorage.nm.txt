@@ -4,11 +4,11 @@
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first"], "date": "2020-4-14 10:39:34", "description": "Evaluating remoteStorage for correctness, cost, and flexibility", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: remoteStorage"}
+  {"tags": ["local-first"], "date": "2020-5-01 10:39:34", "description": "Evaluating remoteStorage for correctness, cost, and flexibility", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: remoteStorage"}
 
 # {"type":"normal","depth":1}
 
-  [remoteStorage](https://remotestorage.io/) is an offline-first solution that's been around for quite some time, and stands out for having a [formal spec](https://datatracker.ietf.org/doc/draft-dejong-remotestorage/), first drafted in 2012. It would be really cool if it took off, but unfortunately there are only [one or two commercial providers](https://wiki.remotestorage.io/Servers), and the most-promising-looking [open-source remotestorage server](https://github.com/untitaker/mysteryshack) has been [unmaintained](https://github.com/untitaker/mysteryshack) since early 2018. Despite this apparent stagnation, I figured it would be interesting to see how it stacks up according to my [local-first database criteria]().
+  [remoteStorage](https://remotestorage.io/) is an offline-first solution that's been around for quite some time, and stands out for having a [formal spec](https://datatracker.ietf.org/doc/draft-dejong-remotestorage/), first drafted in 2012. It would be really cool if it took off, but unfortunately there are only [one or two commercial providers](https://wiki.remotestorage.io/Servers), and the most-promising-looking [open-source remoteStorage server](https://github.com/untitaker/mysteryshack) has been [unmaintained](https://github.com/untitaker/mysteryshack) since early 2018. Nevertheless, I figured it would be interesting to see how it stacks up according to my [local-first database criteria](https://jaredforsyth.com/posts/in-search-of-a-local-first-database/).
 
 # {"type":"header","depth":1}
 
@@ -20,7 +20,7 @@
 
 # {"type":"normal","depth":3}
 
-  How are conflicts handled? Does it require the client (programmer) to write bespoke conflict resolution code?
+  How are conflicts handled?
 
 # {"type":"normal","depth":4}
 
@@ -32,7 +32,7 @@
 
 # {"type":"normal","depth":4}
 
-  With such a simple protocol you'd think it would be pretty robust, but in my short time integrating it into my app I managed to get into a state where refreshing the page and logging out & in again failed to show me the right data. Only when I opened devtools and disabled the browser cache was I able to get the right information to load. That's one hazard of relying so heavily on the browser cache I guess. It's possible that the fault was in the [server implementation](https://github.com/remotestorage/armadietto) that I used, who knows.
+  With such a simple protocol you'd think it would be pretty robust, but in my short time integrating it into my example app I managed to get into a state where refreshing the page and logging out & in again failed to show me the right data. Only when I opened devtools and disabled the browser cache was I able to get the right information to load. That's one hazard of relying so heavily on the browser cache I guess. It's possible that the fault was in the [server implementation](https://github.com/remotestorage/armadietto) that I used, who knows.
 
 # {"type":"normal","depth":3}
 
@@ -54,107 +54,75 @@
 
   Cost
 
-# {"type":"list","depth":2}
+# {"type":"header","depth":2}
 
   Storage
 
-# {"type":"normal","depth":3}
+# {"type":"list","depth":3}
+
+
+
+# {"type":"normal","depth":4}
 
   How much data does the client need to store to fully replicate?
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
   It appears to grow somewhat nonlinearly with the number of documents. At 100 documents, it was 58x the size of a naive jsonified version of the data, at 300 documents it was 108x.
 
-# {"type":"normal","depth":3}
+# {"type":"normal","depth":4}
 
   How much data does the server need to store?
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
   At 100 documents, 58x; at 200 documents, 36x; at 300 documents, 78x
 
-# {"type":"normal","depth":3}
+# {"type":"normal","depth":4}
 
   How complicated is the server logic?
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
   It seems fairly simple conceptually. The server needs to calculate etags for each collection (folder), and stores each document as a plain json file.
 
-# {"type":"list","depth":2}
-
-  Network transfer
-
-# {"type":"normal","depth":3}
-
-  Adding data:
-
-# {"type":"normal","depth":4}
-
-  client -> server is O(size of data)
-
-# {"type":"normal","depth":4}
-
-  server -> client is O(size of data)
-
-# {"type":"normal","depth":3}
-
-  Cold start:
-
-# {"type":"normal","depth":4}
-
-  server -> client is ~3x size of data
-
-# {"type":"normal","depth":4}
-
-  client -> server is O(1)
-
-# {"type":"normal","depth":3}
-
-  Modifying an attribute:
-
-# {"type":"normal","depth":4}
-
-  client -> server O(messages)
-
-# {"type":"normal","depth":4}
-
-  server -> client O(messages)
-
-# {"type":"list","depth":2}
+# {"type":"header","depth":2}
 
   Code / implementation
 
 # {"type":"list","depth":3}
 
+
+
+# {"type":"list","depth":4}
+
   remoteStorage.js
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
   tests: looks like over 3000? All passing on master.
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
   coverage: not tracked (although there is a [6-year-old issue](https://github.com/remotestorage/remotestorage.js/issues/702) about it)
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
   community: 3 contributors in the past month
 
-# {"type":"list","depth":3}
+# {"type":"list","depth":4}
 
   armadietto (the node.js server I evaluated)
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
   tests: 105 tests, all passing on master
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
   coverage: not reported
 
-# {"type":"normal","depth":4}
+# {"type":"normal","depth":5}
 
   community: no commits in the past 9 months.
 
@@ -192,7 +160,7 @@
 
 # {"type":"normal","depth":4}
 
-  Nope, full JSON.
+  All of JSON is supported.
 
 # {"type":"normal","depth":3}
 
@@ -200,7 +168,7 @@
 
 # {"type":"normal","depth":4}
 
-  It certainly could, but the whole point of remoteStorage is that the app develop has zero control over the backend.
+  It certainly could, but the whole point of remoteStorage is that the app developer has zero control (or knowledge) over the backend.
 
 # {"type":"normal","depth":3}
 
@@ -208,7 +176,7 @@
 
 # {"type":"normal","depth":4}
 
-  Technically it can sync to Google Drive or Dropbox, but I've found the implementations to be extremely buggy. However, the whole thing of remoteStorage is that each user manages their own backend storage -- it's just that the users need to have an account with a remoteStorage provider, and the options there are quite limited.
+  Technically it can sync to Google Drive or Dropbox, but I've found the implementations to be extremely buggy. Certainly the whole point of remoteStorage is that each user manages their own backend storage, but the best-supported "backend" is the custom remoteStorage protocol, and the options for public remoteStorage providers are quite limited.
 
 # {"type":"normal","depth":3}
 
@@ -216,7 +184,7 @@
 
 # {"type":"normal","depth":4}
 
-  Large datasets aren't advisable due to the simplicity of the syncing mechanism.
+  Large datasets aren't advisable (imo) due to the simplicity of the syncing mechanism.
 
 # {"type":"normal","depth":3}
 
@@ -224,7 +192,7 @@
 
 # {"type":"normal","depth":4}
 
-  No.
+  There's nothing built-in for e2e encryption, but it could potentially be added (there's nothing in the protocol that would prohibit it).
 
 # {"type":"normal","depth":3}
 
@@ -232,11 +200,11 @@
 
 # {"type":"normal","depth":4}
 
-  No. remoteStorage is a very personal protocol, with no accounting for multi-user data-sharing situations.
+  No. remoteStorage is a very personal protocol, with no support for multi-user data-sharing situations.
 
 # {"type":"normal","depth":3}
 
-  Is collaborative text editing *possible*? (I'm fine paying more for it, in terms of server requirements, data overhead, etc.)
+  Is collaborative text editing supported?
 
 # {"type":"normal","depth":4}
 
@@ -244,11 +212,11 @@
 
 # {"type":"normal","depth":3}
 
-  Does it have the concept of "undo" built-in? At what cost?
+  Does it have the concept of "undo" built-in?
 
 # {"type":"normal","depth":4}
 
-  No.
+  No. Change history is not saved.
 
 # {"type":"normal","depth":3}
 
@@ -268,6 +236,14 @@
 
 # {"type":"normal","depth":3}
 
+  Is it being used in production?
+
+# {"type":"normal","depth":4}
+
+  I think so? The mentions I've seen of it being used in production apps are a couple of years old, and I haven't seen a centralized list of "here's who's using it".
+
+# {"type":"normal","depth":3}
+
   How well does it handle offline behavior?
 
 # {"type":"normal","depth":4}
@@ -280,7 +256,7 @@
 
 # {"type":"normal","depth":4}
 
-  Not when offline. When online, each tab syncs via polling separately, and so the tabs with synchronize within 10 seconds of each other.
+  Not when offline. When online, each tab syncs via polling separately, and so the tabs synchronize within 10 seconds of each other.
 
 # {"type":"normal","depth":3}
 
@@ -297,6 +273,10 @@
 # {"type":"normal","depth":2}
 
   remoteStorage occupies an interesting place in my mind. On the one hand, it's an 8 year old project that still receives active maintenance, which is a pretty big achievement in and of itself. On the other hand, its simplicity means that it's lacking a lot of features that people have come to expect from modern web applications. Overall, given that it's still actively being developed, it could very well gain some of those features and become a strong solution for building modern local-first apps in the future.
+
+# {"type":"note","depth":2}
+
+  The [original spec author](https://michielbdejong.com/) of remoteStorage is [now working](https://community.remotestorage.io/t/state-of-the-project/614/2) on [SOLID](https://solidproject.org/), which seems like it might be a successor in many ways. 
 
 # {"type":"normal","depth":2}
 

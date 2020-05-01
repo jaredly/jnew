@@ -200,7 +200,7 @@
 
 # {"type":"normal","depth":4}
 
-  No.
+  No. Change history is not saved.
 
 # {"type":"normal","depth":3}
 
@@ -228,7 +228,7 @@
 
 # {"type":"normal","depth":4}
 
-  Yes! There are a number of gun-based applications being run in production, most notably [notabug](https://github.com/notabugio/notabug) (a reddit clone that's resistent to censorship/moderation) and [Iris](https://github.com/irislib/iris) (a social networking / social media app). The discord bot claims "8M users", although I had some trouble verifying that number. Archive.org is listed (part of their [dweb initiative](https://www.bleepingcomputer.com/news/technology/archiveorg-has-created-a-decentralized-or-dweb-version-of-their-site/)) but that doesn't appear to be running anymore. [dtube](https://github.com/dtube/dtube) is also listed, but [gun was removed as a dependency](https://github.com/dtube/dtube/commit/6a9ca74158d7d8c67ad97eb5b55fdae9f0abd56a#diff-b9cfc7f2cdf78a7f4b91a753d10865a2) in March, and it doesn't look like it was used in the source code since maybe 2018?
+  Yes! There are a number of gun-based applications being run in production, most notably [notabug](https://github.com/notabugio/notabug) (a reddit clone that's resistent to censorship/moderation) and [Iris](https://github.com/irislib/iris) (a social networking / social media app). The discord bot claims "8M users", although I had some trouble verifying that number. Archive.org is listed (part of their [dweb initiative](https://www.bleepingcomputer.com/news/technology/archiveorg-has-created-a-decentralized-or-dweb-version-of-their-site/)) but that doesn't appear to be running anymore. [dtube](https://github.com/dtube/dtube) is also listed, but [gun was removed as a dependency](https://github.com/dtube/dtube/commit/6a9ca74158d7d8c67ad97eb5b55fdae9f0abd56a#diff-b9cfc7f2cdf78a7f4b91a753d10865a2) in March, and it doesn't look like it was used in the source code since 2018 or so (apparently the feature they were using gun for didn't get enough usage to justify the maintenance).
 
 # {"type":"normal","depth":3}
 
