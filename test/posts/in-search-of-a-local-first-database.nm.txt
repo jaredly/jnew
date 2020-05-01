@@ -164,6 +164,10 @@
 
 # {"type":"normal","depth":4}
 
+  How well does it handle offline behavior?
+
+# {"type":"normal","depth":4}
+
   Does it correctly handle working on multiple tabs in the same browser session?
 
 # {"type":"normal","depth":4}
@@ -176,7 +180,7 @@
 
 # {"type":"header","depth":2}
 
-  Under evaluation
+  Evaluated
 
 # {"type":"list","depth":3}
 
@@ -184,7 +188,15 @@
 
 # {"type":"normal","depth":4}
 
-  gun - https://gun.js.org/
+  gun - https://jaredforsyth.com/posts/local-first-database-gun-js/
+
+# {"type":"header","depth":2}
+
+  Under evaluation
+
+# {"type":"list","depth":3}
+
+
 
 # {"type":"normal","depth":4}
 
@@ -201,6 +213,10 @@
 # {"type":"normal","depth":4}
 
   hyperdb - https://github.com/mafintosh/hyperdb
+
+# {"type":"normal","depth":4}
+
+  SOLID - https://solidproject.org/
 
 # {"type":"header","depth":2}
 

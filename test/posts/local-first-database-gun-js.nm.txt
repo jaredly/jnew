@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first"], "date": "2020-5-01 16:16:34", "description": "Evaluating gun.js for correctness, cost, and flexibility as a local-first database", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: gun.js"}
+  {"tags": ["local-first"], "date": "2020-5-01 16:16:34", "description": "Evaluating gun.js for correctness, cost, and flexibility as a local-first database", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: gun.js"}
 
 # {"type":"normal","depth":1}
 
@@ -44,7 +44,7 @@
 
 # {"type":"normal","depth":4}
 
-  I couldn't see anything in the docs about this, and couldn't figure out anything from the source code.
+  I couldn't see anything in the docs about this, and couldn't figure out anything from the source code. I asked about this in the community chat, and apparently there's some hashing that's used to determine when to "stop syncing" between two peers.
 
 # {"type":"normal","depth":3}
 
@@ -88,7 +88,7 @@
 
 # {"type":"normal","depth":5}
 
-  It appears there's a fair amount of communication back & forth, negotiating what nodes need to be replicated, as well as connecting peers to each other -- "chaining" along data that one peer needs that another one has.
+  It appears there's a fair amount of communication back & forth, negotiating what nodes need to be replicated, as well as connecting peers to each other -- "relaying" along data that one peer needs that another one has.
 
 # {"type":"header","depth":2}
 
@@ -184,7 +184,7 @@
 
 # {"type":"normal","depth":4}
 
-  Yes, but you'll be implementing a lot of custom encryption / key management logic yourself. Out of the box, GUN gives you user auth, where each user has a public and private key which can be used for encryption. If user A wants to allow "read" access to user B, one way to do that is to get user B's public key and use that to encrypt the data. However, if they then want to give read access to user C as well, they would need to re-encrypt it with user C's public key. Alternatively, they could generate some shared secret, use the secret to encrypt the data, and then send the secret, encrypted with the corresponding public keys, to users B and C. As you can imagine, this gets complicated quickly, and requires a decent amount of specialized knowledge to get right.
+  Yes, but you'll be implementing a lot of custom encryption / key management logic yourself. Out of the box, GUN gives you user auth, where each user has a public and private key which can be used for encryption. If user A wants to allow "read" access to user B, one way to do that is to get user B's public key and use that to encrypt the data (see this [remarkably in-depth cartoon explainer](https://gun.eco/docs/Cartoon-Cryptography) for more on that). However, if they then want to give read access to user C as well, they would need to re-encrypt it with user C's public key. Alternatively, they could generate some shared secret, use the secret to encrypt the data, and then send the secret, encrypted with the corresponding public keys, to users B and C. As you can imagine, this gets complicated quickly, and requires a decent amount of specialized knowledge to get right.
 
 # {"type":"normal","depth":3}
 
@@ -228,7 +228,7 @@
 
 # {"type":"normal","depth":4}
 
-  Yes! There are a number of gun-based applications being run in production, most notably [notabug](https://github.com/notabugio/notabug) (a reddit clone that's resistent to censorship/moderation) and [Iris](https://github.com/irislib/iris) (a social networking / social media app). The discord bot claims "8M users", although I had some trouble verifying that number. Archive.org is listed (part of their [dweb initiative](https://www.bleepingcomputer.com/news/technology/archiveorg-has-created-a-decentralized-or-dweb-version-of-their-site/)) but that doesn't appear to be running anymore. [dtube](https://github.com/dtube/dtube) is also listed, but [gun was removed as a dependency](https://github.com/dtube/dtube/commit/6a9ca74158d7d8c67ad97eb5b55fdae9f0abd56a#diff-b9cfc7f2cdf78a7f4b91a753d10865a2) in March, and it doesn't look like it was used in the source code since 2018 or so (apparently the feature they were using gun for didn't get enough usage to justify the maintenance).
+  Yes! There are a number of gun-based applications being run in production, most notably [notabug](https://github.com/notabugio/notabug) (a reddit clone that's resistent to censorship/moderation) and [Iris](https://github.com/irislib/iris) (a social networking / social media app). The discord bot claims "8M users", although I had some trouble verifying that number. Archive.org is listed (part of their [dweb initiative](https://www.bleepingcomputer.com/news/technology/archiveorg-has-created-a-decentralized-or-dweb-version-of-their-site/)) but that doesn't appear to be running anymore. [dtube](https://github.com/dtube/dtube) is also listed, but [gun was removed as a dependency](https://github.com/dtube/dtube/commit/6a9ca74158d7d8c67ad97eb5b55fdae9f0abd56a#diff-b9cfc7f2cdf78a7f4b91a753d10865a2) in March, and it doesn't look like it was used in the source code since 2018 or so (apparently the feature they were using gun for didn't get enough usage to justify the maintenance). HackerNoon is apparently [also using gun](https://discordapp.com/channels/612645357850984470/612645357850984473/705853185230635118) in some capacity, but their site isn't open source so I couldn't verify that.
 
 # {"type":"normal","depth":3}
 
@@ -252,7 +252,7 @@
 
 # {"type":"normal","depth":4}
 
-  Auth is included as an integral part of the system. Some interesting aspects of the authentication system is that usernames are not guarenteed to be unique, and there is no established recourse for lost passwords. If you wanted to have a "private graph", you could probably gate the synchronization with some custom authentication, but it's clearly not something that's been designed for.
+  Auth is included as an integral part of the system. Some interesting aspects of the authentication system is that usernames are not guarenteed to be unique, and there is no established recourse for lost passwords (see [this FAQ page](https://github.com/amark/gun/wiki/FAQ#can-a-lost-password-be-recovered) for some discussion of possible remedies, but there's nothing established as far as I can tell). If you wanted to have a "private graph", you could probably gate the synchronization with some custom authentication, but it's clearly not something that's been designed for.
 
 # {"type":"normal","depth":3}
 
@@ -268,7 +268,7 @@
 
 # {"type":"normal","depth":2}
 
-  Under the default configuration, a "server" doesn't put any restrictions on what data it will replicate, meaning that any developer could point their app at your server and store data on it. Some apps have added a layer of security on top of GUN -- for example, [here's a community plugin](https://github.com/zrrrzzt/bullet-catcher) that extends Gun to reject data that doesn't match a given schema. This does go somewhat against the "vision" of Gun, however, where the idea is to have one universal connected graph instead of many small walled-gardens.
+  Under the default configuration, a "server" (relay peer) doesn't put any restrictions on what data it will replicate, meaning that any developer could point their app at your instance and store data on it. Some apps have added a layer of security on top of GUN -- for example, [here's a community plugin](https://github.com/zrrrzzt/bullet-catcher) that extends Gun to reject data that doesn't match a given schema. This does go somewhat against the "vision" of Gun, however, where the idea is to have one universal connected graph instead of many small walled-gardens.
 
 # {"type":"header","depth":1}
 
