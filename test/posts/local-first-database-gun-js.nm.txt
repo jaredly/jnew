@@ -164,11 +164,11 @@
 
 # {"type":"normal","depth":3}
 
-  Does it require all data to live in memory, or can it work with mostly-persisted data?
+  Does the client implementation require all data to live in memory, or can it work with mostly-persisted data?
 
 # {"type":"normal","depth":4}
 
-  Hard to tell, but it looks like currently all local data lives in memory.
+  With the default (localstorage) persistence, all data lives in memory, but apparently (again, not documented but I asked in the community chat) with other persistence backends it doesn't need all data to live in memory.
 
 # {"type":"normal","depth":3}
 
