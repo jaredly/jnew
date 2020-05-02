@@ -1,14 +1,18 @@
 # {"type":"header","depth":0}
 
-  Local-first database: remoteStorage
+  Local-first database: remoteStorage.js
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first"], "date": "2020-5-01 10:39:34", "description": "Evaluating remoteStorage for correctness, cost, and flexibility", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: remoteStorage"}
+  {"tags": ["local-first"], "date": "2020-5-01 10:39:34", "description": "Evaluating remoteStorage.js for correctness, cost, and flexibility", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: remoteStorage"}
 
 # {"type":"normal","depth":1}
 
-  [remoteStorage](https://remotestorage.io/) is an offline-first solution that's been around for quite some time, and stands out for having a [formal spec](https://datatracker.ietf.org/doc/draft-dejong-remotestorage/), first drafted in 2012. It would be really cool if it took off, but unfortunately there are only [one or two commercial providers](https://wiki.remotestorage.io/Servers), and the most-promising-looking [open-source remoteStorage server](https://github.com/untitaker/mysteryshack) has been [unmaintained](https://github.com/untitaker/mysteryshack) since early 2018. Nevertheless, I figured it would be interesting to see how it stacks up according to my [local-first database criteria](https://jaredforsyth.com/posts/in-search-of-a-local-first-database/).
+  [remoteStorage.js](https://remotestorage.io/) is a an offline-first solution that's been around for quite some time, and stands out for having a [formal protocol spec](https://datatracker.ietf.org/doc/draft-dejong-remotestorage/), first drafted in 2012. It would be really cool if it took off, but unfortunately there are only [one or two commercial providers](https://wiki.remotestorage.io/Servers), and the [only stable open-source server implementation](https://github.com/fkooman/php-remote-storage) is in PHP. There's [one written in rust](https://github.com/untitaker/mysteryshack) that has been [unmaintained](https://github.com/untitaker/mysteryshack) since early 2018, and a [nodejs one](https://github.com/remotestorage/armadietto) that has a big warning up top about being experimental & alpha-stage. Nevertheless, I figured it would be interesting to see how it stacks up according to my [local-first database criteria](https://jaredforsyth.com/posts/in-search-of-a-local-first-database/).
+
+# {"type":"note","depth":1}
+
+  Technically, "remoteStorage" is the protocol, and "remoteStorage.js" is the "reference client imeplementation". My goal with this series is to look at solutions that are immediately ready to be used to build apps, so my evaluation is of the javascript client (and a corresponding community-built javascript server). While many of the features of the client & server are inherent to the protocol, there are also many things that are more due to implementation details than the underlying spec. 🤷
 
 # {"type":"header","depth":1}
 
@@ -24,15 +28,15 @@
 
 # {"type":"normal","depth":4}
 
-  Conflicts are, well, not handled. If two clients change the same document, whichever syncs to the server first wins.
+  Conflicts are not automatically handled -- they must be dealt with (or not) by the client using bespoke conflict merging code. If two clients change the same document, whichever client syncs to the server first wins, and the second one gets an "conflict event" when it tries to sync. A particularly clever client imeplementation could use a json-crdt to encode the data, and thereby automatically handle merge conflicts without developer or user intervention 🤔 but I haven't seen anyone try that yet.
 
 # {"type":"normal","depth":3}
 
-  How "bullet proof" is it? How easy is it to get it into a broken state (e.g. where different clients continue to see inconsistent data dispite syncing)?
+  How "bullet proof" is it? How easy is it to get it into a broken state (e.g. where different clients continue to see inconsistent data despite syncing)?
 
 # {"type":"normal","depth":4}
 
-  With such a simple protocol you'd think it would be pretty robust, but in my short time integrating it into my example app I managed to get into a state where refreshing the page and logging out & in again failed to show me the right data. Only when I opened devtools and disabled the browser cache was I able to get the right information to load. That's one hazard of relying so heavily on the browser cache I guess. It's possible that the fault was in the [server implementation](https://github.com/remotestorage/armadietto) that I used, who knows.
+  With such a simple protocol I expected it to be pretty robust, but in my short time integrating it into my example app I managed to get into a state where refreshing the page and logging out & in again failed to show me the right data (indicating to me that logging out failed to clear my data, which is also concerning). Given that I was using the self-described "experimental & alpha-stage" nodejs server implementation though, the fault is most likely to be there.
 
 # {"type":"normal","depth":3}
 
@@ -40,7 +44,7 @@
 
 # {"type":"normal","depth":4}
 
-  Nope, the server is trusted to calculate etags correctly, and there's no verification that the data loaded is consistent.
+  Nope, the server is trusted to calculate etags correctly, and there's no verification that the data loaded is consistent. Often etag calculation is deterministic based on the content, but we're still trusting the server not to have bugs.
 
 # {"type":"normal","depth":3}
 
@@ -48,7 +52,7 @@
 
 # {"type":"normal","depth":4}
 
-  If a user makes changes to a single "document" on two devices while offline, their changes on one of the devices (the one that *syncs* second) will be completely lost.
+  The out-of-the-box behavior is to not handle conflicts, so if two clients change the same document at the same time, one of those is lost. As described above, you can implement custom conflict resolution code to mitigate this.
 
 # {"type":"header","depth":1}
 
@@ -68,7 +72,7 @@
 
 # {"type":"normal","depth":5}
 
-  It appears to grow somewhat nonlinearly with the number of documents. At 100 documents, it was 58x the size of a naive jsonified version of the data, at 300 documents it was 108x.
+  The client stores each document in indexeddb, without much in the way of metadata.
 
 # {"type":"normal","depth":4}
 
@@ -76,7 +80,7 @@
 
 # {"type":"normal","depth":5}
 
-  At 100 documents, 58x; at 200 documents, 36x; at 300 documents, 78x
+  The server also stores the latest state of each document (no change history).
 
 # {"type":"normal","depth":4}
 
@@ -85,6 +89,10 @@
 # {"type":"normal","depth":5}
 
   It seems fairly simple conceptually. The server needs to calculate etags for each collection (folder), and stores each document as a plain json file.
+
+# {"type":"note","depth":5}
+
+  Again, this is evaluating the specific implementation of armadietto + remoteStorage.js. The protocol itself doesn't place restrictions on what kinds of data can be stored.
 
 # {"type":"header","depth":2}
 
@@ -124,7 +132,7 @@
 
 # {"type":"normal","depth":5}
 
-  community: no commits in the past 9 months.
+  community: 1 change in the past 12 months.
 
 # {"type":"header","depth":2}
 
@@ -132,11 +140,11 @@
 
 # {"type":"normal","depth":3}
 
-  When replicating, the client will make **1 request per document**. Which, if you have several documents, ends up being a ton of network requests, and a long wait from cold start.
+  During the initial sync, the client will make **1 HTTP request per document**. Which, if you have a large number of documents, ends up being a ton of network requests, and a long wait from cold start. (Note that HTTP/2 can lower, although not eliminate, the overhead associated with this).
 
 # {"type":"normal","depth":3}
 
-  Also, synchronization is done via simple polling (every 10 seconds or so).
+  Also, synchronization is done via simple polling (every 10 seconds or so by default).
 
 # {"type":"header","depth":1}
 
@@ -184,7 +192,7 @@
 
 # {"type":"normal","depth":4}
 
-  Large datasets aren't advisable (imo) due to the simplicity of the syncing mechanism.
+  Data is stored in IndexedDB on the client, so it doesn't all need to live in memory.
 
 # {"type":"normal","depth":3}
 
@@ -192,7 +200,7 @@
 
 # {"type":"normal","depth":4}
 
-  There's nothing built-in for e2e encryption, but it could potentially be added (there's nothing in the protocol that would prohibit it).
+  There's nothing built-in for e2e encryption, but it could certainly be added on top (there's nothing in the protocol that would prohibit it).
 
 # {"type":"normal","depth":3}
 
@@ -200,7 +208,7 @@
 
 # {"type":"normal","depth":4}
 
-  No. remoteStorage is a very personal protocol, with no support for multi-user data-sharing situations.
+  Neither remoteStorage.js or armadietto have any accomodation for multi-user editing scenarios. It's possible that something could be implemented on top of the protocol to allow for it, but that's very much an area of future research.
 
 # {"type":"normal","depth":3}
 
@@ -240,7 +248,7 @@
 
 # {"type":"normal","depth":4}
 
-  I think so? The mentions I've seen of it being used in production apps are a couple of years old, and I haven't seen a centralized list of "here's who's using it".
+  Anecdotally yes, but I haven't seen anyone publish a list of "here are currently-running production apps that are using it". The protocol is still in "draft" stage, which is one barrier to widespread adoption.
 
 # {"type":"normal","depth":3}
 
@@ -256,7 +264,7 @@
 
 # {"type":"normal","depth":4}
 
-  Not when offline. When online, each tab syncs via polling separately, and so the tabs synchronize within 10 seconds of each other.
+  Not when offline (there's an [open bug from 2018](https://github.com/remotestorage/remotestorage.js/issues/1137) tracking this). When online, each tab syncs via polling separately, and so the tabs synchronize within 10 seconds of each other.
 
 # {"type":"normal","depth":3}
 
@@ -264,7 +272,7 @@
 
 # {"type":"normal","depth":4}
 
-  It bakes in auth, and you wouldn't use existing authentication because each user brings their own backend.
+  It bakes in auth, and you wouldn't use existing authentication because each user brings their own backend. If you want to ditch the "each user brings their own backend" part, you could implementat custom auth layer, but that negates many of the benefits of using this system.
 
 # {"type":"header","depth":1}
 
@@ -276,7 +284,7 @@
 
 # {"type":"note","depth":2}
 
-  The [original spec author](https://michielbdejong.com/) of remoteStorage is [now working](https://community.remotestorage.io/t/state-of-the-project/614/2) on [SOLID](https://solidproject.org/), which seems like it might be a successor in many ways. 
+  The [original spec author](https://michielbdejong.com/) of remoteStorage is [now working](https://community.remotestorage.io/t/state-of-the-project/614/2) on [SOLID](https://solidproject.org/), which is also working in this you-own-your-data space. [Recently](https://community.remotestorage.io/t/state-of-the-project/614/11) he's started engaging with the remoteStorage community again as well.
 
 # {"type":"normal","depth":2}
 
