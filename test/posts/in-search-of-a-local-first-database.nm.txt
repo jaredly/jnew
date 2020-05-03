@@ -188,7 +188,15 @@
 
 # {"type":"normal","depth":4}
 
-  gun - https://jaredforsyth.com/posts/local-first-database-gun-js/
+  gun-js - https://jaredforsyth.com/posts/local-first-database-gun-js/
+
+# {"type":"normal","depth":4}
+
+  remoteStorage.js - https://jaredforsyth.com/posts/local-first-database-remotestorage/
+
+# {"type":"normal","depth":4}
+
+  rxdb + pouchdb - https://jaredforsyth.com/posts/local-first-rxdb-pouchdb/
 
 # {"type":"header","depth":2}
 
@@ -197,14 +205,6 @@
 # {"type":"list","depth":3}
 
 
-
-# {"type":"normal","depth":4}
-
-  remoteStorage - http://remotestorage.io/
-
-# {"type":"normal","depth":4}
-
-  rxdb + pouchdb - https://rxdb.info/
 
 # {"type":"normal","depth":4}
 
@@ -228,7 +228,7 @@
 
 # {"type":"normal","depth":4}
 
-  irmin - I can't find anything about how to sync it?
+  irmin - I can't find any examples demonstrating how to have a web-client and a server-backend syncing together.
 
 # {"type":"normal","depth":4}
 
