@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first"], "date": "2020-5-01 10:39:34", "description": "Evaluating remoteStorage.js for correctness, cost, and flexibility", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: remoteStorage"}
+  {"tags": ["local-first", "offline-first"], "date": "2020-5-06 22:39:34", "description": "Evaluating remoteStorage.js for correctness, cost, and flexibility", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: remoteStorage.js"}
 
 # {"type":"normal","depth":1}
 
