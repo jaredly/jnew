@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first"], "date": "2020-4-11 10:52:04", "description": "My criteria for evaluating syncing solutions", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "In Search of a Local-First Database"}
+  {"tags": ["local-first", "offline-first"], "date": "2020-4-11 10:52:04", "description": "My criteria for evaluating syncing solutions", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "In Search of a Local-First Database"}
 
 # {"type":"normal","depth":1}
 
@@ -194,10 +194,6 @@
 
   remoteStorage.js - https://jaredforsyth.com/posts/local-first-database-remotestorage/
 
-# {"type":"normal","depth":4}
-
-  rxdb + pouchdb - https://jaredforsyth.com/posts/local-first-rxdb-pouchdb/
-
 # {"type":"header","depth":2}
 
   Under evaluation
@@ -208,11 +204,11 @@
 
 # {"type":"normal","depth":4}
 
-  automerge - https://github.com/automerge/automerge
+  rxdb + pouchdb - https://rxdb.info/ + https://pouchdb.com/
 
 # {"type":"normal","depth":4}
 
-  hyperdb - https://github.com/mafintosh/hyperdb
+  Hypermerge (w/ Automerge) - https://github.com/automerge/hypermerge
 
 # {"type":"normal","depth":4}
 
