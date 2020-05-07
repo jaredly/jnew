@@ -14,6 +14,10 @@
 
   Technically, "remoteStorage" is the protocol, and "remoteStorage.js" is the "reference client imeplementation". My goal with this series is to look at solutions that are immediately ready to be used to build apps, so my evaluation is of the javascript client (and a corresponding community-built javascript server). While many of the features of the client & server are inherent to the protocol, there are also many things that are more due to implementation details than the underlying spec. 🤷
 
+# {"type":"normal","depth":1}
+
+  <!-- more -->
+
 # {"type":"header","depth":1}
 
   Correctness
