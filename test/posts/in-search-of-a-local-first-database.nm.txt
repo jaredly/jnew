@@ -204,7 +204,7 @@
 
 # {"type":"normal","depth":4}
 
-  rxdb + pouchdb - https://rxdb.info/ + https://pouchdb.com/
+  rxdb + pouchdb - https://rxdb.info/ & https://pouchdb.com/
 
 # {"type":"normal","depth":4}
 
