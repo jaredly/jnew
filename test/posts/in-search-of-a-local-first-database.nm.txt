@@ -214,6 +214,10 @@
 
   SOLID - https://solidproject.org/
 
+# {"type":"normal","depth":4}
+
+  Kinto - https://www.kinto-storage.org/
+
 # {"type":"header","depth":2}
 
   Rejected
