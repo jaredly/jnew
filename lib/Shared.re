@@ -411,6 +411,23 @@ let monthName = month =>
   | _ => failwith("Invalid month " ++ string_of_int(month))
   };
 
+let shortMonth = month =>
+  switch (month) {
+  | 1 => "Jan"
+  | 2 => "Feb"
+  | 3 => "Mar"
+  | 4 => "Apr"
+  | 5 => "May"
+  | 6 => "Jun"
+  | 7 => "Jul"
+  | 8 => "Aug"
+  | 9 => "Sep"
+  | 10 => "Oct"
+  | 11 => "Nov"
+  | 12 => "Dec"
+  | _ => failwith("Invalid month " ++ string_of_int(month))
+  };
+
 let showDate = (~date as (year, month, day), ~children, ()) => {
   Html.(
     <fragment>
@@ -421,6 +438,14 @@ let showDate = (~date as (year, month, day), ~children, ()) => {
       {string_of_int(year)}
     </fragment>
   );
+};
+
+let rfcDate = ((year, month, day)) => {
+  string_of_int(day)
+  ++ " "
+  ++ shortMonth(month)
+  ++ " "
+  ++ string_of_int(year);
 };
 
 let dateSort = ((y1, m1, d1), (y2, m2, d2)) => {

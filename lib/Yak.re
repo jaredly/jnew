@@ -182,20 +182,30 @@ let processBlog = (~excludeDrafts=true, inputDir, outputDir) => {
     )
     |> List.sort(((k, n), (v, n2)) => n2 - n);
 
-  let html = Post.postList(posts, tagCounts, "All posts");
+  let (html, rss) =
+    Post.postList(
+      ~urlBase="https://jaredforsyth.com",
+      posts,
+      tagCounts,
+      "All posts",
+    );
   Files.writeFile(outputDir /+ "posts/index.html", html) |> ignore;
+
+  Files.writeFile(outputDir /+ "posts/rss.xml", rss) |> ignore;
 
   StrMap.iter(
     (tag, posts) => {
       let dest = outputDir /+ "tags" /+ tag;
       Files.mkdirp(dest);
-      let html =
+      let (html, rss) =
         Post.postList(
+          ~urlBase="https://jaredforsyth.com",
           List.sort(sortPostsByDate, posts),
           tagCounts,
           "Tag: " ++ tag,
         );
       Files.writeFile(dest /+ "index.html", html) |> ignore;
+      Files.writeFile(dest /+ "rss.xml", rss) |> ignore;
     },
     tags,
   );

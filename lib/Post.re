@@ -171,7 +171,38 @@ let render =
   </html>;
 };
 
-let postList = (posts, tags, contentTitle) => {
+let rss = (~title, ~urlBase, posts, tags) => {
+  Rss.wrapper(
+    ~siteTitle=title,
+    ~posts=
+      posts
+      |> List.map(({config, intro, body}) => {
+           let href =
+             urlBase ++ "/" ++ Util.chopSuffix(config.Types.fileName) ++ "/";
+           let readTime = Shared.minuteReadText(config.wordCount);
+           let description =
+             (
+               switch (intro) {
+               | None => ""
+               | Some(intro) => renderBody(intro) ++ " "
+               }
+             )
+             ++ readTime
+             ++ (config.draft ? " [DRAFT]" : "");
+           {
+             Rss.title: config.title,
+             description,
+             url: href,
+             content: renderBody(body),
+             //  descriptionHtml: description |> Rss.escapeContent,
+             date: config.date,
+             category: None,
+           };
+         }),
+  );
+};
+
+let postList = (~urlBase, posts, tags, contentTitle) => {
   open Html;
   let (css, inlineCss) = Css.startPage();
   /* let contentTitle = "All posts"; */
@@ -219,6 +250,7 @@ let postList = (posts, tags, contentTitle) => {
             ])}>
             contentTitle
           </h1>
+          <a href="rss.xml"> "RSS Feed" </a>
         </div>
         {List.map(
            ({config, intro: teaser}) => {
@@ -263,12 +295,17 @@ let postList = (posts, tags, contentTitle) => {
       </div>
     </main>;
 
-  <html>
-    <pageHead title=contentTitle description="Things Jared has written about">
-      <style> {inlineCss()} </style>
-    </pageHead>
-    body
-  </html>;
+  let main =
+    <html>
+      <pageHead
+        title=contentTitle description="Things Jared has written about">
+        <style> {inlineCss()} </style>
+      </pageHead>
+      body
+    </html>;
+  let rss =
+    rss(~title=contentTitle ++ " | JaredForsyth.com", ~urlBase, posts, tags);
+  (main, rss);
 };
 
 open Types;

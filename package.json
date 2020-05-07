@@ -20,19 +20,14 @@
         "@opam/ocamlrss": "*",
         "@jaredly/omd": "jaredly/omd",
         "@opam/dune": "*",
+        "odate": "jaredly/odate",
         "@esy-ocaml/reason": "*",
         "@opam/ocaml-migrate-parsetree": "*",
         "@opam/ppx_tools_versioned": "*",
         "@opam/ppx_tools": "*",
         "@opam/ppxlib": "*",
         "rex-json": "*",
-        "ocaml": "~4.7.2"
-    },
-    "peerDependencies": {
-        "ocaml": "~4.6.0"
-    },
-    "devDependencies": {
-        "ocaml": "~4.6.0"
+        "ocaml": "4.7.2"
     },
     "resolutions": {
         "@jaredly/omd": "link:../../fork/omd/package.json"
