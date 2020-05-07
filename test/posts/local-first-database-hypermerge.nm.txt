@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first", "offline-first"], "date": "2020-5-02 10:39:34", "description": "Evaluating hypermerge for correctness, cost, and flexibility as a local-first database", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: Hypermerge"}
+  {"tags": ["local-first", "offline-first"], "date": "2020-5-06 10:39:34", "description": "Evaluating Hypermerge for correctness, cost, and flexibility as a local-first database", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: Hypermerge"}
 
 # {"type":"normal","depth":1}
 
@@ -268,7 +268,7 @@
 
 # {"type":"normal","depth":2}
 
-
+  Hypermerge is doing some very cool things in the peer-to-peer space, and the papers that are coming out of this research are fascinating, but ultimately it is a research tool primarily, and not meant to be production ready. That said, it's also undergoing very active development, so I wouldn't be surprised to see it become a real contender in the future!
 
 # {"type":"normal","depth":2}
 
