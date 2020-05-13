@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first", "offline-first"], "date": "2020-5-02 10:39:34", "description": "Evaluating rxdb + pouchdb for correctness, cost, and flexibility as a local-first database", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: RxDB + PouchDB"}
+  {"tags": ["local-first", "offline-first"], "date": "2020-5-12 10:39:34", "description": "Evaluating rxdb + pouchdb for correctness, cost, and flexibility as a local-first database", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: RxDB + PouchDB"}
 
 # {"type":"normal","depth":1}
 
