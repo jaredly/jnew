@@ -194,6 +194,10 @@
 
   remoteStorage.js - https://jaredforsyth.com/posts/local-first-database-remotestorage/
 
+# {"type":"normal","depth":4}
+
+  rxdb + pouchdb - https://jaredforsyth.com/posts/local-first-database-rxdb-pouchdb/
+
 # {"type":"header","depth":2}
 
   Under evaluation
@@ -201,10 +205,6 @@
 # {"type":"list","depth":3}
 
 
-
-# {"type":"normal","depth":4}
-
-  rxdb + pouchdb - https://rxdb.info/ & https://pouchdb.com/
 
 # {"type":"normal","depth":4}
 
