@@ -198,6 +198,10 @@
 
   rxdb + pouchdb - https://jaredforsyth.com/posts/local-first-database-rxdb-pouchdb/
 
+# {"type":"normal","depth":4}
+
+  ¸hypermerge + automerge - https://jaredforsyth.com/posts/local-first-database-hypermerge/
+
 # {"type":"header","depth":2}
 
   Under evaluation
@@ -205,10 +209,6 @@
 # {"type":"list","depth":3}
 
 
-
-# {"type":"normal","depth":4}
-
-  Hypermerge (w/ Automerge) - https://github.com/automerge/hypermerge
 
 # {"type":"normal","depth":4}
 
