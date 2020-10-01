@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first", "offline-first"], "date": "2020-5-06 10:39:34", "description": "Evaluating Hypermerge for correctness, cost, and flexibility as a local-first database", "draft": true, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: Hypermerge"}
+  {"tags": ["local-first", "offline-first"], "date": "2020-5-06 10:39:34", "description": "Evaluating Hypermerge for correctness, cost, and flexibility as a local-first database", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: Hypermerge"}
 
 # {"type":"normal","depth":1}
 
@@ -60,7 +60,7 @@
 
 # {"type":"normal","depth":4}
 
-  Again due to the lack of documentation about Automerge, I can't tell for sure, but the whole point of the CRDT implementation is to preserve user intent in merges.
+  All objects contain the full history of changes to that object, and so all work is fully recoverable.
 
 # {"type":"header","depth":1}
 
@@ -80,7 +80,7 @@
 
 # {"type":"normal","depth":5}
 
-  Both client and server store a full replica of all changes made, and from a some preliminary testing, it looks like the constant factor is rather high (the on-disk size increasing by multiple kilobytes when adding a single change to an attribute).
+  Both client and server store a full replica of all changes made, and from some preliminary testing, it looks like the constant factor is rather high (the on-disk size increasing by multiple kilobytes when adding a single change to an attribute).
 
 # {"type":"header","depth":2}
 
@@ -120,15 +120,7 @@
 
 # {"type":"normal","depth":5}
 
-  community: last commit 3 months ago, 5 contributors in the past 6 months
-
-# {"type":"header","depth":2}
-
-  Other notes
-
-# {"type":"normal","depth":3}
-
-  I tried using glitch.com to host my "storage peer", but given that the default behavior is to use a remote relay peer, nothing would wake it up. [FIX]
+  community: 2 contributors in the past 6 months
 
 # {"type":"header","depth":1}
 
