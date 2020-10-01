@@ -4,7 +4,7 @@
 
 # {"type":"note","depth":1}
 
-  {"tags": ["local-first", "offline-first"], "date": "2020-5-06 10:39:34", "description": "Evaluating Hypermerge for correctness, cost, and flexibility as a local-first database", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: Hypermerge"}
+  {"tags": ["local-first", "offline-first"], "date": "2020-09-30 10:17:14", "description": "Evaluating Hypermerge for correctness, cost, and flexibility as a local-first database", "draft": false, "featured": true, "author": "Jared Forsyth", "title": "Local-first database: Hypermerge"}
 
 # {"type":"normal","depth":1}
 
