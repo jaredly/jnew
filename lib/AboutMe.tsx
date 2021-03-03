@@ -80,12 +80,7 @@ export let column = ({
                         A('overflow', 'auto'),
                     ])}
                 >
-                    <p>
-                        I’m an idealist with strong opinions, but I'm happy to
-                        learn where I'm wrong. We all need more empathy &
-                        compassion. The most important aspect of my life is my
-                        connection to God.
-                    </p>
+                    <p>Relationships are what it's all about.</p>
                     <p>
                         I’m currently a mobile & web developer for Khan Academy,
                         where we’re working to bring a free, world-class
