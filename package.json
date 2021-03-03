@@ -9,27 +9,12 @@
         "start": "watchexec -w lib -w bin -w test/posts npm test",
         "publish": "sh -c $(esy x which Hello) && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets"
     },
-    "esy": {
-        "build": "dune build -p #{self.name}"
+    "devDependencies": {
+        "@types/node": "^18.11.18"
     },
     "dependencies": {
-        "@opam/ezjsonm": "*",
-        "@opam/reason": "^3.0.0",
-        "@opam/yojson": "*",
-        "@opam/ocurl": "*",
-        "@opam/ocamlrss": "*",
-        "@jaredly/omd": "jaredly/omd",
-        "@opam/dune": "*",
-        "odate": "jaredly/odate",
-        "@esy-ocaml/reason": "*",
-        "@opam/ocaml-migrate-parsetree": "*",
-        "@opam/ppx_tools_versioned": "*",
-        "@opam/ppx_tools": "*",
-        "@opam/ppxlib": "*",
-        "rex-json": "*",
-        "ocaml": "4.7.2"
-    },
-    "resolutions": {
-        "@jaredly/omd": "link:../../fork/omd/package.json"
+        "@types/object-hash": "^3.0.2",
+        "object-hash": "^3.0.0",
+        "typescript": "^4.9.5"
     }
 }
