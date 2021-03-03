@@ -1,3 +1,4 @@
+import { triple } from './Shared';
 import { config } from './Types';
 
 export type postBody =
@@ -332,9 +333,9 @@ export type post = {
 //   | Some(value) => fn(value)
 //   };
 
-// let parseDate = text => {
-//   Scanf.sscanf(text, "%d-%d-%d", (year, month, day) => (year, month, day));
-// };
+export let parseDate = (text: string): triple => {
+    return text.split('-').map((m) => parseInt(m)) as triple;
+};
 
 // let parseConfig = (fileName, opts) => {
 //   let config = defaultConfig(fileName);

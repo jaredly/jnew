@@ -3,13 +3,13 @@ import { render } from '../lib/Home';
 import { saveTwitterCache } from '../lib/MarkdownParser';
 import { post } from '../lib/Post';
 import { project } from '../lib/Project';
-import { processTalks } from '../lib/Yak';
+import { processProjects, processTalks } from '../lib/Yak';
 
 let run = (excludeDrafts: boolean) => {
     let outputDir = './test/pages/';
     let inputDir = './test';
 
-    let projects: project[] = []; // processProjects(inputDir, outputDir);
+    let projects = processProjects(inputDir, outputDir);
     let posts: post[] = []; // processBlog(excludeDrafts, inputDir, outputDir);
     let talks = processTalks(inputDir, outputDir);
 

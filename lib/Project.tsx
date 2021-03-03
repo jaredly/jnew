@@ -4,8 +4,13 @@ import * as Shared from './Shared';
 import { startPage } from './Css';
 import { BodyWithSmallAboutMeColumn } from './AboutMe';
 import { process } from './MarkdownParser';
-import { chopSuffix } from './Util';
+import { chopSuffix, splitFirst } from './Util';
 import { PageHead } from './Shared';
+// import toml from 'toml';
+import { parseDate } from './Post';
+import path from 'path';
+import { doc, parseToml } from './Toml';
+import { raw } from './GithubIcon';
 
 export let statusSymbol: { [key: string]: string } = {
     'semi-retired': '🛌',
@@ -18,7 +23,7 @@ export let statusSymbol: { [key: string]: string } = {
 export type project = {
     title: string;
     description: string;
-    longDescription?: string;
+    longDescription?: string | null;
     screenshot?: string;
     github?: string;
     link?: string;
@@ -42,8 +47,13 @@ export let githubLink = ({ css, href }: { css: CssFn; href: string }) => {
             href={href}
             style="font-size: 16px"
         >
-            (GithubIcon.raw(css([ A("fill", Shared.Colors.green), A("width",
-            "20px"), A("height", "20px"), ])))
+            {raw(
+                css([
+                    A('fill', Shared.Colors.green),
+                    A('width', '20px'),
+                    A('height', '20px'),
+                ]),
+            )}
         </a>
     );
 };
@@ -216,46 +226,60 @@ let fullGithub = (text: string) =>
 
 export let splitTags = (text: string) => text.split(/,/g).map((t) => t.trim());
 
-// export let parse = (fileName: string, opts: {}, rawBody: string) => {
-//   let opts = opts |! "No options for static file " + fileName;
-//   let title = Toml.string("title", opts) |! "No title for static page " + fileName;
-//   let description = Toml.string("description", opts) |! "No description for static page " + fileName;
-//   let screenshot = Toml.string("screenshot", opts);
-//   let status = Toml.string("status", opts);
-//   let github = Toml.string("github", opts) |?>> fullGithub;
-//   let link = Toml.string("link", opts);
-//   let tags = Toml.string("tags", opts) |?>> splitTags |? [];
-//   let wip = Toml.bool("wip", opts) |? false;
+export let parseProject = (
+    fileName: string,
+    {
+        strings: { title, description, screenshot, status, github, link, tags },
+        bools: { wip },
+    }: doc,
+    rawBody: string,
+): project => {
+    // let opts = opts |! "No options for static file " + fileName;
+    // let title = Toml.string("title", opts) |! "No title for static page " + fileName;
+    // let description = Toml.string("description", opts) |! "No description for static page " + fileName;
+    // let screenshot = Toml.string("screenshot", opts);
+    // let status = Toml.string("status", opts);
+    let parsedTags = tags ? splitTags(tags) : [];
+    // let github = Toml.string("github", opts) |?>> fullGithub;
+    // let link = Toml.string("link", opts);
+    // let tags = Toml.string("tags", opts) |?>> splitTags |? [];
+    // let wip = Toml.bool("wip", opts) |? false;
 
-//   let (longDescription, rawBody) = Util.splitFirst("\n===\n", rawBody);
+    let longDescription;
+    [longDescription, rawBody] = splitFirst('\n===\n', rawBody);
 
-//   let updates = Util.split("\n---\n", rawBody)
-//   |> List.map(
-//     update => {
-//       let (opts, content) = Util.splitFirst("\n\n", update);
-//       let opts = opts |?>> Toml.parse |! "No options for update " + fileName;
-//       let date = Toml.string("date", opts) |! "No date for project update " + fileName |> Post.parseDate;
+    let updates = rawBody
+        .split('\n---\n')
+        .map((update) => {
+            let [opts, content] = splitFirst('\n\n', update);
+            if (!opts) throw new Error('no opts');
+            const config = parseToml(opts);
 
-//       let screenshot = Toml.string("screenshot", opts);
-//       (date, screenshot, content)
-//     }
-//   ) |> List.sort(((date, _, _), (date2, _, _)) => Shared.dateSort(date2, date));
-//   {
-//     title,
-//     id: Filename.basename(fileName) |> Util.chopSuffix,
-//     github,
-//     link,
-//     status,
-//     tags,
-//     fileName,
-//     description,
-//     longDescription,
-//     screenshot,
-//     wip,
-//     updates
-//   };
-//
-// };
+            let date = parseDate(config.strings.date);
+            let screenshot: string = config.strings.screenshot;
+
+            return [date, screenshot, content] as [
+                Shared.triple,
+                string,
+                string,
+            ];
+        })
+        .sort(([date], [date2]) => Shared.dateSort(date2, date));
+    return {
+        title,
+        id: chopSuffix(path.basename(fileName)),
+        github: github ? fullGithub(github) : undefined,
+        link,
+        status,
+        tags: parsedTags,
+        fileName,
+        description,
+        longDescription,
+        screenshot,
+        wip,
+        updates,
+    };
+};
 
 /* let render = (fileName, opts, rawBody) => {
   (render(config), config)

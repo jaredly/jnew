@@ -1,6 +1,16 @@
 import path from 'path';
 
 // let split = (needle, haystack) => Str.split(Str.regexp(needle), haystack);
+export const splitFirst = (
+    needle: string,
+    haystack: string,
+): [null | string, string] => {
+    const parts = haystack.split(needle);
+    if (parts.length === 1) {
+        return [null, parts[0]];
+    }
+    return [parts[0], parts.slice(1).join(needle)];
+};
 // let splitFirst = (needle, haystack) => {
 //   switch (Str.split(Str.regexp(needle), haystack)) {
 //   | [] => assert(false)

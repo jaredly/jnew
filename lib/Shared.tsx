@@ -78,31 +78,30 @@ export let MobileMeta = () => (
     </fragment>
 );
 
-export let MetaHead = (
-    props: {
-        title: string;
-        description: string;
-        thumbnail?: string;
-        article_image?: string;
-    },
-    children: any[],
-) => {
-    <fragment>
-        <meta charset="utf8" />
-        <meta name="description" content={props.description} />
-        <MobileMeta />
-        <Twitter
-            contentTitle={props.title}
-            description={props.description}
-            article_image={props.article_image}
-            thumbnail={props.thumbnail}
-        />
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content={props.title} />
-        <meta property="og:description" content={props.description} />
-        <link rel="shortcut icon" href="/images/logo/JF_black_32.png" />
-        <title> contentTitle </title>
-    </fragment>;
+export let MetaHead = (props: {
+    title: string;
+    description: string;
+    thumbnail?: string;
+    article_image?: string;
+}) => {
+    return (
+        <fragment>
+            <meta charset="utf8" />
+            <meta name="description" content={props.description} />
+            <MobileMeta />
+            <Twitter
+                contentTitle={props.title}
+                description={props.description}
+                article_image={props.article_image}
+                thumbnail={props.thumbnail}
+            />
+            <meta property="og:type" content="article" />
+            <meta property="og:title" content={props.title} />
+            <meta property="og:description" content={props.description} />
+            <link rel="shortcut icon" href="/images/logo/JF_black_32.png" />
+            <title> {props.title} </title>
+        </fragment>
+    );
 };
 
 export let PageHead = ({

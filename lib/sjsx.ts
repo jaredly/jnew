@@ -8,14 +8,20 @@ export const jsx = (
     ...children: string[]
 ): string => {
     // console.log(name, children.length);
-    return name === 'fragment'
-        ? children.join('\n')
-        : typeof name === 'string'
-        ? normal(name, args ? Object.entries(args) : [], {
-              children,
-              attrs: [],
-          })
-        : name({ ...args, children });
+    if (name === 'fragment') {
+        return children.join('\n');
+    }
+    if (typeof name === 'string') {
+        return normal(name, args ? Object.entries(args) : [], {
+            children,
+            attrs: [],
+        });
+    }
+    const res = name({ ...args, children });
+    if (res == null) {
+        console.log(name);
+    }
+    return res;
 };
 
 const styles = [];

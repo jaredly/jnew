@@ -226,25 +226,30 @@ let TalksColumn = ({ css, talks }: { css: CssFn; talks: talk[] }) => {
                             >
                                 {venues
                                     .map(({ where, date, video }) => {
-                                        <li>
-                                            {video ? (
-                                                <a
-                                                    href={video}
-                                                    className={css([
-                                                        A(
-                                                            'font-family',
-                                                            'Open sans, sans-serif',
-                                                        ),
-                                                        A('font-size', '14px'),
-                                                        ...Styles.hoverUnderline,
-                                                    ])}
-                                                >
-                                                    where "📹"
-                                                </a>
-                                            ) : (
-                                                where
-                                            )}
-                                        </li>;
+                                        return (
+                                            <li>
+                                                {video ? (
+                                                    <a
+                                                        href={video}
+                                                        className={css([
+                                                            A(
+                                                                'font-family',
+                                                                'Open sans, sans-serif',
+                                                            ),
+                                                            A(
+                                                                'font-size',
+                                                                '14px',
+                                                            ),
+                                                            ...Styles.hoverUnderline,
+                                                        ])}
+                                                    >
+                                                        {where} 📹
+                                                    </a>
+                                                ) : (
+                                                    where
+                                                )}
+                                            </li>
+                                        );
                                     })
                                     .join('\n')}
                             </ul>

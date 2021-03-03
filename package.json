@@ -6,8 +6,9 @@
     "scripts": {
         "serve": "http-server test/pages",
         "test": "esy build && sh -c \"$(esy x which Hello) drafts\"",
-        "start": "watchexec -w lib -w bin -w test/posts npm test",
-        "publish": "sh -c $(esy x which Hello) && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets"
+        "start-": "watchexec -w lib -w bin -w test/posts npm test",
+        "publish": "sh -c $(esy x which Hello) && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets",
+        "start": "esbuild --bundle bin/Hello.ts --platform=node | node"
     },
     "devDependencies": {
         "@types/node": "^18.11.18"
@@ -16,6 +17,8 @@
         "@types/object-hash": "^3.0.2",
         "esbuild": "^0.17.5",
         "object-hash": "^3.0.0",
-        "typescript": "^4.9.5"
+        "toml": "^3.0.0",
+        "typescript": "^4.9.5",
+        "yaml": "^2.2.1"
     }
 }

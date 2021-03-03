@@ -1,50 +1,58 @@
+import { mkdir, mkdirSync, readdirSync, readFileSync } from 'fs';
 import { collectTalks } from './Talk';
-
-export {};
+import { chopSuffix } from './Util';
+// import toml from 'toml';
+import { parseProject, project } from './Project';
+import { dateSort } from './Shared';
+import { parseToml } from './Toml';
 
 // let sortPostsByDate =
 //     ({config: {date: date1}}, {config: {date: date2}}) =>
 //   dateSort(date2, date1);
 
-// let sortProjectsByDate = ({Project.updates}, {Project.updates: updates2}) =>
-//   switch (updates, updates2) {
-//   | ([(date1, _, _), ..._], [(date2, _, _), ..._]) =>
-//     Shared.dateSort(date2, date1)
-//   | ([], []) => 0
-//   | ([], _) => (-1)
-//   | (_, []) => 1
-//   };
+let sortProjectsByDate = (
+    { updates }: project,
+    { updates: updates2 }: project,
+) =>
+    updates.length && updates2.length
+        ? dateSort(updates2[0][0], updates[0][0])
+        : updates.length
+        ? 1
+        : -1;
 
-// let splitTopYaml = text => {
-//   let divider = "\n---\n";
-//   switch (Str.split(Str.regexp(divider), text)) {
-//   | [] => assert(false)
-//   | [single] => (None, single)
-//   | [top, ...rest] => (
-//       Some(Toml.parse(top)),
-//       String.concat(divider, rest),
-//     )
-//   };
-// };
+let splitTopYaml = (text: string): [any | null, string] => {
+    let divider = '\n---\n';
+    const parts = text.split(divider);
+    if (parts.length === 1) {
+        return [null, parts[0]];
+    }
+    return [parseToml(parts[0]), parts.slice(1).join(divider)];
+};
 
-// let collectPages = (inputDir, outputDir, baseDir, parse) => {
-//   let base = inputDir /+ baseDir;
-//   Files.readDirectory(base)
-//   |> List.filter(f =>
-//        Filename.check_suffix(f, ".md")
-//        || Filename.check_suffix(f, ".html")
-//        || Filename.check_suffix(f, ".nm.txt")
-//      )
-//   |> List.map(fileName => {
-//        let fullName = base /+ fileName;
-//        let contents = Files.readFile(fullName) |> unwrap("Cannot read file");
-//        let result = parse(baseDir /+ fileName, contents);
-//        let dest = outputDir /+ baseDir /+ Util.chopSuffix(fileName);
-//        Files.mkdirp(dest);
-//        let fullDest = dest /+ "index.html";
-//        (fullDest, result);
-//      });
-// };
+let collectPages = <V>(
+    inputDir: string,
+    outputDir: string,
+    baseDir: string,
+    parse: (name: string, text: string) => V,
+): [string, V][] => {
+    let base = inputDir + '/' + baseDir;
+    return readdirSync(base)
+        .filter(
+            (f) =>
+                f.endsWith('.md') ||
+                f.endsWith('.html') ||
+                f.endsWith('.nm.txt'),
+        )
+        .map((fileName) => {
+            let fullName = base + '/' + fileName;
+            let contents = readFileSync(fullName, 'utf8');
+            let result = parse(baseDir + '/' + fileName, contents);
+            let dest = outputDir + '/' + baseDir + '/' + chopSuffix(fileName);
+            mkdirSync(dest, { recursive: true });
+            let fullDest = dest + '/' + 'index.html';
+            return [fullDest, result];
+        });
+};
 
 // let renderPages = (render, pages) => {
 //   List.map(
@@ -106,49 +114,49 @@ export {};
 //      );
 // };
 
-// let processProjects = (inputDir, outputDir) => {
-//   /* Project pages */
-//   let projects =
-//     collectPages(
-//       inputDir,
-//       outputDir,
-//       "projects",
-//       (fileName, contents) => {
-//         let (opts, body) = splitTopYaml(contents);
-//         Project.parse(fileName, opts, body);
-//       },
-//     )
-//     |> renderPages(Project.render)
-//     |> List.sort(sortProjectsByDate);
-//   let projectTags = assembleProjectTags(projects);
-//   let projectTagCounts =
-//     StrMap.fold(
-//       (key, value, res) => [(key, List.length(value)), ...res],
-//       projectTags,
-//       [],
-//     )
-//     |> List.sort(((k, n), (v, n2)) => n2 - n);
+export let processProjects = (inputDir: string, outputDir: string) => {
+    /* Project pages */
+    let projects = collectPages(
+        inputDir,
+        outputDir,
+        'projects',
+        (fileName, contents) => {
+            let [opts, body] = splitTopYaml(contents);
+            return parseProject(fileName, opts, body);
+        },
+    )
+        // |> renderPages(Project.render)
+        .map((m) => m[1])
+        .sort(sortProjectsByDate);
+    // let projectTags = assembleProjectTags(projects);
+    // let projectTagCounts =
+    //   StrMap.fold(
+    //     (key, value, res) => [(key, List.length(value)), ...res],
+    //     projectTags,
+    //     [],
+    //   )
+    //   |> List.sort(((k, n), (v, n2)) => n2 - n);
 
-//   let html = Project.renderList(projectTagCounts, projects, "All projects");
-//   Files.writeFile(outputDir /+ "projects/index.html", html) |> ignore;
+    // let html = Project.renderList(projectTagCounts, projects, "All projects");
+    // Files.writeFile(outputDir /+ "projects/index.html", html) |> ignore;
 
-//   StrMap.iter(
-//     (tag, posts) => {
-//       let dest = outputDir /+ "projects/tags" /+ tag;
-//       Files.mkdirp(dest);
-//       let html =
-//         Project.renderList(
-//           projectTagCounts,
-//           List.sort(sortProjectsByDate, posts),
-//           "Tag: " ++ tag,
-//         );
-//       Files.writeFile(dest /+ "index.html", html) |> ignore;
-//     },
-//     projectTags,
-//   );
+    // StrMap.iter(
+    //   (tag, posts) => {
+    //     let dest = outputDir /+ "projects/tags" /+ tag;
+    //     Files.mkdirp(dest);
+    //     let html =
+    //       Project.renderList(
+    //         projectTagCounts,
+    //         List.sort(sortProjectsByDate, posts),
+    //         "Tag: " ++ tag,
+    //       );
+    //     Files.writeFile(dest /+ "index.html", html) |> ignore;
+    //   },
+    //   projectTags,
+    // );
 
-//   projects;
-// };
+    return projects;
+};
 
 // let processBlog = (~excludeDrafts=true, inputDir, outputDir) => {
 //   /* Posts */
