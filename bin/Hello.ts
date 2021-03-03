@@ -1,26 +1,30 @@
+import { writeFileSync } from 'fs';
+import { render } from '../lib/Home';
+import { saveTwitterCache } from '../lib/MarkdownParser';
+import { post } from '../lib/Post';
+import { project } from '../lib/Project';
+import { processTalks } from '../lib/Yak';
 
 let run = (excludeDrafts: boolean) => {
-  let outputDir = "./test/pages/";
-  let inputDir = "./test";
+    let outputDir = './test/pages/';
+    let inputDir = './test';
 
-  let projects = processProjects(inputDir, outputDir);
-  let posts = processBlog(excludeDrafts, inputDir, outputDir);
-  let talks = processTalks(inputDir, outputDir);
+    let projects: project[] = []; // processProjects(inputDir, outputDir);
+    let posts: post[] = []; // processBlog(excludeDrafts, inputDir, outputDir);
+    let talks = processTalks(inputDir, outputDir);
 
-  setupRedirectsForOldPosts(outputDir, posts);
+    // setupRedirectsForOldPosts(outputDir, posts);
 
-  /* Home page */
-  Lib.Files.writeFile(
-    outputDir /+ "index.html",
-    Lib.Home.render(~projects, ~posts, ~talks),
-  )
-  |> ignore;
+    /* Home page */
+    writeFileSync(
+        outputDir + '/index.html',
+        render(projects, posts, talks),
+        'utf8',
+    );
 
-  Lib.MarkdownParser.saveTwitterCache();
-  print_endline("Finished!");
+    saveTwitterCache();
+    console.log('Finished!');
 };
 
-print_endline(String.concat("; ", Array.to_list(Sys.argv)));
-
-const [_, drafts] = process.argv
-run(drafts !== 'drafts')
+const [_, drafts] = process.argv;
+run(drafts !== 'drafts');

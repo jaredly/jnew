@@ -4,6 +4,7 @@ import { BodyWithSmallAboutMeColumn } from './AboutMe';
 import { startPage } from './Css';
 import { Consts, PageHead, px, Styles, triple } from './Shared';
 import * as Shared from './Shared';
+import { readFileSync } from 'fs';
 
 export type venue = {
     where: string;
@@ -11,7 +12,7 @@ export type venue = {
     date?: triple;
 };
 
-type talk = {
+export type talk = {
     title: string;
     image?: string;
     slides?: string;
@@ -39,35 +40,11 @@ type talk = {
 // | _ => failwith("Bad venue json")
 // };
 
-// let collect = fname => {
-//   switch (Files.readFile(fname)) {
-//   | None => []
-//   | Some(text) => switch (Yojson.Basic.from_string(~fname, text)) {
-//     | exception _ => {
-//       failwith("Failed to parse talks json " ++ fname);
-//     }
-//     | `List(talks) => {
-//       List.map(
-//         talk => switch talk {
-//           | `Assoc(items) => {
-//             let title = get("title", items) |?> jsonString |! "Title required for talk";
-//             let slides = get("slides", items) |?> jsonString;
-//             let image = get("image", items) |?> jsonString;
-//             let tweets = get("tweets", items) |?> jsonArray |?>> List.map(jsonString) |?>> List.map(unwrap("Tweet must be a string")) |? [];
-//             let venues = get("venues", items) |?> jsonArray |?>> List.map(parseVenue) |? [];
-//             {title, image, slides, venues, tweets}
-//           }
-//           | _ => failwith("Bad talk json, not an assoc")
-//         },
-//         talks
-//       )
-//     }
-//     | _ => {
-//       failwith("Unexpected json in talks file " ++ fname);
-//     }
-//   }
-//   }
-// };
+export let collectTalks = (fname: string) => {
+    const text = readFileSync(fname, 'utf-8');
+    const talks = JSON.parse(text);
+    return talks;
+};
 
 export let renderList = ({
     talks,

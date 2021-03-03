@@ -1,10 +1,21 @@
 let props = '';
 
 let escapeAttributeValue = (value: string) =>
-    value.replace(/&/g, '&amp;').replace(/\"/g, '&quot;');
+    typeof value === 'string'
+        ? value.replace(/&/g, '&amp;').replace(/\"/g, '&quot;')
+        : (console.log(value), JSON.stringify(value));
 
 let formatAttributes = (attrs: [string, string][]) =>
-    attrs.map(([name, v]) => ' ' + name + '="' + escapeAttributeValue(v) + '"');
+    attrs
+        .map(
+            ([name, v]) =>
+                ' ' +
+                (name === 'className' ? 'class' : name) +
+                '="' +
+                escapeAttributeValue(v) +
+                '"',
+        )
+        .join(' ');
 
 let selfClosing = (tag: string) => {
     switch (tag) {

@@ -42,7 +42,7 @@ export let column = ({
                 A('font-size', px(Consts.jaredSize)),
             ])}
         >
-            "I'm Jared Forsyth"
+            I'm Jared Forsyth
         </div>
         {Shared.hspace(Consts.bigSpace)}
         <div
@@ -65,15 +65,15 @@ export let column = ({
                         ...Shared.Styles.row,
                     ])}
                 >
-                    <a href="/"> "home" </a>
-                    <a href="/posts/"> "posts" </a>
-                    <a href="/projects/"> "projects" </a>
-                    <a href="/talks/"> "talks" </a>
+                    <a href="/">home</a>
+                    <a href="/posts/">posts</a>
+                    <a href="/projects/">projects</a>
+                    <a href="/talks/">talks</a>
                 </div>
             ) : (
                 ''
             )}
-            {contents ? (
+            {contents ?? (
                 <div
                     className={css([
                         A('flex-shrink', '1'),
@@ -81,18 +81,18 @@ export let column = ({
                     ])}
                 >
                     <p>
-                        "I’m an idealist with strong opinions, but I'm happy to
+                        I’m an idealist with strong opinions, but I'm happy to
                         learn where I'm wrong. We all need more empathy &
                         compassion. The most important aspect of my life is my
-                        connection to God."
+                        connection to God.
                     </p>
                     <p>
-                        "I’m currently a mobile & web developer for Khan
-                        Academy, where we’re working to bring a free,
-                        world-class education to anyone anywhere."
+                        I’m currently a mobile & web developer for Khan Academy,
+                        where we’re working to bring a free, world-class
+                        education to anyone anywhere.
                     </p>
                 </div>
-            ) : null}
+            )}
             <div
                 style="text-align:center"
                 className={css([
@@ -103,22 +103,23 @@ export let column = ({
                 ])}
             >
                 <a href="https://twitter.com/jaredforsyth">
-                    "twitter/@jaredforsyth"
+                    twitter/@jaredforsyth
                 </a>
-                "<br />"
-                <a href="https://github.com/jaredly"> "github/@jaredly" </a>
-                "<br />"<a href="/posts/rss.xml"> "rss feed" </a>
+                <br />
+                <a href="https://github.com/jaredly">github/@jaredly</a>
+                <br />
+                <a href="/posts/rss.xml">rss feed</a>
             </div>
         </div>
     </div>
 );
 
-export let bodyWithAboutMeColumn = ({
+export let BodyWithAboutMeColumn = ({
     css,
     children,
 }: {
     css: CssFn;
-    children: string[];
+    children?: string[];
 }) => {
     const Styles = Shared.Styles;
 
@@ -136,12 +137,12 @@ export let bodyWithAboutMeColumn = ({
                 >
                     {column({ css })}
                 </div>
-                {children.join('\n')}
+                {children?.join('\n')}
             </div>
         </body>
     );
 
-    body;
+    return body;
 };
 
 export let BodyWithSmallAboutMeColumn = ({

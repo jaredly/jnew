@@ -32,14 +32,14 @@
 // let twitterCache = Hashtbl.create(100);
 // loadTwitterCache(twitterCache);
 
-// let saveTwitterCache = () => {
-//   let items = Hashtbl.fold(
-//     (key, value, items) => [(key, `String(value)), ...items],
-//     twitterCache,
-//     []
-//   );
-//   Yojson.Basic.to_file(cacheFile, `Assoc(items))
-// };
+export let saveTwitterCache = () => {
+    // let items = Hashtbl.fold(
+    //   (key, value, items) => [(key, `String(value)), ...items],
+    //   twitterCache,
+    //   []
+    // );
+    // Yojson.Basic.to_file(cacheFile, `Assoc(items))
+};
 
 // open Omd;
 // let twitterEmbed = element => switch element {

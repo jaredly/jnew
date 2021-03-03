@@ -105,22 +105,21 @@ export let MetaHead = (
     </fragment>;
 };
 
-export let PageHead = (
-    {
-        title: contentTitle,
-        description,
-        thumbnail,
-        article_image,
-        extraHead,
-    }: {
-        title: string;
-        description: string;
-        thumbnail?: string;
-        article_image?: string;
-        extraHead?: string;
-    },
-    children: string[],
-) => {
+export let PageHead = ({
+    title: contentTitle,
+    description,
+    thumbnail,
+    article_image,
+    extraHead,
+    children,
+}: {
+    title: string;
+    description: string;
+    thumbnail?: string;
+    article_image?: string;
+    extraHead?: string;
+    children?: string[];
+}) => {
     contentTitle = contentTitle + ' | Jared Forsyth.com';
     description = description ?? 'Thoughts about programming, mostly';
     return (
@@ -131,8 +130,6 @@ export let PageHead = (
                 thumbnail={thumbnail}
                 article_image={article_image}
             />
-            /* TODO audit these */ /*{' '}
-            <link rel="stylesheet" href="/js/styles/obsidian.css" /> */
             <link
                 rel="stylesheet"
                 href="//brick.a.ssl.fastly.net/Linux+Libertine:400,400i,700,700i/Open+Sans:400,400i,700,700i"
@@ -145,19 +142,6 @@ export let PageHead = (
                 href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css"
                 rel="stylesheet"
             />
-            /*{' '}
-            <link
-                href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"
-                rel="stylesheet"
-            />{' '}
-            */ /* <link rel="stylesheet" media="screen" href="/css/main.css" />
-            <link rel="stylesheet" media="print" href="/css/print.css" />
-            <link
-                rel="stylesheet"
-                media="screen"
-                href="/css/solarized-dark.css"
-            />{' '}
-            */ /* <script async src="//platform.twitter.com/widgets.js" /> */
             <style>
                 {`
       div {
@@ -283,7 +267,8 @@ export let PageHead = (
       } */
       `}
             </style>
-            {children.join('\n')}
+            {children?.join('\n')}
+            {/* {extraHead} */}
         </head>
     );
 };
@@ -666,5 +651,5 @@ export const Header = ({
 
 export let minuteRead = (wordCount: number) => wordCount / 180;
 
-export let minuteReadText = (wordCount: number) =>
+export let minuteReadText = (wordCount?: number) =>
     wordCount ? minuteRead(wordCount) + ' minute read' : 'Read more';

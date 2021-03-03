@@ -1,7 +1,22 @@
 // Ok
 
-export const jsx = (name: string, args: any, ...children: string[]): string =>
-    JSON.stringify({ name, args });
+import { normal } from './Html';
+
+export const jsx = (
+    name: string | ((args: any & { children: string[] }) => string),
+    args: any,
+    ...children: string[]
+): string => {
+    // console.log(name, children.length);
+    return name === 'fragment'
+        ? children.join('\n')
+        : typeof name === 'string'
+        ? normal(name, args ? Object.entries(args) : [], {
+              children,
+              attrs: [],
+          })
+        : name({ ...args, children });
+};
 
 const styles = [];
 export type CssAttr =

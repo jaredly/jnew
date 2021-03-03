@@ -1,3 +1,5 @@
+import { collectTalks } from './Talk';
+
 export {};
 
 // let sortPostsByDate =
@@ -205,15 +207,15 @@ export {};
 //   posts;
 // };
 
-// let processTalks = (inputDir, outputDir) => {
-//   /* Talks */
-//   let talks = Talk.collect(inputDir /+ "talks.json");
-//   let html = Talk.renderList(talks, "Talks");
-//   Files.mkdirp(outputDir /+ "talks/");
-//   Files.writeFile(outputDir /+ "talks/index.html", html)
-//   |> Util.expectTrue("Unable to write talks page");
-//   talks;
-// };
+export let processTalks = (inputDir: string, outputDir: string) => {
+    /* Talks */
+    let talks = collectTalks(inputDir + '/talks.json');
+    // let html = Talk.renderList(talks, "Talks");
+    // Files.mkdirp(outputDir /+ "talks/");
+    // Files.writeFile(outputDir /+ "talks/index.html", html)
+    // |> Util.expectTrue("Unable to write talks page");
+    return talks;
+};
 
 // let redirect = (url, contentTitle, description) => {
 //   open Html;

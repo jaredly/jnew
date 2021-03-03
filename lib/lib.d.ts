@@ -15,6 +15,7 @@ namespace JSX {
     };
     export interface IntrinsicElements {
         html: props;
+        br: {};
         link: { rel: string; href: string; media?: string };
         meta:
             | { name: string; content: string }
