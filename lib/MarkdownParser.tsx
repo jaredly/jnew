@@ -1,3 +1,4 @@
+import md from 'markdown-it';
 // let isTwitterUrl = url => Str.string_match(Str.regexp("https?://twitter.com/[^/]+/status"), url, 0);
 
 // let cacheFile = "./.tweet-cache";
@@ -104,5 +105,5 @@ export let saveTwitterCache = () => {
 //   Omd.to_html(~ids?, md)
 // };
 export const process = (rawBody: string) => {
-    return 'MARKDOWN';
+    return md('commonmark').render(rawBody);
 };

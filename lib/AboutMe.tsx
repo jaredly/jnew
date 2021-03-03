@@ -106,6 +106,10 @@ export let column = ({
                     twitter/@jaredforsyth
                 </a>
                 <br />
+                <a href="https://mastodon.social/@jaredly">
+                    @jaredly@mastodon.social
+                </a>
+                <br />
                 <a href="https://github.com/jaredly">github/@jaredly</a>
                 <br />
                 <a href="/posts/rss.xml">rss feed</a>

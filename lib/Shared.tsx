@@ -400,7 +400,8 @@ export let monthName = (month: number) => {
         case 12:
             return 'December';
         default:
-            throw new Error('Invalid month ' + month);
+            return 'NOTAMONTH';
+        // throw new Error('Invalid month ' + month);
     }
 };
 
@@ -648,7 +649,7 @@ export const Header = ({
     </a>
 );
 
-export let minuteRead = (wordCount: number) => wordCount / 180;
+export let minuteRead = (wordCount: number) => Math.round(wordCount / 180);
 
 export let minuteReadText = (wordCount?: number) =>
     wordCount ? minuteRead(wordCount) + ' minute read' : 'Read more';

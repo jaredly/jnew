@@ -1,15 +1,17 @@
+import { nmNode, parseNotableMind, wordCount } from './NotableMind';
 import { triple } from './Shared';
+import { doc } from './Toml';
 import { config } from './Types';
 
 export type postBody =
     | { type: 'Html'; body: string }
     | { type: 'Markdown'; body: string }
-    | { type: 'Nm'; nodes: any[] };
+    | { type: 'Nm'; body: nmNode[] };
 
 export type post = {
     config: config;
     body: postBody;
-    intro?: postBody;
+    intro?: postBody | null;
 };
 
 // let (|?) = (x, y) =>
@@ -313,19 +315,15 @@ export type post = {
 // };
 
 // open Types;
-// let defaultConfig = fileName => {
-//   fileName,
-//   title: "JaredForsyth.com",
-//   tags: [],
-//   categories: [],
-//   date: (0, 0, 0), /* Year, Month, Day */
-//   description: None,
-//   thumbnail: None,
-//   article_image: None,
-//   draft: false,
-//   featured: false,
-//   wordCount: None,
-// };
+let defaultConfig = (fileName: string): config => ({
+    fileName,
+    title: 'JaredForsyth.com',
+    tags: [],
+    categories: [],
+    date: [0, 0, 0] /* Year, Month, Day */,
+    draft: false,
+    featured: false,
+});
 
 // let check = (opt, base, fn) =>
 //   switch (opt) {
@@ -337,47 +335,98 @@ export let parseDate = (text: string): triple => {
     return text.split('-').map((m) => parseInt(m)) as triple;
 };
 
-// let parseConfig = (fileName, opts) => {
-//   let config = defaultConfig(fileName);
-//   let config =
-//     check(Toml.string("title", opts), config, title => {...config, title});
-//   let config =
-//     check(Toml.string("description", opts), config, description =>
-//       {...config, description: Some(description)}
-//     );
-//   let config =
-//     check(Toml.stringList("tags", opts), config, tags => {...config, tags});
-//   let config =
-//     check(Toml.stringList("categories", opts), config, categories =>
-//       {...config, categories}
-//     );
-//   let config =
-//     check(Toml.string("date", opts), config, date =>
-//       {...config, date: parseDate(date)}
-//     );
-//   let config =
-//     check(Toml.bool("featured", opts), config, featured =>
-//       {...config, featured}
-//     );
-//   let config =
-//     check(Toml.string("thumbnail", opts), config, thumbnail =>
-//       {...config, thumbnail: Some(thumbnail)}
-//     );
-//   let config =
-//     check(Toml.string("article_image", opts), config, article_image =>
-//       {...config, article_image: Some(article_image)}
-//     );
-//   let config =
-//     check(Toml.bool("draft", opts), config, draft => {...config, draft});
-//   config;
-// };
+export let parseConfig = (
+    fileName: string,
+    {
+        strings: { title, description, date, thumbnail, article_image },
+        stringLists: { tags, categories },
+        bools: { featured, draft },
+    }: doc,
+): config => {
+    let config = defaultConfig(fileName);
+    return {
+        ...config,
+        ...{
+            title,
+            description,
+            date: date ? parseDate(date) : config.date,
+            thumbnail,
+            article_image,
+            tags,
+            categories,
+            featured,
+            draft,
+        },
+    };
+};
 
-// let getIntro = body =>
-//   switch (Str.split(Str.regexp("<!-- more -->"), body)) {
-//   | [] => assert(false)
-//   | [one] => None
-//   | [top, ...rest] => Some(top)
-//   };
+let parseJsonConfig = (
+    config: config,
+    {
+        title,
+        description,
+        tags,
+        categories,
+        date,
+        featured,
+        thumnbail,
+        article_image,
+        draft,
+    }: any,
+): config => {
+    // let config =
+    //   check(Get.string("title", json), config, title => {...config, title});
+    // let config =
+    //   check(Get.string("description", json), config, description =>
+    //     {...config, description: Some(description)}
+    //   );
+    // let config =
+    //   check(Get.stringList("tags", json), config, tags => {...config, tags});
+    // let config =
+    //   check(Get.stringList("categories", json), config, categories =>
+    //     {...config, categories}
+    //   );
+    // let config =
+    //   check(Get.string("date", json), config, date =>
+    //     {...config, date: parseDate(date)}
+    //   );
+    // let config =
+    //   check(Get.bool("featured", json), config, featured =>
+    //     {...config, featured}
+    //   );
+    // let config =
+    //   check(Get.string("thumbnail", json), config, thumbnail =>
+    //     {...config, thumbnail: Some(thumbnail)}
+    //   );
+    // let config =
+    //   check(Get.string("article_image", json), config, article_image =>
+    //     {...config, article_image: Some(article_image)}
+    //   );
+    // let config =
+    //   check(Get.bool("draft", json), config, draft => {...config, draft});
+    return {
+        ...config,
+        ...{
+            title,
+            description,
+            tags,
+            categories,
+            date: date ? parseDate(date) : undefined,
+            featured,
+            thumnbail,
+            article_image,
+            draft,
+        },
+    } as config;
+};
+
+let getIntro = (body: string) => {
+    const parts = body.split('<!-- more -->');
+    if (parts.length > 1) {
+        return parts[0];
+    }
+    return null;
+};
 
 // let (|?>>) = (v, f) =>
 //   switch (v) {
@@ -385,108 +434,84 @@ export let parseDate = (text: string): triple => {
 //   | None => None
 //   };
 
-// let parse = (fileName, opts, content) => {
-//   let opts = opts |! "No options for post " ++ fileName;
-//   let config = parseConfig(fileName, opts);
-//   let intro = getIntro(content);
-//   let isMarkdown = Filename.check_suffix(fileName, ".md");
-//   let wordCount =
-//     isMarkdown
-//       ? Some(
-//           Str.split(Str.regexp("[^a-zA-Z0-9-]+"), content) |> List.length,
-//         )
-//       : None;
-//   let config = {...config, wordCount};
+export let parsePost = (fileName: string, opts: doc, content: string): post => {
+    let config = parseConfig(fileName, opts);
+    let intro = getIntro(content);
+    let isMarkdown = fileName.endsWith('.md');
+    let wordCount = isMarkdown
+        ? content.split(/[^a-zA-Z0-9-]+/).length
+        : undefined;
+    config.wordCount = wordCount;
 
-//   isMarkdown
-//     ? {
-//       config,
-//       intro: intro |?>> (x => Markdown(x)),
-//       body: Markdown(content),
-//     }
-//     : {
-//       intro: intro |?>> (intro => Html(intro)),
-//       config,
-//       body: Html(content),
-//     };
-// };
+    return isMarkdown
+        ? {
+              config,
+              intro: intro ? { type: 'Markdown', body: intro } : undefined,
+              body: { type: 'Markdown', body: content },
+          }
+        : {
+              intro: intro ? { type: 'Html', body: intro } : undefined,
+              config,
+              body: { type: 'Html', body: content },
+          };
+};
 
-// let parseJsonConfig = (config, json) => {
-//   open NotableMind.Json.Infix;
-//   module Get = NotableMind.Json.Get;
-//   let config =
-//     check(Get.string("title", json), config, title => {...config, title});
-//   let config =
-//     check(Get.string("description", json), config, description =>
-//       {...config, description: Some(description)}
-//     );
-//   let config =
-//     check(Get.stringList("tags", json), config, tags => {...config, tags});
-//   let config =
-//     check(Get.stringList("categories", json), config, categories =>
-//       {...config, categories}
-//     );
-//   let config =
-//     check(Get.string("date", json), config, date =>
-//       {...config, date: parseDate(date)}
-//     );
-//   let config =
-//     check(Get.bool("featured", json), config, featured =>
-//       {...config, featured}
-//     );
-//   let config =
-//     check(Get.string("thumbnail", json), config, thumbnail =>
-//       {...config, thumbnail: Some(thumbnail)}
-//     );
-//   let config =
-//     check(Get.string("article_image", json), config, article_image =>
-//       {...config, article_image: Some(article_image)}
-//     );
-//   let config =
-//     check(Get.bool("draft", json), config, draft => {...config, draft});
-//   config;
-// };
+let getNmIntro = (nodes: nmNode[]) => {
+    let loop = (coll: nmNode[], nodes: nmNode[]): postBody | null => {
+        if (nodes.length && nodes[0].content === '<!-- more -->') {
+            return { type: 'Nm', body: coll.reverse() };
+        }
+        if (nodes.length) {
+            return loop([nodes[0], ...coll], nodes.slice(1));
+        }
+        // switch (nodes) {
+        // | [{content: "<!-- more -->"}, ..._] =>
+        //   Some(Nm(List.rev(coll)))
+        // | [one, ...rest] => loop([one, ...coll], rest)
+        // | [] => None
+        // };
+        return null;
+    };
+    return loop([], nodes);
+};
 
-// let getNmIntro = nodes => {
-//   let rec loop = (coll, nodes) => {
-//     switch (nodes) {
-//     | [{NotableMind.content: "<!-- more -->"}, ..._] =>
-//       Some(Nm(List.rev(coll)))
-//     | [one, ...rest] => loop([one, ...coll], rest)
-//     | [] => None
-//     };
-//   };
-//   loop([], nodes);
-// };
-
-// let parseNm = (fileName, content) => {
-//   let nodes = NotableMind.parse(content);
-//   let config = defaultConfig(fileName);
-//   let (nodes, config) =
-//     switch (nodes) {
-//     | [
-//         {
-//           children: [{typ: "note", content: attrs}, ...otherChildren],
-//           content,
-//         },
-//       ] => (
-//         otherChildren,
-//         parseJsonConfig(
-//           {...config, title: content},
-//           Yojson.Basic.from_string(attrs),
-//         ),
-//       )
-//     | _ => (nodes, config)
-//     };
-//   {
-//     config: {
-//       ...config,
-//       wordCount:
-//         Some(
-//           List.fold_left((a, n) => a + NotableMind.wordCount(n), 0, nodes),
-//         ),
-//     },
-//     intro: getNmIntro(nodes),
-//     body: Nm(nodes),
-//   };
-// };
+export let parseNm = (fileName: string, content: string): post => {
+    let nodes = parseNotableMind(content);
+    let config = defaultConfig(fileName);
+    if (
+        nodes.length &&
+        nodes[0].children.length &&
+        nodes[0].children[0].typ === 'note'
+    ) {
+        config = parseJsonConfig(
+            config,
+            JSON.parse(nodes[0].children[0].content),
+        );
+    }
+    console.log(nodes);
+    // fail;
+    // let (nodes, config) =
+    //   switch (nodes) {
+    //   | [
+    //       {
+    //         children: [{typ: "note", content: attrs}, ...otherChildren],
+    //         content,
+    //       },
+    //     ] => (
+    //       otherChildren,
+    //       parseJsonConfig(
+    //         {...config, title: content},
+    //         Yojson.Basic.from_string(attrs),
+    //       ),
+    //     )
+    //   | _ => (nodes, config)
+    //   };
+    return {
+        config: {
+            ...config,
+            wordCount: nodes.reduce((a, b) => a + wordCount(b), 0),
+        },
+        intro: getNmIntro(nodes),
+        body: { type: 'Nm', body: nodes },
+    };
+};

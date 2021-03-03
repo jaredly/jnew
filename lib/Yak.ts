@@ -5,10 +5,12 @@ import { chopSuffix } from './Util';
 import { parseProject, project } from './Project';
 import { dateSort } from './Shared';
 import { parseToml } from './Toml';
+import { parseNm, parsePost, post } from './Post';
 
-// let sortPostsByDate =
-//     ({config: {date: date1}}, {config: {date: date2}}) =>
-//   dateSort(date2, date1);
+let sortPostsByDate = (
+    { config: { date: date1 } }: post,
+    { config: { date: date2 } }: post,
+) => dateSort(date2, date1);
 
 let sortProjectsByDate = (
     { updates }: project,
@@ -158,62 +160,75 @@ export let processProjects = (inputDir: string, outputDir: string) => {
     return projects;
 };
 
-// let processBlog = (~excludeDrafts=true, inputDir, outputDir) => {
-//   /* Posts */
-//   let fullPosts =
-//     collectPages(inputDir, outputDir, "posts", (fileName, contents) =>
-//       if (Filename.check_suffix(fileName, ".nm.txt")) {
-//         Post.parseNm(fileName, contents);
-//       } else {
-//         let (opts, body) = splitTopYaml(contents);
-//         Post.parse(fileName, opts, body);
-//       }
-//     );
-//   let posts = List.map(snd, fullPosts) |> List.sort(sortPostsByDate);
-//   let posts =
-//     excludeDrafts
-//       ? posts |> List.filter(post => !post.Post.config.draft) : posts;
-//   renderPages(Post.render(posts), fullPosts) |> ignore;
+export let processBlog = (
+    excludeDrafts: boolean,
+    inputDir: string,
+    outputDir: string,
+) => {
+    /* Posts */
+    let fullPosts = collectPages(
+        inputDir,
+        outputDir,
+        'posts',
+        (fileName, contents) => {
+            if (fileName.endsWith('.nm.txt')) {
+                return parseNm(fileName, contents);
+                // throw new Error('no nm');
+                // console.log(fileName);
+            } else {
+                let [opts, body] = splitTopYaml(contents);
+                return parsePost(fileName, opts, body);
+            }
+        },
+    );
+    let allPosts = fullPosts
+        .map((p) => p[1])
+        .filter(Boolean)
+        .sort(sortPostsByDate);
+    let posts = excludeDrafts
+        ? allPosts.filter((post) => !post.config.draft)
+        : allPosts;
+    //   renderPages(Post.render(posts), fullPosts) |> ignore;
 
-//   let tags = assembleTags(posts);
-//   let tagCounts =
-//     StrMap.fold(
-//       (key, value, res) => [(key, List.length(value)), ...res],
-//       tags,
-//       [],
-//     )
-//     |> List.sort(((k, n), (v, n2)) => n2 - n);
+    //   let tags = assembleTags(posts);
+    //   let tagCounts =
+    //     StrMap.fold(
+    //       (key, value, res) => [(key, List.length(value)), ...res],
+    //       tags,
+    //       [],
+    //     )
+    //     |> List.sort(((k, n), (v, n2)) => n2 - n);
 
-//   let (html, rss) =
-//     Post.postList(
-//       ~urlBase="https://jaredforsyth.com",
-//       posts,
-//       tagCounts,
-//       "All posts",
-//     );
-//   Files.writeFile(outputDir /+ "posts/index.html", html) |> ignore;
+    //   let (html, rss) =
+    //     Post.postList(
+    //       ~urlBase="https://jaredforsyth.com",
+    //       posts,
+    //       tagCounts,
+    //       "All posts",
+    //     );
+    //   Files.writeFile(outputDir /+ "posts/index.html", html) |> ignore;
 
-//   Files.writeFile(outputDir /+ "posts/rss.xml", rss) |> ignore;
+    //   Files.writeFile(outputDir /+ "posts/rss.xml", rss) |> ignore;
 
-//   StrMap.iter(
-//     (tag, posts) => {
-//       let dest = outputDir /+ "tags" /+ tag;
-//       Files.mkdirp(dest);
-//       let (html, rss) =
-//         Post.postList(
-//           ~urlBase="https://jaredforsyth.com",
-//           List.sort(sortPostsByDate, posts),
-//           tagCounts,
-//           "Tag: " ++ tag,
-//         );
-//       Files.writeFile(dest /+ "index.html", html) |> ignore;
-//       Files.writeFile(dest /+ "rss.xml", rss) |> ignore;
-//     },
-//     tags,
-//   );
+    //   StrMap.iter(
+    //     (tag, posts) => {
+    //       let dest = outputDir /+ "tags" /+ tag;
+    //       Files.mkdirp(dest);
+    //       let (html, rss) =
+    //         Post.postList(
+    //           ~urlBase="https://jaredforsyth.com",
+    //           List.sort(sortPostsByDate, posts),
+    //           tagCounts,
+    //           "Tag: " ++ tag,
+    //         );
+    //       Files.writeFile(dest /+ "index.html", html) |> ignore;
+    //       Files.writeFile(dest /+ "rss.xml", rss) |> ignore;
+    //     },
+    //     tags,
+    //   );
 
-//   posts;
-// };
+    return posts;
+};
 
 export let processTalks = (inputDir: string, outputDir: string) => {
     /* Talks */

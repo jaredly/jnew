@@ -21,6 +21,8 @@ let selfClosing = (tag: string) => {
     switch (tag) {
         case 'meta':
             return true;
+        case 'br':
+            return true;
         case 'img':
             return true;
         default:

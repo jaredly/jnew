@@ -162,7 +162,7 @@ let projectColumn = ({
                                                         '/'
                                                     }
                                                 >
-                                                    tag
+                                                    {tag}
                                                 </a>
                                             ))
                                             .join(',' + Shared.vspace(4))}
@@ -277,37 +277,45 @@ let BlogColumn = ({ css, posts }: { css: CssFn; posts: post[] }) => {
                         }) => {
                             let href = '/' + chopSuffix(fileName) + '/';
                             let [year, month, day] = date;
-                            <a href={href} className={css(Styles.subtleLink)}>
-                                <div
-                                    className={css([
-                                        A('font-size', px(Consts.titleSize)),
-                                    ])}
+                            return (
+                                <a
+                                    href={href}
+                                    className={css(Styles.subtleLink)}
                                 >
-                                    title
-                                </div>
-                                {Shared.hspace(Consts.smallSpace)}
-                                <div
-                                    className={css([
-                                        A('display', 'flex'),
-                                        A('align-items', 'center'),
-                                        A('flex-direction', 'row'),
-                                        ...Styles.metaText,
-                                    ])}
-                                >
-                                    {year}
-                                    {Shared.monthName(month)}
-                                    {day}
-                                    {draft ? (
-                                        <span style="background-color: red; margin-left: 8px; padding: 4px 8px; display: inline-block; color: white; border-radius: 4px">
-                                            "draft"
-                                        </span>
-                                    ) : (
-                                        ''
-                                    )}
-                                    <div style="flex: 1" />
-                                    {Shared.minuteReadText(wordCount)}
-                                </div>
-                            </a>;
+                                    <div
+                                        className={css([
+                                            A(
+                                                'font-size',
+                                                px(Consts.titleSize),
+                                            ),
+                                        ])}
+                                    >
+                                        {title}
+                                    </div>
+                                    {Shared.hspace(Consts.smallSpace)}
+                                    <div
+                                        className={css([
+                                            A('display', 'flex'),
+                                            A('align-items', 'center'),
+                                            A('flex-direction', 'row'),
+                                            ...Styles.metaText,
+                                        ])}
+                                    >
+                                        {year}
+                                        {Shared.monthName(month)}
+                                        {day}
+                                        {draft ? (
+                                            <span style="background-color: red; margin-left: 8px; padding: 4px 8px; display: inline-block; color: white; border-radius: 4px">
+                                                "draft"
+                                            </span>
+                                        ) : (
+                                            ''
+                                        )}
+                                        <div style="flex: 1" />
+                                        {Shared.minuteReadText(wordCount)}
+                                    </div>
+                                </a>
+                            );
                         },
                     )
                     .join('\n' + Shared.hspace(Consts.bigSpace))}

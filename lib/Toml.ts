@@ -22,7 +22,7 @@ export let parseToml = (text: string) => {
                 if (startsWith(line, '- ')) {
                     const value = line.slice('- '.length);
                     if (!curList) {
-                        throw new Error('no');
+                        throw new Error('no curlist' + text);
                     }
                     return [
                         curList,
@@ -40,7 +40,7 @@ export let parseToml = (text: string) => {
                         console.log('unexpected line', line);
                         return [curList, doc];
                     }
-                    if (!rest.length) {
+                    if (rest.length === 1 && rest[0] === '') {
                         return [
                             name.trim(),
                             {
