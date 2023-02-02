@@ -4,9 +4,12 @@
   - [x] see how many anchors changed
 
 - [x] DARK MODE PLS
-- [ ] indicate which links are internal, and which ones are external
+- [x] indicate which links are internal, and which ones are external
+- [ ] try this font maybe https://fonts.google.com/specimen/Spectral?preview.size=23&category=Serif&stylecount=11
 - [ ] and thennnnn let's do some github gisting!
   - btw don't load the comments until they come into view. for simplicityyyess
+  - ok, so I want a script to just download the gists to the posts folder
+    and then we can render them, kinda like normal?
 
 ## [x] Homepage
 - [x] talks

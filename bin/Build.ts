@@ -1,8 +1,6 @@
 import { writeFileSync } from 'fs';
 import { render } from '../lib/Home';
 import { saveTwitterCache } from '../lib/MarkdownParser';
-import { post } from '../lib/Post';
-import { project } from '../lib/Project';
 import { processBlog, processProjects, processTalks } from '../lib/Yak';
 
 let run = (excludeDrafts: boolean) => {

@@ -147,7 +147,7 @@ export let renderPost = (
                             Hover([['text-decoration', 'underline']]),
                         ])}
                     >
-                        <div className={css([])}>Recent posts</div>
+                        <div className={css([])}>Latest posts</div>
                     </a>
                     {Shared.hspace(8)}
                     {posts
