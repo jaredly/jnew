@@ -46,13 +46,7 @@ export let collectTalks = (fname: string) => {
     return talks;
 };
 
-export let renderList = ({
-    talks,
-    contentTitle,
-}: {
-    talks: talk[];
-    contentTitle: string;
-}) => {
+export let renderTalkList = (talks: talk[], contentTitle: string) => {
     let { css, inlineCss } = startPage();
     let body = (
         <BodyWithSmallAboutMeColumn
@@ -65,8 +59,8 @@ export let renderList = ({
                         A('margin-bottom', '32px'),
                     ])}
                 >
-                    "If you want to speak at conferences, contact me on twitter
-                    and I'd be happy to give you guidance on applying 👋"
+                    If you want to speak at conferences, contact me on twitter
+                    and I'd be happy to give you guidance on applying 👋
                 </div>
             }
         >
@@ -82,10 +76,10 @@ export let renderList = ({
                         ...Shared.Styles.title,
                     ])}
                 >
-                    contentTitle
+                    {contentTitle}
                 </h1>
             </div>
-            (Shared.hspace(64))
+            {Shared.hspace(64)}
             {talks
                 .map(({ title, image, slides, venues }) => {
                     let main = image ? (

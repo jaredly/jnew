@@ -1,5 +1,5 @@
 import { mkdir, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
-import { collectTalks } from './Talk';
+import { collectTalks, renderTalkList } from './Talk';
 import { chopSuffix } from './Util';
 // import toml from 'toml';
 import { parseProject, project, renderList, renderProject } from './Project';
@@ -228,10 +228,9 @@ export let processBlog = (
 export let processTalks = (inputDir: string, outputDir: string) => {
     /* Talks */
     let talks = collectTalks(inputDir + '/talks.json');
-    // let html = Talk.renderList(talks, "Talks");
-    // Files.mkdirp(outputDir /+ "talks/");
-    // Files.writeFile(outputDir /+ "talks/index.html", html)
-    // |> Util.expectTrue("Unable to write talks page");
+    let html = renderTalkList(talks, 'Talks');
+    mkdirSync(outputDir + '/talks/', { recursive: true });
+    writeFileSync(outputDir + '/talks/index.html', html, 'utf8');
     return talks;
 };
 
