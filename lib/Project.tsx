@@ -11,7 +11,6 @@ import { parseDate } from './Post';
 import path from 'path';
 import { doc, parseToml } from './Toml';
 import { raw } from './GithubIcon';
-import markdownit from 'markdown-it';
 
 export let statusSymbol: { [key: string]: string } = {
     'semi-retired': '🛌',
@@ -491,9 +490,7 @@ export let renderList = ({
                                         ...Shared.Styles.bodyText,
                                     ])}
                                 >
-                                    {markdownit('commonmark').render(
-                                        description,
-                                    )}
+                                    {process(description)}
                                     {/* (Omd.to_html(Omd.of_string(description))) */}
                                 </div>
                                 {longDescription ? (

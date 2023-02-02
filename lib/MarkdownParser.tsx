@@ -104,6 +104,19 @@ export let saveTwitterCache = () => {
 //   let md = Omd.visit(twitterEmbed, md);
 //   Omd.to_html(~ids?, md)
 // };
+import mdi from 'markdown-it-anchor';
+const mdit = md('commonmark').use(mdi, {
+    permalink: mdi.permalink.headerLink(),
+    slugify: (text) => {
+        // console.log(text);
+        return text
+            .trim()
+            .replaceAll('"', '&quot;')
+            .replaceAll(/[^a-zA-Z0-9_-]+/g, '-')
+            .replace(/-$/, '');
+    },
+});
+
 export const process = (rawBody: string, ids?: { [key: string]: string }) => {
-    return md('commonmark').render(rawBody);
+    return mdit.render(rawBody);
 };

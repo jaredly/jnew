@@ -8,8 +8,8 @@ import { PageHead, triple } from './Shared';
 import { doc } from './Toml';
 import { config } from './Types';
 import { chopSuffix } from './Util';
-import MarkdownIt from 'markdown-it';
 import { rssWrapper } from './Rss';
+import { process } from './MarkdownParser';
 
 export type postBody =
     | { type: 'Html'; body: string }
@@ -103,7 +103,7 @@ let PostAbout = ({
 let renderBody = ({ type, body }: postBody) => {
     switch (type) {
         case 'Markdown':
-            return MarkdownIt('commonmark').render(body);
+            return process(body);
         case 'Html':
             return body;
         case 'Nm':

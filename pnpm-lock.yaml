@@ -7,6 +7,7 @@ specifiers:
   '@types/prismjs': ^1.26.0
   esbuild: ^0.17.5
   markdown-it: ^13.0.1
+  markdown-it-anchor: ^8.6.6
   object-hash: ^3.0.0
   prismjs: ^1.29.0
   toml: ^3.0.0
@@ -19,6 +20,7 @@ dependencies:
   '@types/prismjs': 1.26.0
   esbuild: 0.17.5
   markdown-it: 13.0.1
+  markdown-it-anchor: 8.6.6_ea7kj7wzjkld5jo2noyjqxi764
   object-hash: 3.0.0
   prismjs: 1.29.0
   toml: 3.0.0
@@ -298,6 +300,16 @@ packages:
     resolution: {integrity: sha512-C7bfi1UZmoj8+PQx22XyeXCuBlokoyWQL5pWSP+EI6nzRylyThouddufc2c1NDIcP9k5agmN9fLpA7VNJfIiqw==}
     dependencies:
       uc.micro: 1.0.6
+    dev: false
+
+  /markdown-it-anchor/8.6.6_ea7kj7wzjkld5jo2noyjqxi764:
+    resolution: {integrity: sha512-jRW30YGywD2ESXDc+l17AiritL0uVaSnWsb26f+68qaW9zgbIIr1f4v2Nsvc0+s0Z2N3uX6t/yAw7BwCQ1wMsA==}
+    peerDependencies:
+      '@types/markdown-it': '*'
+      markdown-it: '*'
+    dependencies:
+      '@types/markdown-it': 12.2.3
+      markdown-it: 13.0.1
     dev: false
 
   /markdown-it/13.0.1:
