@@ -473,6 +473,8 @@ export let parsePost = (fileName: string, opts: doc, content: string): post => {
 };
 
 let getNmIntro = (nodes: nmNode[]) => {
+    // let found = [];
+    // console.log(nodes.slice(0, 10).map((n) => n.content));
     let loop = (coll: nmNode[], nodes: nmNode[]): postBody | null => {
         if (nodes.length && nodes[0].content === '<!-- more -->') {
             return { type: 'Nm', body: coll.reverse() };
@@ -489,6 +491,7 @@ let getNmIntro = (nodes: nmNode[]) => {
         return null;
     };
     return loop([], nodes);
+    // return null;
 };
 
 export let parseNm = (fileName: string, content: string): post => {
@@ -503,6 +506,7 @@ export let parseNm = (fileName: string, content: string): post => {
             config,
             JSON.parse(nodes[0].children[0].content),
         );
+        nodes = nodes[0].children.slice(1);
     }
     // console.log(nodes);
     // fail;
