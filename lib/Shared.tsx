@@ -115,7 +115,7 @@ export let MetaHead = (props: {
     );
 };
 
-const COLORS = {
+const colorModes = {
     light: `
         --color-text: #333;
         --color-lightText: #999;
@@ -130,7 +130,7 @@ const COLORS = {
     dark: `
         --color-text: #ccc;
         --color-lightText: #999;
-        --color-red: #692900;
+        --color-red: #1dd442;
         --color-lightOrange: #0f0d0d;
         --color-darkGreen: #d8ac7e;
         --color-green: #ef8d27;
@@ -167,7 +167,7 @@ export let PageHead = ({
             />
             <link
                 rel="stylesheet"
-                href="//brick.a.ssl.fastly.net/Linux+Libertine:400,400i,700,700i/Open+Sans:400,400i,700,700i"
+                href="//brick.a.ssl.fastly.net/Linux+Libertine:400,400i,700,700i/Merriweather:200,200i,400,400i,700,700i/Open+Sans:400,400i,700,700i"
             />
             <link
                 href="https://fonts.googleapis.com/css?family=Inconsolata:400,700"
@@ -204,6 +204,14 @@ export let PageHead = ({
                             document.getElementsByTagName('html')[0].className = localStorage.viewMode + ' mode-change';
                         }
                     }
+                    dark.onclick = (evt) => {
+                        setMode('dark-mode');
+                        evt.preventDefault()
+                    }
+                    light.onclick = (evt) => {
+                        setMode('light-mode');
+                        evt.preventDefault()
+                    }
 
                     dark.textContent = 'dark mode';
                     dark.href = 'javascript:setMode("dark-mode")'
@@ -227,17 +235,24 @@ export let PageHead = ({
         transition: background-color .1s ease;
     }
     html.light-mode, :root {
-        ${COLORS.light}
+        ${colorModes.light}
     }
 
     @media (prefers-color-scheme: dark) {
         :root {
-            ${COLORS.dark}
+            ${colorModes.dark}
         }
     }
 
     html.dark-mode {
-        ${COLORS.dark}
+        ${colorModes.dark}
+    }
+
+    main a:not([href^="/"]):not([href^="#"]):after {
+        color: red;
+        content: '🌐';
+        font-size: 70%;
+        margin-left: 4px;
     }
 
     .dark-mode-button, .light-mode-button {
@@ -329,8 +344,12 @@ export let PageHead = ({
       }
       a {
         color: ${Colors.green};
+        text-decoration: none;
         /* color: #28cc4c;
         text-decoration-color: #28cc4c; */
+      }
+      a:hover {
+        text-decoration: underline;
       }
       h1 > a, h2 > a, h3 > a, h4 > a, h5 > a, h6 > a {
         text-decoration: none;
@@ -662,9 +681,11 @@ export const Styles = {
     ],
 
     bodyText: [
-        A('font-size', '24px'),
-        A('line-height', '36px'),
+        A('font-size', '22px'),
+        A('line-height', '40px'),
         A('hyphens', 'auto'),
+        A('font-family', 'Merriweather'),
+        A('font-weight', '200'),
         Media('max-width: 600px', [
             ['font-size', '20px'],
             ['line-height', '30px'],

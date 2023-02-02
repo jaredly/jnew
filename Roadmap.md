@@ -3,7 +3,8 @@
 - [x] markdown rendering -- headers need <a>s with ids folks (ok they're different, but maybe thats ok? idk)
   - [x] see how many anchors changed
 
-- [ ] DARK MODE PLS
+- [x] DARK MODE PLS
+- [ ] indicate which links are internal, and which ones are external
 - [ ] and thennnnn let's do some github gisting!
   - btw don't load the comments until they come into view. for simplicityyyess
 

@@ -8,7 +8,7 @@ date: 2018-1-23
 description: I figure it's good to document what I went through for future ocaml cross-compilation spelunkers.
 ---
 
-I recently released [a tool that will manage all of this stuff](https://github.com/jaredly/reprocessing-scripts) (see the [accompanying blog post](https://jaredforsyth.com/posts/making-a-cross-platform-mobile-game-in-reason-ocaml/)), but I figure it's good to document what I went through for future ocaml cross-compilation spelunkers.
+I recently released [a tool that will manage all of this stuff](https://github.com/jaredly/reprocessing-scripts) (see the [accompanying blog post](/posts/making-a-cross-platform-mobile-game-in-reason-ocaml/)), but I figure it's good to document what I went through for future ocaml cross-compilation spelunkers.
 
 <!-- more -->
 

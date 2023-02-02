@@ -139,7 +139,16 @@ export let renderPost = (
                         A('overflow', 'auto'),
                     ])}
                 >
-                    <div className={css([])}>Recent posts</div>
+                    <a
+                        href="/posts/"
+                        className={css([
+                            A('text-decoration', 'none'),
+                            A('color', 'inherit'),
+                            Hover([['text-decoration', 'underline']]),
+                        ])}
+                    >
+                        <div className={css([])}>Recent posts</div>
+                    </a>
                     {Shared.hspace(8)}
                     {posts
                         .slice(0, 5)
