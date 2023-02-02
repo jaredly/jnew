@@ -133,7 +133,7 @@ let renderUpdate = ({
     );
 };
 
-let render = ({
+export let renderProject = ({
     title: contentTitle,
     tags,
     description,
@@ -149,7 +149,7 @@ let render = ({
         <BodyWithSmallAboutMeColumn css={css} toc="">
             <script async src="//platform.twitter.com/widgets.js" />
             <h1 className={css(Shared.Styles.titleWithTopMargin)}>
-                contentTitle
+                {contentTitle}
             </h1>
             <div className={css(Shared.Styles.bodyText)}>
                 {process(description)}
@@ -161,7 +161,16 @@ let render = ({
                         A('flex-direction', 'row'),
                     ])}
                 >
-                    {status ? <span className={css([])}>status</span> : ''}
+                    {status && statusSymbol[status] && (
+                        <span
+                            title={status}
+                            className={css([A('padding-right', '8px')])}
+                        >
+                            {statusSymbol[status]}
+                        </span>
+                    )}
+                    {status ? <span className={css([])}>{status}</span> : ''}
+
                     {tags?.length
                         ? Shared.spacer(8) + '·' + Shared.spacer(8)
                         : ''}
@@ -215,9 +224,9 @@ let render = ({
     return (
         <html>
             <PageHead title={contentTitle} description={description}>
-                <style>(inlineCss())</style>
+                <style>{inlineCss()}</style>
             </PageHead>
-            body
+            {body}
         </html>
     );
 };

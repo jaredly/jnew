@@ -2,7 +2,7 @@ import { mkdir, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { collectTalks } from './Talk';
 import { chopSuffix } from './Util';
 // import toml from 'toml';
-import { parseProject, project, renderList } from './Project';
+import { parseProject, project, renderList, renderProject } from './Project';
 import { dateSort } from './Shared';
 import { parseToml } from './Toml';
 import { parseNm, parsePost, post } from './Post';
@@ -56,13 +56,11 @@ let collectPages = <V>(
         });
 };
 
-// let renderPages = (render, pages) => {
-//   List.map(
-//     ((dest, config)) => {
+// let renderPages = (render, dest, config) => {
+//   pages(
+//     ([dest, config]) => {
 //       let html = render(config);
-//       Files.writeFile(dest, html)
-//       |> Util.expectTrue("Failed to write file " ++ dest);
-//       config;
+//       writeFileSync(dest, html, 'utf8');
 //     },
 //     pages,
 //   );
@@ -117,8 +115,11 @@ export let processProjects = (inputDir: string, outputDir: string) => {
             return parseProject(fileName, opts, body);
         },
     )
-        // |> renderPages(Project.render)
-        .map((m) => m[1])
+        .map(([dest, config]) => {
+            let html = renderProject(config);
+            writeFileSync(dest, html, 'utf8');
+            return config;
+        })
         .sort(sortProjectsByDate);
     let projectTags = assembleProjectTags(projects);
     let projectTagCounts = Object.entries(projectTags)

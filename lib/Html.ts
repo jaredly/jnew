@@ -3,7 +3,9 @@ let props = '';
 let escapeAttributeValue = (value: string) =>
     typeof value === 'string'
         ? value.replace(/&/g, '&amp;').replace(/\"/g, '&quot;')
-        : (console.log(value), JSON.stringify(value));
+        : typeof value === 'boolean'
+        ? value + ''
+        : (console.log('attributed value is', value), JSON.stringify(value));
 
 let formatAttributes = (attrs: [string, string][]) =>
     attrs

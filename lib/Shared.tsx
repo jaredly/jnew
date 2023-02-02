@@ -267,7 +267,7 @@ export let PageHead = ({
       `}
             </style>
             {children?.join('\n')}
-            {/* {extraHead} */}
+            {extraHead}
         </head>
     );
 };
