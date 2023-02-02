@@ -285,7 +285,7 @@ export let parseProject = (
   (render(config), config)
 }; */
 
-let renderList = ({
+export let renderList = ({
     tags,
     projects,
     contentTitle,
@@ -453,7 +453,7 @@ let renderList = ({
                                         ))
                                         .join(',' + Shared.vspace(4))}
                                 </div>
-                                (Shared.hspace(16))
+                                {Shared.hspace(16)}
                                 {screenshot ? (
                                     <img
                                         src={screenshot}
@@ -504,9 +504,9 @@ let renderList = ({
                     '\n' +
                     (
                         <fragment>
-                            (Shared.hspace(40))
+                            {Shared.hspace(40)}
                             <div className={css(Shared.Styles.pinkDivider)} />
-                            (Shared.hspace(40))
+                            {Shared.hspace(40)}
                         </fragment>
                     ),
                 )}

@@ -1,8 +1,8 @@
-import { mkdir, mkdirSync, readdirSync, readFileSync } from 'fs';
+import { mkdir, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { collectTalks } from './Talk';
 import { chopSuffix } from './Util';
 // import toml from 'toml';
-import { parseProject, project } from './Project';
+import { parseProject, project, renderList } from './Project';
 import { dateSort } from './Shared';
 import { parseToml } from './Toml';
 import { parseNm, parsePost, post } from './Post';
@@ -92,29 +92,19 @@ let collectPages = <V>(
 //      );
 // };
 
-// let assembleProjectTags = projects => {
-//   projects
-//   |> List.fold_left(
-//        (byTag, config) => {
-//          let byTag =
-//            List.fold_left(
-//              (byTag, tag) =>
-//                StrMap.add(
-//                  tag,
-//                  switch (StrMap.find(tag, byTag)) {
-//                  | exception Not_found => [config]
-//                  | items => [config, ...items]
-//                  },
-//                  byTag,
-//                ),
-//              byTag,
-//              config.Project.tags,
-//            );
-//          byTag;
-//        },
-//        StrMap.empty,
-//      );
-// };
+let assembleProjectTags = (projects: project[]) => {
+    return projects.reduce((byTag, config) => {
+        return (
+            config.tags?.reduce(
+                (byTag, tag) => ({
+                    ...byTag,
+                    [tag]: [config, ...(byTag[tag] || [])],
+                }),
+                byTag,
+            ) ?? byTag
+        );
+    }, {} as { [key: string]: project[] });
+};
 
 export let processProjects = (inputDir: string, outputDir: string) => {
     /* Project pages */
@@ -130,17 +120,17 @@ export let processProjects = (inputDir: string, outputDir: string) => {
         // |> renderPages(Project.render)
         .map((m) => m[1])
         .sort(sortProjectsByDate);
-    // let projectTags = assembleProjectTags(projects);
-    // let projectTagCounts =
-    //   StrMap.fold(
-    //     (key, value, res) => [(key, List.length(value)), ...res],
-    //     projectTags,
-    //     [],
-    //   )
-    //   |> List.sort(((k, n), (v, n2)) => n2 - n);
+    let projectTags = assembleProjectTags(projects);
+    let projectTagCounts = Object.entries(projectTags)
+        .map(([res, value]) => [res, value.length] as [string, number])
+        .sort(([k, n], [v, n2]) => n2 - n);
 
-    // let html = Project.renderList(projectTagCounts, projects, "All projects");
-    // Files.writeFile(outputDir /+ "projects/index.html", html) |> ignore;
+    let html = renderList({
+        tags: projectTagCounts,
+        projects,
+        contentTitle: 'All projects',
+    });
+    writeFileSync(outputDir + '/projects/index.html', html);
 
     // StrMap.iter(
     //   (tag, posts) => {
