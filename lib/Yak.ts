@@ -132,20 +132,16 @@ export let processProjects = (inputDir: string, outputDir: string) => {
     });
     writeFileSync(outputDir + '/projects/index.html', html);
 
-    // StrMap.iter(
-    //   (tag, posts) => {
-    //     let dest = outputDir /+ "projects/tags" /+ tag;
-    //     Files.mkdirp(dest);
-    //     let html =
-    //       Project.renderList(
-    //         projectTagCounts,
-    //         List.sort(sortProjectsByDate, posts),
-    //         "Tag: " ++ tag,
-    //       );
-    //     Files.writeFile(dest /+ "index.html", html) |> ignore;
-    //   },
-    //   projectTags,
-    // );
+    Object.entries(projectTags).forEach(([tag, posts]) => {
+        let dest = outputDir + '/projects/tags/' + tag;
+        mkdirSync(dest, { recursive: true });
+        let html = renderList({
+            tags: projectTagCounts,
+            projects: posts.sort(sortProjectsByDate),
+            contentTitle: 'Tag: ' + tag,
+        });
+        writeFileSync(dest + '/index.html', html, 'utf8');
+    });
 
     return projects;
 };

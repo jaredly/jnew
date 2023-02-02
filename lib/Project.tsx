@@ -11,6 +11,7 @@ import { parseDate } from './Post';
 import path from 'path';
 import { doc, parseToml } from './Toml';
 import { raw } from './GithubIcon';
+import markdownit from 'markdown-it';
 
 export let statusSymbol: { [key: string]: string } = {
     'semi-retired': '🛌',
@@ -455,15 +456,23 @@ export let renderList = ({
                                 </div>
                                 {Shared.hspace(16)}
                                 {screenshot ? (
-                                    <img
-                                        src={screenshot}
-                                        alt="Screenshot"
+                                    <a
+                                        href={href}
                                         className={css([
-                                            A('margin-bottom', '16px'),
-                                            A('max-height', '300px'),
-                                            ...Shared.Styles.basicImage,
+                                            A('color', 'currentColor'),
+                                            A('text-decoration', 'none'),
                                         ])}
-                                    />
+                                    >
+                                        <img
+                                            src={screenshot}
+                                            alt="Screenshot"
+                                            className={css([
+                                                A('margin-bottom', '16px'),
+                                                A('max-height', '300px'),
+                                                ...Shared.Styles.basicImage,
+                                            ])}
+                                        />
+                                    </a>
                                 ) : (
                                     ''
                                 )}
@@ -473,7 +482,10 @@ export let renderList = ({
                                         ...Shared.Styles.bodyText,
                                     ])}
                                 >
-                                    (Omd.to_html(Omd.of_string(description)))
+                                    {markdownit('commonmark').render(
+                                        description,
+                                    )}
+                                    {/* (Omd.to_html(Omd.of_string(description))) */}
                                 </div>
                                 {longDescription ? (
                                     <div

@@ -488,7 +488,7 @@ export let parseNm = (fileName: string, content: string): post => {
             JSON.parse(nodes[0].children[0].content),
         );
     }
-    console.log(nodes);
+    // console.log(nodes);
     // fail;
     // let (nodes, config) =
     //   switch (nodes) {

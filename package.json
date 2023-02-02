@@ -14,6 +14,7 @@
         "@types/node": "^18.11.18"
     },
     "dependencies": {
+        "@types/markdown-it": "^12.2.3",
         "@types/object-hash": "^3.0.2",
         "esbuild": "^0.17.5",
         "markdown-it": "^13.0.1",
