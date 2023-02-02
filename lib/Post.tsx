@@ -9,6 +9,7 @@ import { doc } from './Toml';
 import { config } from './Types';
 import { chopSuffix } from './Util';
 import MarkdownIt from 'markdown-it';
+import { rssWrapper } from './Rss';
 
 export type postBody =
     | { type: 'Html'; body: string }
@@ -211,142 +212,153 @@ export let renderPost = (
     );
 };
 
-// let rss = (~title, ~urlBase, posts, tags) => {
-//   Rss.wrapper(
-//     ~siteTitle=title,
-//     ~posts=
-//       posts
-//       |> List.map(({config, intro, body}) => {
-//            let href =
-//              urlBase + "/" + Util.chopSuffix(config.Types.fileName) + "/";
-//            let readTime = Shared.minuteReadText(config.wordCount);
-//            let description =
-//              (
-//                switch (intro) {
-//                | None => ""
-//                | Some(intro) => renderBody(intro) + " "
-//                }
-//              )
-//              + readTime
-//              + (config.draft ? " [DRAFT]" : "");
-//            {
-//              Rss.title: config.title,
-//              description,
-//              url: href,
-//              content: renderBody(body),
-//              //  descriptionHtml: description |> Rss.escapeContent,
-//              date: config.date,
-//              category: None,
-//            };
-//          }),
-//   );
-// };
+let rss = (
+    title: string,
+    urlBase: string,
+    posts: post[],
+    tags: [string, number][],
+) => {
+    return rssWrapper(
+        title,
+        posts.map(({ config, intro, body }) => {
+            let href = urlBase + '/' + chopSuffix(config.fileName) + '/';
+            let readTime = Shared.minuteReadText(config.wordCount);
+            let description =
+                (intro ? renderBody(intro) + ' ' : '') +
+                readTime +
+                (config.draft ? ' [DRAFT]' : '');
+            return {
+                title: config.title,
+                description,
+                url: href,
+                content: renderBody(body),
+                //  descriptionHtml: description |> Rss.escapeContent,
+                date: config.date,
+                category: undefined,
+            };
+        }),
+    );
+};
 
-// let postList = (~urlBase, posts, tags, contentTitle) => {
-//   open Html;
-//   let (css, inlineCss) = Css.startPage();
-//   /* let contentTitle = "All posts"; */
-//   let main = AboutMe.bodyWithSmallAboutMeColumn;
+export let postList = (
+    urlBase: string,
+    posts: post[],
+    tags: [string, number][],
+    contentTitle: string,
+) => {
+    let { css, inlineCss } = startPage();
 
-//   let body =
-//     <main
-//       css
-//       toc={
-//         <div
-//           className={css([
-//             A("font-size", "16px"),
-//             A("line-height", "20px"),
-//             A("margin-bottom", "32px"),
-//           ])}>
-//           {List.map(
-//              ((tag, count)) =>
-//                Types.(
-//                  <a
-//                    href={"/tags/" + tag + "/"}
-//                    className={css([
-//                      A("color", "currentColor"),
-//                      A("white-space", "nowrap"),
-//                      A("margin-right", "8px"),
-//                      ...Shared.Styles.hoverUnderline,
-//                    ])}>
-//                    tag
-//                    {"" + string_of_int(count) + ""}
-//                  </a>
-//                ),
-//              /* <postAbout css date=config.date tags=config.tags withPic=false />
-//                 <a className=css([A("font-size", "24px")]) href>readTime</a> */
-//              tags,
-//            )
-//            |> String.concat("\n")}
-//         </div>
-//       }>
-//       <div className={css([A("flex", "3"), A("padding", "32px")])}>
-//         <div
-//           className={css([A("padding", "1px"), A("position", "relative")])}>
-//           <h1
-//             className={css([
-//               A("text-align", "center"),
-//               ...Shared.Styles.title,
-//             ])}>
-//             contentTitle
-//           </h1>
-//           <a href="rss.xml"> "RSS Feed" </a>
-//         </div>
-//         {List.map(
-//            ({config, intro: teaser}) => {
-//              open Types;
-//              let href = "/" + Util.chopSuffix(config.Types.fileName) + "/";
-//              let readTime = Shared.minuteReadText(config.wordCount);
-//              <div>
-//                <a
-//                  href
-//                  className={css([
-//                    A("color", "currentColor"),
-//                    A("text-decoration", "none"),
-//                  ])}>
-//                  <h2> {config.title} </h2>
-//                </a>
-//                <postAbout
-//                  css
-//                  date={config.date}
-//                  tags={config.tags}
-//                  withPic=false
-//                />
-//                {switch (teaser) {
-//                 | None => ""
-//                 | Some(teaser) =>
-//                   <div
-//                     className={css([
-//                       A("padding-top", "16px"),
-//                       ...Shared.Styles.bodyText,
-//                     ])}>
-//                     {renderBody(teaser)}
-//                   </div>
-//                 // (Omd.to_html(Omd.of_string(teaser)))
-//                 }}
-//                <a className={css([A("font-size", "24px")])} href>
-//                  readTime
-//                </a>
-//              </div>;
-//            },
-//            posts,
-//          )
-//          |> String.concat("\n<div style='height: 32px'></div>\n")}
-//       </div>
-//     </main>;
+    let body = (
+        <BodyWithSmallAboutMeColumn
+            css={css}
+            toc={
+                <div
+                    className={css([
+                        A('font-size', '16px'),
+                        A('line-height', '20px'),
+                        A('margin-bottom', '32px'),
+                    ])}
+                >
+                    {tags
+                        .map(([tag, count]) => (
+                            <a
+                                href={'/tags/' + tag + '/'}
+                                className={css([
+                                    A('color', 'currentColor'),
+                                    A('white-space', 'nowrap'),
+                                    A('margin-right', '8px'),
+                                    ...Shared.Styles.hoverUnderline,
+                                ])}
+                            >
+                                {tag}
+                                {'' + count + ''}
+                            </a>
+                        ))
+                        .join('\n')}
+                </div>
+            }
+        >
+            <div className={css([A('flex', '3'), A('padding', '32px')])}>
+                <div
+                    className={css([
+                        A('padding', '1px'),
+                        A('position', 'relative'),
+                    ])}
+                >
+                    <h1
+                        className={css([
+                            A('text-align', 'center'),
+                            ...Shared.Styles.title,
+                        ])}
+                    >
+                        {contentTitle}
+                    </h1>
+                    <a href="rss.xml">RSS Feed</a>
+                </div>
+                {posts
+                    .map(({ config, intro: teaser }) => {
+                        let href = '/' + chopSuffix(config.fileName) + '/';
+                        let readTime = Shared.minuteReadText(config.wordCount);
+                        return (
+                            <div>
+                                <a
+                                    href={href}
+                                    className={css([
+                                        A('color', 'currentColor'),
+                                        A('text-decoration', 'none'),
+                                    ])}
+                                >
+                                    <h2> {config.title} </h2>
+                                </a>
+                                <PostAbout
+                                    css={css}
+                                    date={config.date}
+                                    tags={config.tags}
+                                    withPic={false}
+                                />
+                                {
+                                    teaser ? (
+                                        <div
+                                            className={css([
+                                                A('padding-top', '16px'),
+                                                ...Shared.Styles.bodyText,
+                                            ])}
+                                        >
+                                            {renderBody(teaser)}
+                                        </div>
+                                    ) : null
+                                    // (Omd.to_html(Omd.of_string(teaser)))
+                                }
+                                <a
+                                    className={css([A('font-size', '24px')])}
+                                    href={href}
+                                >
+                                    {readTime}
+                                </a>
+                            </div>
+                        );
+                    })
+                    .join("\n<div style='height: 32px'></div>\n")}
+            </div>
+        </BodyWithSmallAboutMeColumn>
+    );
 
-//   let main =
-//     <html>
-//       <pageHead
-//         title=contentTitle description="Things Jared has written about">
-//         <style> {inlineCss()} </style>
-//       </pageHead>
-//       body
-//     </html>;
-//   let rss =
-//     rss(~title=contentTitle + " | JaredForsyth.com", ~urlBase, posts, tags);
-//   (main, rss);
-// };
+    let main = (
+        <html>
+            <PageHead
+                title={contentTitle}
+                description="Things Jared has written about"
+            >
+                <style> {inlineCss()} </style>
+            </PageHead>
+            {body}
+        </html>
+    );
+    return {
+        main,
+        rss: rss(contentTitle + ' | JaredForsyth.com', urlBase, posts, tags),
+    };
+};
 
 // open Types;
 let defaultConfig = (fileName: string): config => ({
@@ -408,36 +420,6 @@ let parseJsonConfig = (
         draft,
     }: any,
 ): config => {
-    // let config =
-    //   check(Get.string("title", json), config, title => {...config, title});
-    // let config =
-    //   check(Get.string("description", json), config, description =>
-    //     {...config, description: Some(description)}
-    //   );
-    // let config =
-    //   check(Get.stringList("tags", json), config, tags => {...config, tags});
-    // let config =
-    //   check(Get.stringList("categories", json), config, categories =>
-    //     {...config, categories}
-    //   );
-    // let config =
-    //   check(Get.string("date", json), config, date =>
-    //     {...config, date: parseDate(date)}
-    //   );
-    // let config =
-    //   check(Get.bool("featured", json), config, featured =>
-    //     {...config, featured}
-    //   );
-    // let config =
-    //   check(Get.string("thumbnail", json), config, thumbnail =>
-    //     {...config, thumbnail: Some(thumbnail)}
-    //   );
-    // let config =
-    //   check(Get.string("article_image", json), config, article_image =>
-    //     {...config, article_image: Some(article_image)}
-    //   );
-    // let config =
-    //   check(Get.bool("draft", json), config, draft => {...config, draft});
     return {
         ...config,
         ...{

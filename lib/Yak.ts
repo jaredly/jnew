@@ -5,7 +5,7 @@ import { chopSuffix } from './Util';
 import { parseProject, project, renderList, renderProject } from './Project';
 import { dateSort } from './Shared';
 import { parseToml } from './Toml';
-import { parseNm, parsePost, post, renderPost } from './Post';
+import { parseNm, parsePost, post, postList, renderPost } from './Post';
 
 let sortPostsByDate = (
     { config: { date: date1 } }: post,
@@ -65,10 +65,10 @@ let collectPages = <V>(
 //   );
 // };
 
-// let assembleTags = posts => {
+// let assembleTags = (posts: post[]) => {
 //   posts
-//   |> List.fold_left(
-//        (byTag, {Post.config, intro, body}) => {
+//   .reduce(
+//        (byTag, {config, intro, body}) => {
 //          let byTag =
 //            List.fold_left(
 //              (byTag, tag) =>
@@ -85,9 +85,23 @@ let collectPages = <V>(
 //            );
 //          byTag;
 //        },
-//        StrMap.empty,
+//        {} as {[key: string]c}
 //      );
 // };
+
+let assembleTags = (posts: post[]) => {
+    return posts.reduce((byTag, post) => {
+        return (
+            post.config.tags?.reduce(
+                (byTag, tag) => ({
+                    ...byTag,
+                    [tag]: [post, ...(byTag[tag] || [])],
+                }),
+                byTag,
+            ) ?? byTag
+        );
+    }, {} as { [key: string]: post[] });
+};
 
 let assembleProjectTags = (projects: project[]) => {
     return projects.reduce((byTag, config) => {
@@ -180,42 +194,33 @@ export let processBlog = (
     });
     //   renderPages(renderPost(posts), fullPosts)
 
-    //   let tags = assembleTags(posts);
-    //   let tagCounts =
-    //     StrMap.fold(
-    //       (key, value, res) => [(key, List.length(value)), ...res],
-    //       tags,
-    //       [],
-    //     )
-    //     |> List.sort(((k, n), (v, n2)) => n2 - n);
+    let tags = assembleTags(posts);
+    let tagCounts = Object.entries(tags)
+        .map(([res, value]) => [res, value.length] as [string, number])
+        .sort(([k, n], [v, n2]) => n2 - n);
 
-    //   let (html, rss) =
-    //     Post.postList(
-    //       ~urlBase="https://jaredforsyth.com",
-    //       posts,
-    //       tagCounts,
-    //       "All posts",
-    //     );
-    //   Files.writeFile(outputDir /+ "posts/index.html", html) |> ignore;
+    let { main: html, rss } = postList(
+        'https://jaredforsyth.com',
+        posts,
+        tagCounts,
+        'All posts',
+    );
+    writeFileSync(outputDir + '/posts/index.html', html);
 
-    //   Files.writeFile(outputDir /+ "posts/rss.xml", rss) |> ignore;
+    writeFileSync(outputDir + '/posts/rss.xml', rss);
 
-    //   StrMap.iter(
-    //     (tag, posts) => {
-    //       let dest = outputDir /+ "tags" /+ tag;
-    //       Files.mkdirp(dest);
-    //       let (html, rss) =
-    //         Post.postList(
-    //           ~urlBase="https://jaredforsyth.com",
-    //           List.sort(sortPostsByDate, posts),
-    //           tagCounts,
-    //           "Tag: " ++ tag,
-    //         );
-    //       Files.writeFile(dest /+ "index.html", html) |> ignore;
-    //       Files.writeFile(dest /+ "rss.xml", rss) |> ignore;
-    //     },
-    //     tags,
-    //   );
+    Object.entries(tags).forEach(([tag, posts]) => {
+        let dest = outputDir + '/tags/' + tag;
+        mkdirSync(dest, { recursive: true });
+        let { main: html, rss } = postList(
+            'https://jaredforsyth.com',
+            posts.sort(sortPostsByDate),
+            tagCounts,
+            'Tag: ' + tag,
+        );
+        writeFileSync(dest + '/index.html', html);
+        writeFileSync(dest + '/rss.xml', rss);
+    }, tags);
 
     return posts;
 };

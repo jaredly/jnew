@@ -16,7 +16,7 @@ namespace JSX {
     export interface IntrinsicElements {
         html: props;
         br: {};
-        link: { rel: string; href: string; media?: string };
+        link: { rel: string; href: string; media?: string } | {};
         meta:
             | { name: string; content: string }
             | { charset: string }
@@ -45,5 +45,14 @@ namespace JSX {
         head: props;
         title: props;
         fragment: props;
+
+        channel: {};
+        description: {};
+        item: {};
+        summary: {};
+        author: {};
+        guid: {};
+        pubDate: {};
+        category: {};
     }
 }
