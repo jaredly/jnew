@@ -3,7 +3,7 @@ import { A, CssFn, Hover, jsx, Media, Sub } from './sjsx';
 import * as Shared from './Shared';
 import { BodyWithSmallAboutMeColumn } from './AboutMe';
 import { startPage } from './Css';
-import { nmNode, parseNotableMind, wordCount } from './NotableMind';
+import { nmNode, parseNotableMind, renderNm, wordCount } from './NotableMind';
 import { PageHead, triple } from './Shared';
 import { doc } from './Toml';
 import { config } from './Types';
@@ -106,7 +106,7 @@ let renderBody = ({ type, body }: postBody) => {
         case 'Html':
             return body;
         case 'Nm':
-            return 'NOPE'; // NotableMind.render(body);
+            return renderNm(body);
     }
 };
 

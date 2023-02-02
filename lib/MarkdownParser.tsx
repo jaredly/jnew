@@ -104,6 +104,6 @@ export let saveTwitterCache = () => {
 //   let md = Omd.visit(twitterEmbed, md);
 //   Omd.to_html(~ids?, md)
 // };
-export const process = (rawBody: string) => {
+export const process = (rawBody: string, ids?: { [key: string]: string }) => {
     return md('commonmark').render(rawBody);
 };

@@ -1,3 +1,5 @@
+import { process } from './MarkdownParser';
+
 export type nmNode = {
     typ: string;
     depth: number;
@@ -94,7 +96,7 @@ let organizeNodes = (nodes: nmNode[]) => {
         );
         // switch list {
         // | [node, ...rest] =>
-        // // print_endline("A node " ++ node.typ ++ " -- " ++ node.content);
+        // // print_endline("A node " + node.typ + " -- " + node.content);
         //   let (children, rest) = getChildren(node.depth, [], rest);
         //   loop([{...node, children: children |> List.rev}, ...organized], rest)
         // | [] =>
@@ -107,21 +109,25 @@ let organizeNodes = (nodes: nmNode[]) => {
 export let parseNotableMind = (text: string) =>
     organizeNodes(collectNodes(text));
 
-// let header = (depth: string) => {
-//     let b = Buffer.create(depth);
-//     for (x in 1 to depth) {
-//         Buffer.add_char(b, '#');
-//     };
-//     b |> Buffer.contents
-// };
+let header = (depth: number) => {
+    let b = '';
+    for (let x = 0; x < depth; x++) {
+        b += '#';
+    }
+    return b + ' ';
+};
 
-// let makeList = (el, items) => {
-//     "<" ++ el ++ ">"
-//     ++
-//     (items |> List.map(item => "<li>" ++ item ++ "</li>") |> String.concat("\n"))
-//     ++
-//     "</" ++ el ++ ">"
-// }
+let makeList = (el: string, items: string[]) => {
+    return (
+        '<' +
+        el +
+        '>' +
+        items.map((item) => '<li>' + item + '</li>').join('\n') +
+        '</' +
+        el +
+        '>'
+    );
+};
 
 // Printexc.record_backtrace(true)
 
@@ -133,64 +139,83 @@ export let parseNotableMind = (text: string) =>
 //   |> Str.global_replace(Str.regexp_string(">"), "&gt;")
 // };
 
-// let getLanguage = types => {
-//   switch types {
-//     | Some(`Assoc(items)) => switch (List.assoc_opt("code", items)) {
-//       | Some(`Assoc(items)) => switch (List.assoc_opt("language", items)) {
-//         | Some(`String(v)) => Some(v)
-//         | _ => None
-//       }
-//       | _ => None
-//     }
-//     | _ => None
-//   }
-// }
+let getLanguage = (types: any) => {
+    return types?.code?.language ?? 'javascript';
+    // switch (types) {
+    //   | Some(`Assoc(items)) => switch (List.assoc_opt("code", items)) {
+    //     | Some(`Assoc(items)) => switch (List.assoc_opt("language", items)) {
+    //       | Some(`String(v)) => Some(v)
+    //       | _ => None
+    //     }
+    //     | _ => None
+    //   }
+    //   | _ => None
+    // }
+};
 
-// let highlightCode = (code, language) => {
-//   let highlighter = "highlighter/highlight.js";
-//   let language = switch language {
-//     | None => "javascript"
-//     | Some(x) => x
-//   };
-//   let (stdout, stderr, _) = Commands.execFull(~input=code, Printf.sprintf({|%s %s|}, highlighter, Filename.quote(language)));
-//   print_endline(String.concat("\n", stderr));
-//   let output = String.concat("\n", stdout);
-//   output
-// };
+import prism from 'prismjs';
 
-// let rec renderNode = (~ids, depth, node) => {
-//   switch (node.typ) {
-//   | "list" => [
-//       MarkdownParser.process(~ids, node.content),
-//       makeList(
-//         "ul",
-//         List.map(renderNode(~ids, depth + 1), node.children) |> List.map(items => "<div>" ++ String.concat("\n", items) ++ "</div>"),
-//       ),
-//     ]
-//   | "orderedList" => [
-//       MarkdownParser.process(~ids, node.content),
-//       makeList(
-//         "ol",
-//         List.map(renderNode(~ids, depth + 1), node.children) |> List.map(items => "<div>" ++ String.concat("\n", items) ++ "</div>"),
-//       ),
-//     ]
-//   | "note" => ["<div class='note'>" ++ MarkdownParser.process(~ids, node.content) ++ "</div>"]
-//   | "normal" => [
-//       MarkdownParser.process(~ids, node.content),
-//       ...List.map(renderNode(~ids, depth + 1), node.children) |> List.concat,
-//     ]
-//   | "header" => [
-//       MarkdownParser.process(~ids, header(depth) ++ node.content),
-//       ...List.map(renderNode(~ids, depth + 1), node.children) |> List.concat,
-//     ]
-//   | "code" => [
-//     "<pre><code>" ++ highlightCode(node.content, getLanguage(node.types)) ++ "</code></pre>"
-//   ]
-//   | _ => failwith("Unexpected node type")
-//   };
-// };
+let highlightCode = (code: string, language?: string) => {
+    language = language ?? 'javascript';
+    const html = prism.highlight(code, prism.languages.javascript, language);
+    // let (stdout, stderr, _) = Commands.execFull(input=code, Printf.sprintf({|%s %s|}, highlighter, Filename.quote(language)));
+    // print_endline(String.concat("\n", stderr));
+    // let output = String.concat("\n", stdout);
+    return html;
+};
 
-// let render = (nodes) => {
-//     let ids = Hashtbl.create(10);
-//     nodes |> List.map(renderNode(~ids, 1)) |> List.concat |> String.concat("\n")
-// }
+type Ids = { [key: string]: string };
+let renderNode = (ids: Ids, depth: number, node: nmNode): string[] => {
+    switch (node.typ) {
+        case 'list':
+            return [
+                process(node.content, ids),
+                makeList(
+                    'ul',
+                    node.children
+                        .map((child) => renderNode(ids, depth + 1, child))
+                        .map((items) => '<div>' + items.join('\n') + '</div>'),
+                ),
+            ];
+        case 'orderedList':
+            return [
+                process(node.content, ids),
+                makeList(
+                    'ol',
+                    node.children
+                        .map((child) => renderNode(ids, depth + 1, child))
+                        .map((items) => '<div>' + items.join('\n') + '</div>'),
+                ),
+            ];
+        case 'note':
+            return [
+                "<div class='note'>" + process(node.content, ids) + '</div>',
+            ];
+        case 'normal':
+            return [
+                process(node.content, ids),
+                ...node.children.flatMap((child) =>
+                    renderNode(ids, depth + 1, child),
+                ),
+            ];
+        case 'header':
+            return [
+                process(header(depth) + node.content, ids),
+                ...node.children.flatMap((child) =>
+                    renderNode(ids, depth + 1, child),
+                ),
+            ];
+        case 'code':
+            return [
+                '<pre><code>' +
+                    highlightCode(node.content, getLanguage(node.types)) +
+                    '</code></pre>',
+            ];
+    }
+    throw new Error('nope');
+};
+
+export let renderNm = (nodes: nmNode[]) => {
+    let ids: Ids = {};
+    return nodes.flatMap((node) => renderNode(ids, 1, node)).join('\n');
+};
