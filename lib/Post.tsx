@@ -1,7 +1,14 @@
+/** @jsx jsx */
+import { A, CssFn, Hover, jsx, Media, Sub } from './sjsx';
+import * as Shared from './Shared';
+import { BodyWithSmallAboutMeColumn } from './AboutMe';
+import { startPage } from './Css';
 import { nmNode, parseNotableMind, wordCount } from './NotableMind';
-import { triple } from './Shared';
+import { PageHead, triple } from './Shared';
 import { doc } from './Toml';
 import { config } from './Types';
+import { chopSuffix } from './Util';
+import MarkdownIt from 'markdown-it';
 
 export type postBody =
     | { type: 'Html'; body: string }
@@ -38,144 +45,171 @@ export type post = {
 // let spacer = Shared.spacer;
 // let showDate = Shared.showDate;
 
-// let postAbout =
-//     (~draft=false, ~css, ~date, ~tags, ~withPic=true, ~children, ()) => {
-//   Html.(
-//     Css.(
-//       <div
-//         className={css([
-//           A("color", Shared.Colors.lightText),
-//           A("font-family", "Open sans"),
-//           A("font-size", "14px"),
-//           A("display", "flex"),
-//           A("flex-direction", "row"),
-//           A("align-items", "center"),
-//           A("justify-content", "flex-start"),
-//         ])}>
-//         <showDate date />
-//         {spacer(8)}
-//         {tags |> List.length > 0 ? " · " : ""}
-//         {spacer(8)}
-//         {String.concat(
-//            ", " ++ spacer(4),
-//            List.map(
-//              tag =>
-//                <a
-//                  href={"/tags/" ++ tag ++ "/"}
-//                  className={css([A("text-decoration", "none")])}>
-//                  tag
-//                </a>,
-//              tags,
-//            ),
-//          )}
-//         {spacer(8)}
-//         {draft
-//            ? <span
-//                style="background-color: red; padding: 4px 8px; display: inline-block; color: white; border-radius: 4px">
-//                "draft"
-//              </span>
-//            : ""}
-//       </div>
-//     )
-//   );
-// };
+let PostAbout = ({
+    draft = false,
+    css,
+    date,
+    tags,
+    withPic = true,
+}: {
+    draft?: boolean;
+    css: CssFn;
+    date: triple;
+    tags?: string[];
+    withPic?: boolean;
+}) => {
+    return (
+        <div
+            className={css([
+                A('color', Shared.Colors.lightText),
+                A('font-family', 'Open sans'),
+                A('font-size', '14px'),
+                A('display', 'flex'),
+                A('flex-direction', 'row'),
+                A('align-items', 'center'),
+                A('justify-content', 'flex-start'),
+            ])}
+        >
+            <Shared.showDate date={date} />
+            {Shared.spacer(8)}
+            {tags && tags.length > 0 ? ' · ' : ''}
+            {Shared.spacer(8)}
+            {tags
+                ?.map((tag) => (
+                    <a
+                        href={'/tags/' + tag + '/'}
+                        className={css([A('text-decoration', 'none')])}
+                    >
+                        {tag}
+                    </a>
+                ))
+                .join(', ' + Shared.spacer(4))}
+            {Shared.spacer(8)}
+            {draft ? (
+                <span style="background-color: red; padding: 4px 8px; display: inline-block; color: white; border-radius: 4px">
+                    draft
+                </span>
+            ) : (
+                ''
+            )}
+        </div>
+    );
+};
 
 // let pageWithTopAndBottom = Shared.pageWithTopAndBottom;
 // let pageHead = Shared.pageHead;
 
-// let renderBody =
-//   fun
-//   | Markdown(md) => MarkdownParser.process(md)
-//   | Html(html) => html
-//   | Nm(nodes) => NotableMind.render(nodes);
+let renderBody = ({ type, body }: postBody) => {
+    switch (type) {
+        case 'Markdown':
+            return MarkdownIt('commonmark').render(body);
+        case 'Html':
+            return body;
+        case 'Nm':
+            return 'NOPE'; // NotableMind.render(body);
+    }
+};
 
-// let render =
-//     (
-//       posts,
-//       {
-//         config: {
-//           Types.title: contentTitle,
-//           fileName,
-//           description,
-//           date,
-//           tags,
-//           thumbnail,
-//           article_image,
-//           draft,
-//         },
-//         body: postBody,
-//       },
-//     ) => {
-//   let (css, inlineCss) = Css.startPage();
-//   open Html;
-//   open Css;
-//   // let isMarkdown = Filename.check_suffix(fileName, ".md");
+export let renderPost = (
+    posts: post[],
+    {
+        config: {
+            title: contentTitle,
+            fileName,
+            description,
+            date,
+            tags,
+            thumbnail,
+            article_image,
+            draft,
+        },
+        body: postBody,
+    }: post,
+) => {
+    let { css, inlineCss } = startPage();
+    let body = (
+        <BodyWithSmallAboutMeColumn
+            css={css}
+            toc={
+                <div
+                    className={css([
+                        A('padding', '0 16px'),
+                        A('flex-shrink', '1'),
+                        A('overflow', 'auto'),
+                    ])}
+                >
+                    <div className={css([])}>Recent posts</div>
+                    {Shared.hspace(8)}
+                    {posts
+                        .slice(0, 5)
+                        .map(
+                            ({
+                                config: {
+                                    title,
+                                    date: [year, month, day],
+                                    fileName,
+                                },
+                            }) => {
+                                let href = '/' + chopSuffix(fileName) + '/';
+                                return (
+                                    <a
+                                        href={href}
+                                        className={css([
+                                            A('font-size', '16px'),
+                                            A('margin-bottom', '16px'),
+                                            A('display', 'block'),
+                                            A('line-height', '20px'),
+                                            ...Shared.Styles.subtleLink,
+                                        ])}
+                                    >
+                                        <div> {title} </div>
+                                        <div
+                                            className={css([
+                                                A(
+                                                    'color',
+                                                    Shared.Colors.lightText,
+                                                ),
+                                                ...Shared.Styles.row,
+                                            ])}
+                                        >
+                                            {year}
+                                            {Shared.monthName(month)}
+                                            {day}
+                                        </div>
+                                    </a>
+                                );
+                            },
+                        )
+                        .join('\n')}
+                    {Shared.hspace(32)}
+                </div>
+            }
+        >
+            <h1 className={css(Shared.Styles.titleWithTopMargin)}>
+                {contentTitle}
+            </h1>
+            <PostAbout draft={draft} css={css} date={date} tags={tags} />
+            {Shared.hspace(32)}
+            <div className={'post-body ' + css(Shared.Styles.bodyText)}>
+                {renderBody(postBody)}
+            </div>
+        </BodyWithSmallAboutMeColumn>
+    );
 
-//   let main = AboutMe.bodyWithSmallAboutMeColumn;
-//   let body =
-//     <main
-//       css
-//       toc={
-//         <div
-//           className={css([
-//             A("padding", "0 16px"),
-//             A("flex-shrink", "1"),
-//             A("overflow", "auto"),
-//           ])}>
-//           <div className={css([])}> "Recent posts" </div>
-//           {Shared.hspace(8)}
-//           {List.mapi(
-//              (
-//                i,
-//                {config: {Types.title, date: (year, month, day), fileName}},
-//              ) => {
-//                let href = "/" ++ Util.chopSuffix(fileName) ++ "/";
-//                i < 5
-//                  ? <a
-//                      href
-//                      className={css([
-//                        A("font-size", "16px"),
-//                        A("margin-bottom", "16px"),
-//                        A("display", "block"),
-//                        A("line-height", "20px"),
-//                        ...Shared.Styles.subtleLink,
-//                      ])}>
-//                      <div> title </div>
-//                      <div
-//                        className={css([
-//                          A("color", Shared.Colors.lightText),
-//                          ...Shared.Styles.row,
-//                        ])}>
-//                        {string_of_int(year)}
-//                        {Shared.monthName(month)}
-//                        {string_of_int(day)}
-//                      </div>
-//                    </a>
-//                  : "";
-//              },
-//              posts,
-//            )
-//            |> String.concat("\n")}
-//           {Shared.hspace(32)}
-//         </div>
-//       }>
-//       <h1 className={css(Shared.Styles.titleWithTopMargin)}>
-//         contentTitle
-//       </h1>
-//       <postAbout draft css date tags />
-//       {Shared.hspace(32)}
-//       <div className={"post-body " ++ css(Shared.Styles.bodyText)}>
-//         {renderBody(postBody)}
-//       </div>
-//     </main>;
-
-//   <html>
-//     <pageHead title=contentTitle ?description ?thumbnail ?article_image>
-//       <style> {inlineCss()} </style>
-//     </pageHead>
-//     body
-//   </html>;
-// };
+    return (
+        <html>
+            <PageHead
+                title={contentTitle}
+                description={description}
+                thumbnail={thumbnail}
+                article_image={article_image}
+            >
+                <style> {inlineCss()} </style>
+            </PageHead>
+            {body}
+        </html>
+    );
+};
 
 // let rss = (~title, ~urlBase, posts, tags) => {
 //   Rss.wrapper(
@@ -184,17 +218,17 @@ export type post = {
 //       posts
 //       |> List.map(({config, intro, body}) => {
 //            let href =
-//              urlBase ++ "/" ++ Util.chopSuffix(config.Types.fileName) ++ "/";
+//              urlBase + "/" + Util.chopSuffix(config.Types.fileName) + "/";
 //            let readTime = Shared.minuteReadText(config.wordCount);
 //            let description =
 //              (
 //                switch (intro) {
 //                | None => ""
-//                | Some(intro) => renderBody(intro) ++ " "
+//                | Some(intro) => renderBody(intro) + " "
 //                }
 //              )
-//              ++ readTime
-//              ++ (config.draft ? " [DRAFT]" : "");
+//              + readTime
+//              + (config.draft ? " [DRAFT]" : "");
 //            {
 //              Rss.title: config.title,
 //              description,
@@ -228,7 +262,7 @@ export type post = {
 //              ((tag, count)) =>
 //                Types.(
 //                  <a
-//                    href={"/tags/" ++ tag ++ "/"}
+//                    href={"/tags/" + tag + "/"}
 //                    className={css([
 //                      A("color", "currentColor"),
 //                      A("white-space", "nowrap"),
@@ -236,7 +270,7 @@ export type post = {
 //                      ...Shared.Styles.hoverUnderline,
 //                    ])}>
 //                    tag
-//                    {"" ++ string_of_int(count) ++ ""}
+//                    {"" + string_of_int(count) + ""}
 //                  </a>
 //                ),
 //              /* <postAbout css date=config.date tags=config.tags withPic=false />
@@ -261,7 +295,7 @@ export type post = {
 //         {List.map(
 //            ({config, intro: teaser}) => {
 //              open Types;
-//              let href = "/" ++ Util.chopSuffix(config.Types.fileName) ++ "/";
+//              let href = "/" + Util.chopSuffix(config.Types.fileName) + "/";
 //              let readTime = Shared.minuteReadText(config.wordCount);
 //              <div>
 //                <a
@@ -310,7 +344,7 @@ export type post = {
 //       body
 //     </html>;
 //   let rss =
-//     rss(~title=contentTitle ++ " | JaredForsyth.com", ~urlBase, posts, tags);
+//     rss(~title=contentTitle + " | JaredForsyth.com", ~urlBase, posts, tags);
 //   (main, rss);
 // };
 

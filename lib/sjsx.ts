@@ -19,7 +19,7 @@ export const jsx = (
     }
     const res = name({ ...args, children });
     if (res == null) {
-        console.log(name);
+        console.log('Component with null response', name);
     }
     return res;
 };

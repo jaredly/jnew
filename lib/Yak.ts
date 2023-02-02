@@ -5,7 +5,7 @@ import { chopSuffix } from './Util';
 import { parseProject, project, renderList, renderProject } from './Project';
 import { dateSort } from './Shared';
 import { parseToml } from './Toml';
-import { parseNm, parsePost, post } from './Post';
+import { parseNm, parsePost, post, renderPost } from './Post';
 
 let sortPostsByDate = (
     { config: { date: date1 } }: post,
@@ -57,12 +57,11 @@ let collectPages = <V>(
 };
 
 // let renderPages = (render, dest, config) => {
-//   pages(
+//   pages.map(
 //     ([dest, config]) => {
 //       let html = render(config);
 //       writeFileSync(dest, html, 'utf8');
 //     },
-//     pages,
 //   );
 // };
 
@@ -175,7 +174,11 @@ export let processBlog = (
     let posts = excludeDrafts
         ? allPosts.filter((post) => !post.config.draft)
         : allPosts;
-    //   renderPages(Post.render(posts), fullPosts) |> ignore;
+    fullPosts.forEach(([dest, post]) => {
+        let html = renderPost(posts, post);
+        writeFileSync(dest, html, 'utf8');
+    });
+    //   renderPages(renderPost(posts), fullPosts)
 
     //   let tags = assembleTags(posts);
     //   let tagCounts =

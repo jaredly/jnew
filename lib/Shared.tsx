@@ -113,7 +113,7 @@ export let PageHead = ({
     children,
 }: {
     title: string;
-    description: string;
+    description?: string;
     thumbnail?: string;
     article_image?: string;
     extraHead?: string;
@@ -437,13 +437,15 @@ export let shortMonth = (month: number) => {
 };
 
 export let showDate = ({ date: [year, month, day] }: { date: triple }) => {
-    <fragment>
-        {monthName(month)}
-        {spacer(4)}
-        {day + ','}
-        {spacer(4)}
-        {year}
-    </fragment>;
+    return (
+        <fragment>
+            {monthName(month)}
+            {spacer(4)}
+            {day + ','}
+            {spacer(4)}
+            {year}
+        </fragment>
+    );
 };
 export type triple = [number, number, number];
 
