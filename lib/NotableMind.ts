@@ -155,7 +155,7 @@ let getLanguage = (types: any) => {
 
 import prism from 'prismjs';
 
-let highlightCode = (code: string, language?: string) => {
+export let highlightCode = (code: string, language?: string) => {
     language = language ?? 'javascript';
     const html = prism.highlight(code, prism.languages.javascript, language);
     // let (stdout, stderr, _) = Commands.execFull(input=code, Printf.sprintf({|%s %s|}, highlighter, Filename.quote(language)));

@@ -105,17 +105,37 @@ export let saveTwitterCache = () => {
 //   Omd.to_html(~ids?, md)
 // };
 import mdi from 'markdown-it-anchor';
-const mdit = md('commonmark').use(mdi, {
-    permalink: mdi.permalink.headerLink(),
-    slugify: (text) => {
-        // console.log(text);
-        return text
-            .trim()
-            .replaceAll('"', '&quot;')
-            .replaceAll(/[^a-zA-Z0-9_-]+/g, '-')
-            .replace(/-$/, '');
-    },
-});
+import mdp from 'markdown-it-prism';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-clojure';
+import 'prismjs/components/prism-reason';
+import 'prismjs/components/prism-ocaml';
+import 'prismjs/components/prism-rust';
+import 'prismjs/components/prism-bash';
+import 'prismjs/components/prism-json';
+import 'prismjs/components/prism-graphql';
+import 'prismjs/components/prism-diff';
+
+const mdit = md('default', {
+    linkify: true,
+    typographer: true,
+    html: true,
+})
+    .use(mdi, {
+        permalink: mdi.permalink.headerLink(),
+        slugify: (text) => {
+            // console.log(text);
+            return text
+                .trim()
+                .replaceAll('"', '&quot;')
+                .replaceAll(/[^a-zA-Z0-9_-]+/g, '-')
+                .replace(/-$/, '');
+        },
+    })
+    .use(mdp, {
+        highlightInlineCode: true,
+        defaultLanguage: 'javascript',
+    });
 
 export const process = (rawBody: string, ids?: { [key: string]: string }) => {
     return mdit.render(rawBody);

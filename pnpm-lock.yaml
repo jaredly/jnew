@@ -8,6 +8,7 @@ specifiers:
   esbuild: ^0.17.5
   markdown-it: ^13.0.1
   markdown-it-anchor: ^8.6.6
+  markdown-it-prism: ^2.3.0
   object-hash: ^3.0.0
   prismjs: ^1.29.0
   toml: ^3.0.0
@@ -21,6 +22,7 @@ dependencies:
   esbuild: 0.17.5
   markdown-it: 13.0.1
   markdown-it-anchor: 8.6.6_ea7kj7wzjkld5jo2noyjqxi764
+  markdown-it-prism: 2.3.0
   object-hash: 3.0.0
   prismjs: 1.29.0
   toml: 3.0.0
@@ -310,6 +312,13 @@ packages:
     dependencies:
       '@types/markdown-it': 12.2.3
       markdown-it: 13.0.1
+    dev: false
+
+  /markdown-it-prism/2.3.0:
+    resolution: {integrity: sha512-ePtHY80gZyeje4bn3R3SL0jpd1C9HFaYffJW2Ma0YD+tspqa2v9TuVwUyFwboFu4jnFNcO8oPQROgbcYJbmBvw==}
+    engines: {node: '>=6.0.0'}
+    dependencies:
+      prismjs: 1.29.0
     dev: false
 
   /markdown-it/13.0.1:

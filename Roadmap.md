@@ -1,11 +1,11 @@
 
 - [-] moving this all to js!
 - [x] markdown rendering -- headers need <a>s with ids folks (ok they're different, but maybe thats ok? idk)
-	- [ ] see how many anchors changed
+  - [x] see how many anchors changed
 
 - [ ] DARK MODE PLS
 - [ ] and thennnnn let's do some github gisting!
-	- btw don't load the comments until they come into view. for simplicityyyess
+  - btw don't load the comments until they come into view. for simplicityyyess
 
 ## [x] Homepage
 - [x] talks

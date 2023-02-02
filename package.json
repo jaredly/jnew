@@ -8,7 +8,7 @@
         "test": "esy build && sh -c \"$(esy x which Hello) drafts\"",
         "start-": "watchexec -w lib -w bin -w test/posts npm test",
         "publish": "sh -c $(esy x which Hello) && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets",
-        "start": "esbuild --bundle bin/Hello.ts --platform=node | node"
+        "start": "esbuild --bundle bin/Hello.ts --external:markdown-it-prism --platform=node --sourcemap=inline > ok.js && node --enable-source-maps ok.js && rm ok.js"
     },
     "devDependencies": {
         "@types/node": "^18.11.18"
@@ -20,6 +20,7 @@
         "esbuild": "^0.17.5",
         "markdown-it": "^13.0.1",
         "markdown-it-anchor": "^8.6.6",
+        "markdown-it-prism": "^2.3.0",
         "object-hash": "^3.0.0",
         "prismjs": "^1.29.0",
         "toml": "^3.0.0",

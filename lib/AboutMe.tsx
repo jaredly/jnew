@@ -107,7 +107,7 @@ export let column = ({
                 <br />
                 <a href="https://github.com/jaredly">github/@jaredly</a>
                 <br />
-                <a href="/posts/rss.xml">rss feed</a>
+                <a href="/posts/rss.xml">posts rss feed</a>
             </div>
         </div>
     </div>

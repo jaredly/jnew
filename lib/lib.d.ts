@@ -40,7 +40,7 @@ namespace JSX {
         li: props;
         p: props;
         a: props & { href?: string; target?: string };
-        script: { src: string; async?: boolean };
+        script: { src?: string; async?: boolean };
         style: props;
         head: props;
         title: props;

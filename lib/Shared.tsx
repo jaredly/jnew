@@ -1,12 +1,23 @@
 /** @jsx jsx */
 import { A, CssFn, Hover, jsx, Media } from './sjsx';
 export const Colors = {
-    text: '#333',
-    lightText: '#999',
-    red: '#692900',
-    lightOrange: '#fff4ef',
-    darkGreen: '#147429',
-    green: '#1fad3e',
+    // text: '#333',
+    // lightText: '#999',
+    // red: '#692900',
+    // lightOrange: '#fff4ef',
+    // darkGreen: '#147429',
+    // green: '#1fad3e',
+    // code: '#ffede4',
+    // codeText: '#692900',
+
+    codeText: 'var(--color-codeText)',
+    code: 'var(--color-code)',
+    text: 'var(--color-text)',
+    lightText: 'var(--color-lightText)',
+    red: 'var(--color-red)',
+    lightOrange: 'var(--color-lightOrange)',
+    darkGreen: 'var(--color-darkGreen)',
+    green: 'var(--color-green)',
 };
 
 export let px = (n: number) => n + 'px';
@@ -104,6 +115,31 @@ export let MetaHead = (props: {
     );
 };
 
+const COLORS = {
+    light: `
+        --color-text: #333;
+        --color-lightText: #999;
+        --color-red: #692900;
+        --color-lightOrange: #fff4ef;
+        --color-darkGreen: #147429;
+        --color-green: #1fad3e;
+        --color-code: #ffede4;
+        --color-codeText: #692900;
+        background-color: white;
+    `,
+    dark: `
+        --color-text: #ccc;
+        --color-lightText: #999;
+        --color-red: #692900;
+        --color-lightOrange: #0f0d0d;
+        --color-darkGreen: #d8ac7e;
+        --color-green: #ef8d27;
+        --color-code: #361402;
+        --color-codeText: #f9d6bf;
+        background-color: #21262c;
+    `,
+};
+
 export let PageHead = ({
     title: contentTitle,
     description,
@@ -138,11 +174,87 @@ export let PageHead = ({
                 rel="stylesheet"
             />
             <link
-                href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css"
+                href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-one-light.min.css"
                 rel="stylesheet"
+                media="not (prefers-color-scheme: dark)"
             />
+            <link
+                href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-vsc-dark-plus.min.css"
+                rel="stylesheet"
+                media="(prefers-color-scheme: dark)"
+            />
+            <script>
+                {`if (localStorage.viewMode) {
+                    document.getElementsByTagName('html')[0].className = localStorage.viewMode;
+                }
+                window.addEventListener('load', () => {
+                    const node = document.createElement('div');
+                    const dark = document.createElement('a');
+                    const light = document.createElement('a');
+                    dark.className = 'dark-mode-button';
+                    light.className = 'light-mode-button';
+
+                    window.setMode = (mode) => {
+                        if (localStorage.viewMode === mode) {
+                            localStorage.viewMode = ''
+                            document.getElementsByTagName('html')[0].className = 'mode-change'
+
+                        } else {
+                            localStorage.viewMode = mode
+                            document.getElementsByTagName('html')[0].className = localStorage.viewMode + ' mode-change';
+                        }
+                    }
+
+                    dark.textContent = 'dark mode';
+                    dark.href = 'javascript:setMode("dark-mode")'
+                    light.textContent = 'light mode';
+                    light.href = 'javascript:setMode("light-mode")'
+                    node.appendChild(dark)
+                    node.appendChild(document.createTextNode(' · '));
+                    node.appendChild(light)
+                    Object.assign(node.style, {
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                    });
+                    document.body.appendChild(node);
+                })
+                `}
+            </script>
             <style>
                 {`
+    html.mode-change {
+        transition: background-color .1s ease;
+    }
+    html.light-mode, :root {
+        ${COLORS.light}
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            ${COLORS.dark}
+        }
+    }
+
+    html.dark-mode {
+        ${COLORS.dark}
+    }
+
+    .dark-mode-button, .light-mode-button {
+        text-decoration: none;
+        color: var(--color-text);
+    }
+
+    html.dark-mode .dark-mode-button,
+    html.light-mode .light-mode-button {
+        text-decoration: underline;
+        color: var(--color-green);
+    }
+
+    code[class*=language-], pre[class*=language-] {
+        font-size: 80% !important;
+    }
+
       div {
         flex-shrink: 0;
         flex-wrap: wrap;
@@ -162,8 +274,8 @@ export let PageHead = ({
         padding: 15px;
         /* border: 1px solid #ddd; */
         font-family: Inconsolata;
-        background-color: ${Colors.lightOrange};
-        color: #692900;
+        background-color: ${Colors.code};
+        color: ${Colors.codeText};
         border-radius: 4px;
         margin: 0;
         margin-bottom: 1em;
@@ -176,8 +288,8 @@ export let PageHead = ({
       p > code {
         font-size: 90%;
         padding: 4px;
-        background-color: #ffede4;
-        color: #692900;
+        background-color: ${Colors.code};
+        color: ${Colors.codeText};
         border-radius: 4px;
         hyphens: none;
       }
