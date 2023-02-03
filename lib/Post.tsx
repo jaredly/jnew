@@ -123,6 +123,7 @@ const loadComments = (
     },
 ) => {
     const node = document.getElementById('comments')!;
+
     node.textContent = 'Fetching from github...';
     const loadMarkdown = (): Promise<typeof MarkdownIt> =>
         new Promise((resolve, reject) => {
@@ -155,6 +156,7 @@ const loadComments = (
 
             if (!comments.length) {
                 node.textContent = 'No comments yet!';
+                return;
             }
             loadMarkdown().then((markdown) => {
                 node.textContent = '';
@@ -303,9 +305,9 @@ export let renderPost = (
                     <div id="comments" data-gist={gist}>
                         Loading comments...
                     </div>
-                    <script>
+                    <script async>
                         {`const loadComments = ${loadComments.toString()};
-                        loadComments(${JSON.stringify(gist)}, ${JSON.stringify({
+                        const styles = ${JSON.stringify({
                             top: css([
                                 A('display', 'flex'),
                                 A('align-items', 'center'),
@@ -324,13 +326,20 @@ export let renderPost = (
 
                                 A('background', 'var(--color-lightOrange)'),
                             ]),
-                        })});`}
+                        })};
+                        let observer = new IntersectionObserver((entries) => {
+                            if (!entries[0].isIntersecting) return;
+                            observer.disconnect();
+                            loadComments(${JSON.stringify(gist)}, styles);
+                        }, {rootMargin: '200px'});
+                        observer.observe(document.getElementById('comments'));
+                        `}
                     </script>
                     <a
                         href={`https://gist.github.com/${gist}#comments`}
                         target="_blank"
                         className={css([
-                            A('margin-top', '8px'),
+                            A('margin-top', '32px'),
                             A('display', 'block'),
                         ])}
                     >
