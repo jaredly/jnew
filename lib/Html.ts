@@ -17,7 +17,7 @@ let formatAttributes = (attrs: [string, string][]) =>
                 escapeAttributeValue(v) +
                 '"',
         )
-        .join(' ');
+        .join('');
 
 let selfClosing = (tag: string) => {
     switch (tag) {
@@ -38,14 +38,20 @@ export let normal = (
     { attrs, children }: { attrs: [string, string][]; children: string[] },
 ) => {
     let head = name + formatAttributes(preattrs.concat(attrs));
+    const prefix = name === 'html' ? '<!DOCTYPE HTML>\n' : '';
     if (children.length === 0) {
-        return '<' + head + (selfClosing(name) ? '/>' : '></' + name + '>');
+        return (
+            prefix +
+            '<' +
+            head +
+            (selfClosing(name) ? '/>' : '></' + name + '>')
+        );
     } else {
         let body = children.join('\n');
         if (body.includes('\n')) {
-            return '<' + head + '>\n' + body + '\n</' + name + '>';
+            return prefix + '<' + head + '>\n' + body + '\n</' + name + '>';
         } else {
-            return '<' + head + '>' + body + '</' + name + '>';
+            return prefix + '<' + head + '>' + body + '</' + name + '>';
         }
     }
 };
