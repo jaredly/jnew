@@ -267,7 +267,7 @@ export let PageHead = ({
     }
 
     code[class*=language-], pre[class*=language-] {
-        font-size: 80% !important;
+        font-size: 90% !important;
     }
 
       div {
