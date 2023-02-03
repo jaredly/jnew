@@ -10,6 +10,7 @@ import { config } from './Types';
 import { chopSuffix } from './Util';
 import { rssWrapper } from './Rss';
 import { process } from './MarkdownParser';
+import MarkdownIt from 'markdown-it';
 
 export type postBody =
     | { type: 'Html'; body: string }
@@ -112,9 +113,74 @@ let renderBody = ({ type, body }: postBody) => {
 };
 
 // SANDBOXED
-const loadComments = (gist: string) => {
-    const node = document.getElementById('comments');
-    node!.textContent = 'Loaded!';
+const loadComments = (
+    gist: string,
+    styles: {
+        comment: string;
+        body: string;
+        avatar: string;
+        top: string;
+    },
+) => {
+    const node = document.getElementById('comments')!;
+    node!.textContent = 'Fetching from github...';
+    const loadMarkdown = (): Promise<typeof MarkdownIt> =>
+        new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src =
+                'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js';
+            script.onload = () => resolve(window.markdownit);
+            script.onerror = () =>
+                reject(new Error('Unable to load markdown-it'));
+            document.head.append(script);
+        });
+    fetch(`https://api.github.com/gists/${gist}/comments?per_page=100`, {
+        headers: {
+            Accept: 'application/vnd.github+json',
+        },
+    })
+        .then((res) => res.json())
+        .then((raw) => {
+            const comments = raw as {
+                body: string;
+                id: string;
+                url: string;
+                created_at: string;
+                user: {
+                    login: string;
+                    avatar_url: string;
+                    html_url: string;
+                };
+            }[];
+
+            if (!comments.length) {
+                node.textContent = 'No comments yet!';
+            }
+            loadMarkdown().then((markdown) => {
+                node.textContent = '';
+                comments.forEach((comment) => {
+                    const cm = document.createElement('div');
+                    cm.className = styles.comment;
+                    cm.innerHTML = `
+                    <div class="${styles.top}">
+                    <img src="${comment.user.avatar_url}"
+                    class="${styles.avatar}" />
+                    <a href="https://gist.github.com/${gist}?permalink_comment_id=${
+                        comment.id
+                    }#gistcomment-${comment.id}" target="_blank">
+                        ${comment.user.login} on ${new Date(
+                        comment.created_at,
+                    ).toLocaleDateString()}
+                    </a>
+                    </div>
+                    <div class="${styles.body}">
+                        ${markdown({ linkify: true }).render(comment.body)}
+                    </div>
+                    `;
+                    node.append(cm);
+                });
+            });
+        });
 };
 
 export let renderPost = (
@@ -211,13 +277,54 @@ export let renderPost = (
                 {renderBody(postBody)}
             </div>
             {gist ? (
-                <section>
+                <section className={css(Shared.Styles.bodyText)}>
+                    <div
+                        className={css([
+                            A('font-size', '150%'),
+                            A('margin-top', '32px'),
+                        ])}
+                    >
+                        Comments
+                    </div>
+                    <div
+                        className={css([
+                            A('font-size', '80%'),
+                            A('margin-bottom', '32px'),
+                        ])}
+                    >
+                        courtesy of{' '}
+                        <a
+                            href={'https://gist.github.com/' + gist}
+                            target="_blank"
+                        >
+                            github gists
+                        </a>
+                    </div>
                     <div id="comments" data-gist={gist}>
                         Loading comments...
                     </div>
                     <script>
-                        const loadComments = {loadComments.toString()};
-                        loadComments({JSON.stringify(gist)});
+                        {`const loadComments = ${loadComments.toString()};
+                        loadComments(${JSON.stringify(gist)}, ${JSON.stringify({
+                            top: css([
+                                A('display', 'flex'),
+                                A('align-items', 'center'),
+                            ]),
+                            comment: css([A('padding', '8px')]),
+                            avatar: css([
+                                A('width', '40px'),
+                                A('height', '40px'),
+                                A('border-radius', '10px'),
+                                A('margin-right', '16px'),
+                            ]),
+                            body: css([
+                                A('padding', '8px'),
+                                A('margin-top', '16px'),
+                                A('border-radius', '10px'),
+
+                                A('background', 'var(--color-lightOrange)'),
+                            ]),
+                        })});`}
                     </script>
                     <a
                         href={`https://gist.github.com/${gist}#comments`}

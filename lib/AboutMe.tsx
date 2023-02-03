@@ -20,7 +20,7 @@ export let column = ({
             Media('min-width: ' + px(Consts.Media.oneCol), [
                 ['position', 'sticky'],
                 /* ("top", px(Consts.colPadding / 2)), */
-                ['height', 'calc(100vh - ' + px(Consts.colPadding) + ')'],
+                ['height', 'calc(100vh - ' + px(Consts.colPadding * 2) + ')'],
                 ['display', 'flex'],
                 ['flex-wrap', 'nowrap'],
                 ['flex-direction', 'column'],
