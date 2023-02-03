@@ -306,7 +306,7 @@ let BlogColumn = ({ css, posts }: { css: CssFn; posts: post[] }) => {
                                         {day}
                                         {draft ? (
                                             <span style="background-color: red; margin-left: 8px; padding: 4px 8px; display: inline-block; color: white; border-radius: 4px">
-                                                "draft"
+                                                draft
                                             </span>
                                         ) : (
                                             ''

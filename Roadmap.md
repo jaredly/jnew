@@ -6,10 +6,12 @@
 - [x] DARK MODE PLS
 - [x] indicate which links are internal, and which ones are external
 - [ ] try this font maybe https://fonts.google.com/specimen/Spectral?preview.size=23&category=Serif&stylecount=11
-- [ ] and thennnnn let's do some github gisting!
+- [x] and thennnnn let's do some github gisting!
   - btw don't load the comments until they come into view. for simplicityyyess
   - ok, so I want a script to just download the gists to the posts folder
     and then we can render them, kinda like normal?
+  - [ ] the name being the gist ID is actually annoying, lets have it be an attribute on the frontmatter.
+  - [ ] also, should my script actually upload the latest data to gist.xyz? hmmm
 
 ## [x] Homepage
 - [x] talks

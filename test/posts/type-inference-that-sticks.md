@@ -8,11 +8,12 @@ tags:
 categories:
   - Programming
 date: 2023-02-02
+gist: 13abec33c7576c4636ca87039a999cf2
 ---
 
 *What if type inference felt like a real-time conversation, instead of emailing code back and forth?*
 
-Type inference algorithms are faced with an already difficult task -- intuiting what types a user *would* have wrote, but chose not to. Frustration comes when the types that the algorithm assigns are different from those the user had in mind, and especially so when the type error reported is far away from the site of mental mismatch.
+With type inference, compilers are faced with a difficult task: intuiting what types a user *had in mind* (but didn't write down) while writing some code. It all falls apart when the types that the algorithm assigns are different from those the user expected, and especially so when the type error reported is far away from the site of mental mismatch.
 
 <!-- more -->
 
@@ -34,9 +35,9 @@ Roc, on the other hand, follows Elm's admirable commitment to having all type an
 
 ## A sufficiently interactive compiler
 
-With jerd, I'm trying to build a compiler that's "sufficiently interactive", not [sufficiently smart](http://wiki.c2.com/?SufficientlySmartCompiler). Instead of trying to reconstruct the programmer's intentions from a text-dump of source code, the compiler is involved in the entire process of development, both responding to programmer action and giving context-aware feedback in return. In this model, the source code is enriched with the compiler's inferences along the way, which the programmer can inspect & correct (but can also be elided from display for a more compact presentation). Type inference is therefore *incremental* and *reified in the program source*, meaning that, once a function has been written, the compiler need make no guesses about types or the identities of referenced terms.
+With jerd, I'm trying to build a compiler that's "sufficiently interactive" instead of [sufficiently smart](http://wiki.c2.com/?SufficientlySmartCompiler). Instead of trying to reconstruct the programmer's intentions from a text-dump of source code, the compiler is involved in the entire process of development, both responding to programmer action and giving context-aware feedback in return. In this model, the source code is enriched with the compiler's inferences along the way, which the programmer can inspect & correct (but which can also be elided from display for a more compact presentation). Type inference is therefore *incremental* and *reified in the program source*, meaning that, once a function has been written, the compiler need make no guesses about types or the identities of referenced terms.
 
-As a simple example, consider autocomplete. Isn't it funny that autocomplete can allow you to choose exactly what function you want to call, and what local variable you want to reference, but then when the compiler comes along all it has to go on is the autocompleted text. It has to construct local scopes and do name resolution, and if the term has since been renamed then it just falls over.
+As a simple example, consider autocomplete. Isn't it funny that autocomplete can enable you to choose exactly what function you want to call, and what local variable you want to reference, but then when the compiler comes along all it has to go on is the autocompleted text? It has to duplicate all of the work autocomplete did, constructing local scopes and performing top-level name resolution, and if the term has since been renamed then it just falls over.
 
 When typing an identifier in jerd, if you select something from autocomplete, the ID of that term is stuck onto the identifier node (e.g. `myFn#4ea8ff`). This way, the compilation pass doesn't need to do any name resolution -- it knows exactly what is being referenced. And, if you later change the name of a variable, none of the references are broken. (In jerd, references are by a hash of the definition's syntax tree instead of by name, similar to what [unison](https://www.unison-lang.org/learn/the-big-idea/) does.)
 
@@ -69,7 +70,7 @@ your new usage, and marking any other incompatible usages as erroneous.
 See how it's a conversation?
 
 This functionality is intimitely connected to the fact that jerd is a **projectional** language,
-that is to say there is no provision for editing source code as "flat text". Because of this,
+and that there is no provision for editing source code as "flat text". Because of this,
 the compiler can rely on having much more information persisted in the source tree, which would
 otherwise be provibitively verbose if it had to be printed & parsed as syntax. Similarly, interactions
 with the compiler are no longer text-first with optional enhancement by a separate IDE; the compilation process is interactive from the ground up, such that ambiguity doesn't have to be an error -- it can just be a dropdown.
@@ -80,7 +81,6 @@ Lamdu's editor has [a similar interaction to this](https://www.youtube.com/watch
 
 ## Further reading
 
-- [jerd's types](https://github.com/jaredly/j3/blob/main/docs/Types.md)
-- [jerd's algebraic effects](https://github.com/jaredly/j3/blob/main/docs/Algebraic%20Effects.md)
+I'm hoping to write quite a bit more about jerd as I'm fleshing out the language and development environment, but in the meantime you can take a look at the WIP documentation for the [type system](https://github.com/jaredly/j3/blob/main/docs/Types.md) (which borrows quite a bit from [Roc](https://www.roc-lang.org/)) and the [algebraic effects](https://github.com/jaredly/j3/blob/main/docs/Algebraic%20Effects.md) setup, which is inspired by, but fairly different from, that of unison or eff.
 
-
+This whole endeavor is quite experimental, so if you have any feedback or suggestions, I'd love to hear them 😄 leave a comment here, or message me on [mastodon](https://mastodon.social/@jaredly).

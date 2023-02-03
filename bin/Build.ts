@@ -25,4 +25,4 @@ let run = (excludeDrafts: boolean) => {
 };
 
 const [_, drafts] = process.argv;
-run(drafts !== 'drafts');
+run(false);
