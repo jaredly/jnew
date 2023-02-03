@@ -123,7 +123,7 @@ const loadComments = (
     },
 ) => {
     const node = document.getElementById('comments')!;
-    node!.textContent = 'Fetching from github...';
+    node.textContent = 'Fetching from github...';
     const loadMarkdown = (): Promise<typeof MarkdownIt> =>
         new Promise((resolve, reject) => {
             const script = document.createElement('script');
