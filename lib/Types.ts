@@ -2,6 +2,7 @@ import { triple } from './Shared';
 
 export type config = {
     title: string;
+    gist?: string;
     tags: string[];
     categories: string[];
     date: triple;

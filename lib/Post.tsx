@@ -111,6 +111,12 @@ let renderBody = ({ type, body }: postBody) => {
     }
 };
 
+// SANDBOXED
+const loadComments = (gist: string) => {
+    const node = document.getElementById('comments');
+    node!.textContent = 'Loaded!';
+};
+
 export let renderPost = (
     posts: post[],
     {
@@ -123,6 +129,7 @@ export let renderPost = (
             thumbnail,
             article_image,
             draft,
+            gist,
         },
         body: postBody,
     }: post,
@@ -203,6 +210,27 @@ export let renderPost = (
             <div className={'post-body ' + css(Shared.Styles.bodyText)}>
                 {renderBody(postBody)}
             </div>
+            {gist ? (
+                <section>
+                    <div id="comments" data-gist={gist}>
+                        Loading comments...
+                    </div>
+                    <script>
+                        const loadComments = {loadComments.toString()};
+                        loadComments({JSON.stringify(gist)});
+                    </script>
+                    <a
+                        href={`https://gist.github.com/${gist}#comments`}
+                        target="_blank"
+                        className={css([
+                            A('margin-top', '8px'),
+                            A('display', 'block'),
+                        ])}
+                    >
+                        Add a comment on github
+                    </a>
+                </section>
+            ) : null}
         </BodyWithSmallAboutMeColumn>
     );
 
@@ -213,6 +241,8 @@ export let renderPost = (
                 description={description}
                 thumbnail={thumbnail}
                 article_image={article_image}
+                extraHead={`
+                `}
             >
                 <style> {inlineCss()} </style>
             </PageHead>
@@ -393,7 +423,7 @@ export let parseDate = (text: string): triple => {
 export let parseConfig = (
     fileName: string,
     {
-        strings: { title, description, date, thumbnail, article_image },
+        strings: { title, description, date, thumbnail, article_image, gist },
         stringLists: { tags, categories },
         bools: { featured, draft },
     }: doc,
@@ -404,6 +434,7 @@ export let parseConfig = (
         ...{
             title,
             description,
+            gist,
             date: date ? parseDate(date) : config.date,
             thumbnail,
             article_image,
