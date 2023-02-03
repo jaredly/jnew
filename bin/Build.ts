@@ -6,12 +6,12 @@ import { processBlog, processProjects, processTalks } from '../lib/Yak';
 import fetch from 'node-fetch';
 import { chopSuffix } from '../lib/Util';
 
-let run = (excludeDrafts: boolean) => {
+let run = (renderDrafts: boolean) => {
     let outputDir = './test/pages/';
     let inputDir = './test';
 
     let projects = processProjects(inputDir, outputDir);
-    let posts = processBlog(excludeDrafts, inputDir, outputDir);
+    let posts = processBlog(!renderDrafts, inputDir, outputDir);
     let talks = processTalks(inputDir, outputDir);
 
     if (process.env.UPLOAD_GISTS) {
@@ -75,5 +75,4 @@ let run = (excludeDrafts: boolean) => {
     console.log('Finished!');
 };
 
-const [_, drafts] = process.argv;
-run(false);
+run(!!process.env.DRAFTS);

@@ -280,6 +280,11 @@ export let PageHead = ({
       span {
         box-sizing: border-box;
       }
+      code[class*=language-], pre[class*=language-],
+      pre {
+        margin: 0;
+        margin-bottom: 1.5em;
+      }
       pre {
         line-height: 18px;
         font-size: 16px;
@@ -292,8 +297,6 @@ export let PageHead = ({
         background-color: ${Colors.code};
         color: ${Colors.codeText};
         border-radius: 4px;
-        margin: 0;
-        margin-bottom: 1em;
       }
       img {
         max-width: 100%;

@@ -42,26 +42,43 @@ As a simple example, consider autocomplete. Isn't it funny that autocomplete can
 
 When typing an identifier in jerd, if you select something from autocomplete, the ID of that term is stuck onto the identifier node (e.g. `myFn#4ea8ff`). This way, the compilation pass doesn't need to do any name resolution -- it knows exactly what is being referenced. And, if you later change the name of a variable, none of the references are broken. (In jerd, references are by a hash of the definition's syntax tree instead of by name, similar to what [unison](https://www.unison-lang.org/learn/the-big-idea/) does.)
 
-## So what does sticky type inference look like?
+## Sticky type inference
 
 Say you're writing a function with two arguments. Before the body is defined,
 the arguments have the universal type "𝕌".
 
+The interface *looks* like this:
 ```clojure
 (defn movieFromLine [line idx]
-	)
+    )
+```
+But the underlying data has reified ("sticky") type information for all identifiers, something like this:
+```clojure
+(defn movieFromLine [line {id: 0, type: 𝕌}
+                     idx  {id: 1, type: 𝕌}]
+    )
 ```
 
 Then, when you use one of the arguments, the type annotation for that
 argument gets updated, if possible, to the intersection of the current
 annotation and the type required by the new usage.
 
+What you see:
 ```clojure
 (defn movieFromLine [line idx]
-	(switch (split line "!")
-		; split has type (fn [string string] (array string))
-		; so at this point line's type annotation is `string`
-		))
+    (switch (split line "!")
+        ))
+```
+
+What the compiler sees (again, this isn't *inferred* by the compiler, it's actually persisted in the source tree):
+```clojure
+(defn movieFromLine [line {id: 0, type: string}
+                     idx  {id: 1, type: 𝕌}]
+    (switch (split {id: '#ead31a8',
+                    type: (fn [string string] (array string))}
+                line {id: 0}
+                "!")
+        ))
 ```
 
 If there is no intersection, then the new usage is marked as an error,
@@ -72,7 +89,7 @@ See how it's a conversation?
 
 This functionality is intimitely connected to the fact that jerd is a **projectional** language,
 and that there is no provision for editing source code as "flat text". Because of this,
-the compiler can rely on having much more information persisted in the source tree, which would
+the compiler can rely on having **much more information** persisted in the source tree, which would
 otherwise be provibitively verbose if it had to be printed & parsed as syntax. Similarly, interactions
 with the compiler are no longer text-first with optional enhancement by a separate IDE; the compilation process is interactive from the ground up, such that ambiguity doesn't have to be an error -- it can just be a dropdown.
 
@@ -82,6 +99,6 @@ Lamdu's editor has [a similar interaction to this](https://www.youtube.com/watch
 
 ## Further reading
 
-I'm hoping to write quite a bit more about jerd as I'm fleshing out the language and development environment, but in the meantime you can take a look at the WIP documentation for the [type system](https://github.com/jaredly/j3/blob/main/docs/Types.md) (which borrows quite a bit from [Roc](https://www.roc-lang.org/)) and the [algebraic effects](https://github.com/jaredly/j3/blob/main/docs/Algebraic%20Effects.md) setup, which is inspired by, but fairly different from, that of unison or eff.
+I'm hoping to write quite a bit more about jerd as I'm fleshing out the language and development environment, but in the meantime you can take a look at the WIP documentation for the [type system](https://github.com/jaredly/j3/blob/main/docs/Types.md) (which borrows quite a bit from [Roc](https://www.roc-lang.org/)) and the [algebraic effects](https://github.com/jaredly/j3/blob/main/docs/Algebraic%20Effects.md) setup, which is inspired by, but fairly different from, that of [unison](https://www.unison-lang.org/learn/fundamentals/abilities/) and [eff](https://www.eff-lang.org/handlers-tutorial.pdf).
 
 This whole endeavor is quite experimental, so if you have any feedback or suggestions, I'd love to hear them 😄 leave a comment here, or message me on [mastodon](https://mastodon.social/@jaredly).
