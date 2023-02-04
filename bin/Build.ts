@@ -2,7 +2,12 @@ import { readFileSync, writeFileSync } from 'fs';
 import { basename } from 'path';
 import { render } from '../lib/Home';
 import { saveTwitterCache } from '../lib/MarkdownParser';
-import { processBlog, processProjects, processTalks } from '../lib/Yak';
+import {
+    processBlog,
+    processPoetry,
+    processProjects,
+    processTalks,
+} from '../lib/Yak';
 import fetch from 'node-fetch';
 import { chopSuffix } from '../lib/Util';
 
@@ -12,6 +17,7 @@ let run = (renderDrafts: boolean) => {
 
     let projects = processProjects(inputDir, outputDir);
     let posts = processBlog(!renderDrafts, inputDir, outputDir);
+    let poetry = processPoetry(inputDir, outputDir);
     let talks = processTalks(inputDir, outputDir);
 
     if (process.env.UPLOAD_GISTS) {
@@ -83,7 +89,7 @@ let run = (renderDrafts: boolean) => {
     /* Home page */
     writeFileSync(
         outputDir + '/index.html',
-        render(projects, posts, talks),
+        render(projects, posts, talks, poetry),
         'utf8',
     );
 

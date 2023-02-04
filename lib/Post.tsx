@@ -47,17 +47,19 @@ export type post = {
 // let spacer = Shared.spacer;
 // let showDate = Shared.showDate;
 
-let PostAbout = ({
+export let PostAbout = ({
     draft = false,
     css,
     date,
     tags,
+    tagPrefix,
     withPic = true,
 }: {
     draft?: boolean;
     css: CssFn;
     date: triple;
     tags?: string[];
+    tagPrefix?: string;
     withPic?: boolean;
 }) => {
     return (
@@ -79,7 +81,7 @@ let PostAbout = ({
             {tags
                 ?.map((tag) => (
                     <a
-                        href={'/tags/' + tag + '/'}
+                        href={(tagPrefix ?? '') + '/tags/' + tag + '/'}
                         className={css([A('text-decoration', 'none')])}
                     >
                         {tag}
@@ -101,7 +103,7 @@ let PostAbout = ({
 // let pageWithTopAndBottom = Shared.pageWithTopAndBottom;
 // let pageHead = Shared.pageHead;
 
-let renderBody = ({ type, body }: postBody) => {
+export let renderBody = ({ type, body }: postBody) => {
     switch (type) {
         case 'Markdown':
             return process(body);
@@ -206,69 +208,7 @@ export let renderPost = (
     let body = (
         <BodyWithSmallAboutMeColumn
             css={css}
-            toc={
-                <div
-                    className={css([
-                        A('padding', '0 16px'),
-                        A('flex-shrink', '1'),
-                        A('overflow', 'auto'),
-                    ])}
-                >
-                    <a
-                        href="/posts/"
-                        className={css([
-                            A('text-decoration', 'none'),
-                            A('color', 'inherit'),
-                            Hover([['text-decoration', 'underline']]),
-                        ])}
-                    >
-                        <div className={css([])}>Latest posts</div>
-                    </a>
-                    {Shared.hspace(8)}
-                    {posts
-                        .slice(0, 5)
-                        .map(
-                            ({
-                                config: {
-                                    title,
-                                    date: [year, month, day],
-                                    fileName,
-                                },
-                            }) => {
-                                let href = '/' + chopSuffix(fileName) + '/';
-                                return (
-                                    <a
-                                        href={href}
-                                        className={css([
-                                            A('font-size', '16px'),
-                                            A('margin-bottom', '16px'),
-                                            A('display', 'block'),
-                                            A('line-height', '20px'),
-                                            ...Shared.Styles.subtleLink,
-                                        ])}
-                                    >
-                                        <div> {title} </div>
-                                        <div
-                                            className={css([
-                                                A(
-                                                    'color',
-                                                    Shared.Colors.lightText,
-                                                ),
-                                                ...Shared.Styles.row,
-                                            ])}
-                                        >
-                                            {year}
-                                            {Shared.monthName(month)}
-                                            {day}
-                                        </div>
-                                    </a>
-                                );
-                            },
-                        )
-                        .join('\n')}
-                    {Shared.hspace(32)}
-                </div>
-            }
+            toc={latestPosts('Latest posts', '/posts/', css, posts)}
         >
             <h1 className={css(Shared.Styles.titleWithTopMargin)}>
                 {contentTitle}
@@ -278,75 +218,7 @@ export let renderPost = (
             <div className={'post-body ' + css(Shared.Styles.bodyText)}>
                 {renderBody(postBody)}
             </div>
-            {gist ? (
-                <section className={css(Shared.Styles.bodyText)}>
-                    <div
-                        className={css([
-                            A('font-size', '150%'),
-                            A('margin-top', '32px'),
-                        ])}
-                    >
-                        Comments
-                    </div>
-                    <div
-                        className={css([
-                            A('font-size', '80%'),
-                            A('margin-bottom', '32px'),
-                        ])}
-                    >
-                        courtesy of{' '}
-                        <a
-                            href={'https://gist.github.com/' + gist}
-                            target="_blank"
-                        >
-                            github gists
-                        </a>
-                    </div>
-                    <div id="comments" data-gist={gist}>
-                        Loading comments...
-                    </div>
-                    <script async>
-                        {`const loadComments = ${loadComments.toString()};
-                        const styles = ${JSON.stringify({
-                            top: css([
-                                A('display', 'flex'),
-                                A('align-items', 'center'),
-                            ]),
-                            comment: css([A('padding', '8px')]),
-                            avatar: css([
-                                A('width', '40px'),
-                                A('height', '40px'),
-                                A('border-radius', '10px'),
-                                A('margin-right', '16px'),
-                            ]),
-                            body: css([
-                                A('padding', '8px'),
-                                A('margin-top', '16px'),
-                                A('border-radius', '10px'),
-
-                                A('background', 'var(--color-lightOrange)'),
-                            ]),
-                        })};
-                        let observer = new IntersectionObserver((entries) => {
-                            if (!entries[0].isIntersecting) return;
-                            observer.disconnect();
-                            loadComments(${JSON.stringify(gist)}, styles);
-                        }, {rootMargin: '200px'});
-                        observer.observe(document.getElementById('comments'));
-                        `}
-                    </script>
-                    <a
-                        href={`https://gist.github.com/${gist}#comments`}
-                        target="_blank"
-                        className={css([
-                            A('margin-top', '32px'),
-                            A('display', 'block'),
-                        ])}
-                    >
-                        Add a comment on github
-                    </a>
-                </section>
-            ) : null}
+            {gist ? renderComments(css, gist) : null}
         </BodyWithSmallAboutMeColumn>
     );
 
@@ -400,6 +272,8 @@ export let postList = (
     posts: post[],
     tags: [string, number][],
     contentTitle: string,
+    showReadTime = true,
+    tagPrefix = '',
 ) => {
     let { css, inlineCss } = startPage();
 
@@ -417,7 +291,7 @@ export let postList = (
                     {tags
                         .map(([tag, count]) => (
                             <a
-                                href={'/tags/' + tag + '/'}
+                                href={tagPrefix + '/tags/' + tag + '/'}
                                 className={css([
                                     A('color', 'currentColor'),
                                     A('white-space', 'nowrap'),
@@ -484,12 +358,18 @@ export let postList = (
                                     ) : null
                                     // (Omd.to_html(Omd.of_string(teaser)))
                                 }
-                                <a
-                                    className={css([A('font-size', '24px')])}
-                                    href={href}
-                                >
-                                    {readTime}
-                                </a>
+                                {showReadTime ? (
+                                    <a
+                                        className={css([
+                                            A('font-size', '24px'),
+                                        ])}
+                                        href={href}
+                                    >
+                                        {readTime}
+                                    </a>
+                                ) : (
+                                    ''
+                                )}
                             </div>
                         );
                     })
@@ -691,3 +571,145 @@ export let parseNm = (fileName: string, content: string): post => {
         body: { type: 'Nm', body: nodes },
     };
 };
+
+export function latestPosts(
+    title: string,
+    base: string,
+    css: CssFn,
+    posts: post[],
+): string {
+    return (
+        <div
+            className={css([
+                A('padding', '0 16px'),
+                A('flex-shrink', '1'),
+                A('overflow', 'auto'),
+            ])}
+        >
+            <a
+                href={base}
+                className={css([
+                    A('text-decoration', 'none'),
+                    A('color', 'inherit'),
+                    Hover([['text-decoration', 'underline']]),
+                ])}
+            >
+                <div className={css([])}>{title}</div>
+            </a>
+            {Shared.hspace(8)}
+            {posts
+                .slice(0, 5)
+                .map(
+                    ({
+                        config: {
+                            title,
+                            date: [year, month, day],
+                            fileName,
+                        },
+                    }) => {
+                        let href = '/' + chopSuffix(fileName) + '/';
+                        return (
+                            <a
+                                href={href}
+                                className={css([
+                                    A('font-size', '16px'),
+                                    A('margin-bottom', '16px'),
+                                    A('display', 'block'),
+                                    A('line-height', '20px'),
+                                    ...Shared.Styles.subtleLink,
+                                ])}
+                            >
+                                <div> {title} </div>
+                                <div
+                                    className={css([
+                                        A('color', Shared.Colors.lightText),
+                                        ...Shared.Styles.row,
+                                    ])}
+                                >
+                                    {year}
+                                    {Shared.monthName(month)}
+                                    {day}
+                                </div>
+                            </a>
+                        );
+                    },
+                )
+                .join('\n')}
+            {Shared.hspace(32)}
+        </div>
+    );
+}
+
+function renderComments(
+    css: (
+        items: import('/Users/jared/clone/sites/jnew/lib/sjsx').CssAttr[],
+    ) => string,
+    gist: string,
+) {
+    return (
+        <section className={css(Shared.Styles.bodyText)}>
+            <div
+                className={css([
+                    A('font-size', '150%'),
+                    A('margin-top', '32px'),
+                ])}
+            >
+                Comments
+            </div>
+            <div
+                className={css([
+                    A('font-size', '80%'),
+                    A('margin-bottom', '32px'),
+                ])}
+            >
+                courtesy of{' '}
+                <a href={'https://gist.github.com/' + gist} target="_blank">
+                    github gists
+                </a>
+            </div>
+            <div id="comments" data-gist={gist}>
+                Loading comments...
+            </div>
+            <script async>
+                {`const loadComments = ${loadComments.toString()};
+                        const styles = ${JSON.stringify({
+                            top: css([
+                                A('display', 'flex'),
+                                A('align-items', 'center'),
+                            ]),
+                            comment: css([A('padding', '8px')]),
+                            avatar: css([
+                                A('width', '40px'),
+                                A('height', '40px'),
+                                A('border-radius', '10px'),
+                                A('margin-right', '16px'),
+                            ]),
+                            body: css([
+                                A('padding', '8px'),
+                                A('margin-top', '16px'),
+                                A('border-radius', '10px'),
+
+                                A('background', 'var(--color-lightOrange)'),
+                            ]),
+                        })};
+                        let observer = new IntersectionObserver((entries) => {
+                            if (!entries[0].isIntersecting) return;
+                            observer.disconnect();
+                            loadComments(${JSON.stringify(gist)}, styles);
+                        }, {rootMargin: '200px'});
+                        observer.observe(document.getElementById('comments'));
+                        `}
+            </script>
+            <a
+                href={`https://gist.github.com/${gist}#comments`}
+                target="_blank"
+                className={css([
+                    A('margin-top', '32px'),
+                    A('display', 'block'),
+                ])}
+            >
+                Add a comment on github
+            </a>
+        </section>
+    );
+}

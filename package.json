@@ -6,7 +6,7 @@
     "scripts": {
         "serve": "http-server test/pages",
         "test": "esy build && sh -c \"$(esy x which Hello) drafts\"",
-        "start": "env DRAFTS=true watchexec -w lib -w bin -w test/posts npm run build",
+        "start": "env DRAFTS=true watchexec -w test/poems -w lib -w bin -w test/posts npm run build",
         "publish": "npm run build && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets",
         "build": "esbuild --bundle bin/Build.ts --external:markdown-it-prism --platform=node --sourcemap=inline > ok.js && node --enable-source-maps ok.js && rm ok.js",
         "upload": "env DRAFTS=true UPLOAD_GISTS=true npm run build",

@@ -116,6 +116,9 @@ import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-graphql';
 import 'prismjs/components/prism-diff';
 
+const mdpoetry = md('default', { breaks: true });
+export const processPoetry = (rawBody: string) => mdpoetry.render(rawBody);
+
 const mdit = md('default', {
     linkify: true,
     typographer: true,
@@ -124,7 +127,6 @@ const mdit = md('default', {
     .use(mdi, {
         permalink: mdi.permalink.headerLink(),
         slugify: (text) => {
-            // console.log(text);
             return text
                 .trim()
                 .replaceAll('"', '&quot;')

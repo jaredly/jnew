@@ -6,6 +6,7 @@ import { parseProject, project, renderList, renderProject } from './Project';
 import { dateSort } from './Shared';
 import { parseToml } from './Toml';
 import { parseNm, parsePost, post, postList, renderPost } from './Post';
+import { renderPoem } from './Poetry';
 
 let sortPostsByDate = (
     { config: { date: date1 } }: post,
@@ -55,39 +56,6 @@ let collectPages = <V>(
             return [fullDest, result];
         });
 };
-
-// let renderPages = (render, dest, config) => {
-//   pages.map(
-//     ([dest, config]) => {
-//       let html = render(config);
-//       writeFileSync(dest, html, 'utf8');
-//     },
-//   );
-// };
-
-// let assembleTags = (posts: post[]) => {
-//   posts
-//   .reduce(
-//        (byTag, {config, intro, body}) => {
-//          let byTag =
-//            List.fold_left(
-//              (byTag, tag) =>
-//                StrMap.add(
-//                  tag,
-//                  switch (StrMap.find(tag, byTag)) {
-//                  | exception Not_found => [{config, intro, body}]
-//                  | items => [{Post.config, intro, body}, ...items]
-//                  },
-//                  byTag,
-//                ),
-//              byTag,
-//              config.tags,
-//            );
-//          byTag;
-//        },
-//        {} as {[key: string]c}
-//      );
-// };
 
 let assembleTags = (posts: post[]) => {
     return posts.reduce((byTag, post) => {
@@ -158,6 +126,58 @@ export let processProjects = (inputDir: string, outputDir: string) => {
     });
 
     return projects;
+};
+
+export let processPoetry = (inputDir: string, outputDir: string) => {
+    let fullPosts = collectPages(
+        inputDir,
+        outputDir,
+        'poems',
+        (fileName, contents) => {
+            let [opts, body] = splitTopYaml(contents);
+            return parsePost(fileName, opts, body);
+        },
+    );
+    let posts = fullPosts
+        .map((p) => p[1])
+        .filter(Boolean)
+        .sort(sortPostsByDate);
+    fullPosts.forEach(([dest, post]) => {
+        let html = renderPoem(posts, post);
+        writeFileSync(dest, html, 'utf8');
+    });
+
+    let tags = assembleTags(posts);
+    let tagCounts = Object.entries(tags)
+        .map(([res, value]) => [res, value.length] as [string, number])
+        .sort(([k, n], [v, n2]) => n2 - n);
+
+    let { main: html, rss } = postList(
+        'https://jaredforsyth.com',
+        posts,
+        tagCounts,
+        'All poems',
+        false,
+        '/poems',
+    );
+
+    writeFileSync(outputDir + '/poems/index.html', html);
+    writeFileSync(outputDir + '/poems/rss.xml', rss);
+
+    Object.entries(tags).forEach(([tag, posts]) => {
+        let dest = outputDir + '/poems/tags/' + tag;
+        mkdirSync(dest, { recursive: true });
+        let { main: html, rss } = postList(
+            'https://jaredforsyth.com',
+            posts.sort(sortPostsByDate),
+            tagCounts,
+            'Tag: ' + tag,
+        );
+        writeFileSync(dest + '/index.html', html);
+        writeFileSync(dest + '/rss.xml', rss);
+    }, tags);
+
+    return posts;
 };
 
 export let processBlog = (

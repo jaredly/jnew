@@ -263,10 +263,20 @@ let TalksColumn = ({ css, talks }: { css: CssFn; talks: talk[] }) => {
     );
 };
 
-let BlogColumn = ({ css, posts }: { css: CssFn; posts: post[] }) => {
+let BlogColumn = ({
+    css,
+    posts,
+    title,
+    base,
+}: {
+    css: CssFn;
+    posts: post[];
+    title: string;
+    base: string;
+}) => {
     return (
         <fragment>
-            <Header href="/posts/" css={css} title="Blog posts" />
+            <Header href={base} css={css} title={title} />
             <div>
                 {posts
                     .map(
@@ -324,15 +334,32 @@ let BlogColumn = ({ css, posts }: { css: CssFn; posts: post[] }) => {
     );
 };
 
-export let render = (projects: project[], posts: post[], talks: talk[]) => {
+export let render = (
+    projects: project[],
+    posts: post[],
+    talks: talk[],
+    poetry: post[],
+) => {
     let { css, inlineCss } = startPage();
 
     let body = (
         <BodyWithAboutMeColumn css={css}>
             <div className={css(Styles.column)}>
-                {BlogColumn({ css, posts })}
+                {BlogColumn({
+                    css,
+                    posts,
+                    title: 'Blog posts',
+                    base: '/posts/',
+                })}
             </div>
             <div className={css(Styles.column)}>
+                {BlogColumn({
+                    css,
+                    posts: poetry,
+                    title: 'Poetry',
+                    base: '/poems/',
+                })}
+                <div className={css([A('height', '32px')])} />
                 {TalksColumn({ css, talks })}
             </div>
             <div className={css([A('max-width', '700px'), ...Styles.column])}>

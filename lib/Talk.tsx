@@ -129,30 +129,32 @@ export let renderTalkList = (talks: talk[], contentTitle: string) => {
                             >
                                 {venues
                                     .map(({ where, date, video }) => {
-                                        <li>
-                                            {video ? (
-                                                <a
-                                                    href={video}
-                                                    className={css([
-                                                        A(
-                                                            'font-family',
-                                                            'Open sans, sans-serif',
-                                                        ),
-                                                        A(
-                                                            'font-size',
-                                                            Shared.px(
-                                                                Consts.titleSize,
+                                        return (
+                                            <li>
+                                                {video ? (
+                                                    <a
+                                                        href={video}
+                                                        className={css([
+                                                            A(
+                                                                'font-family',
+                                                                'Open sans, sans-serif',
                                                             ),
-                                                        ),
-                                                        ...Styles.hoverUnderline,
-                                                    ])}
-                                                >
-                                                    {where} 📹
-                                                </a>
-                                            ) : (
-                                                where
-                                            )}
-                                        </li>;
+                                                            A(
+                                                                'font-size',
+                                                                Shared.px(
+                                                                    Consts.titleSize,
+                                                                ),
+                                                            ),
+                                                            ...Styles.hoverUnderline,
+                                                        ])}
+                                                    >
+                                                        {where} 📹
+                                                    </a>
+                                                ) : (
+                                                    where
+                                                )}
+                                            </li>
+                                        );
                                     }, venues)
                                     .join('\n')}
                             </ul>
