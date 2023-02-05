@@ -270,6 +270,13 @@ export let PageHead = ({
         font-size: 90% !important;
     }
 
+    #comments p {
+        font-size: 90%;
+    }
+    #comments p:last-child {
+        padding-bottom: 0;
+    }
+
       div {
         flex-shrink: 0;
         flex-wrap: wrap;

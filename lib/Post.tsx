@@ -178,7 +178,9 @@ const loadComments = (
                     </a>
                     </div>
                     <div class="${styles.body}">
-                        ${markdown({ linkify: true }).render(comment.body)}
+                        ${markdown({ linkify: true, breaks: true }).render(
+                            comment.body,
+                        )}
                     </div>
                     `;
                     node.append(cm);
@@ -344,6 +346,7 @@ export let postList = (
                                     date={config.date}
                                     tags={config.tags}
                                     withPic={false}
+                                    tagPrefix={tagPrefix}
                                 />
                                 {
                                     teaser ? (
@@ -685,7 +688,7 @@ function renderComments(
                                 A('margin-right', '16px'),
                             ]),
                             body: css([
-                                A('padding', '8px'),
+                                A('padding', '16px'),
                                 A('margin-top', '16px'),
                                 A('border-radius', '10px'),
 

@@ -172,6 +172,8 @@ export let processPoetry = (inputDir: string, outputDir: string) => {
             posts.sort(sortPostsByDate),
             tagCounts,
             'Tag: ' + tag,
+            false,
+            '/poems',
         );
         writeFileSync(dest + '/index.html', html);
         writeFileSync(dest + '/rss.xml', rss);
