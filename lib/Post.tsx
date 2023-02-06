@@ -117,6 +117,7 @@ export let renderBody = ({ type, body }: postBody) => {
 // SANDBOXED
 const loadComments = (
     gist: string,
+    hackerNews: string | null,
     styles: {
         comment: string;
         body: string;
@@ -125,8 +126,8 @@ const loadComments = (
     },
 ) => {
     const node = document.getElementById('comments')!;
-
     node.textContent = 'Fetching from github...';
+
     const loadMarkdown = (): Promise<typeof MarkdownIt> =>
         new Promise((resolve, reject) => {
             const script = document.createElement('script');
@@ -137,6 +138,77 @@ const loadComments = (
                 reject(new Error('Unable to load markdown-it'));
             document.head.append(script);
         });
+    const waitForMarkdown = loadMarkdown();
+
+    if (hackerNews) {
+        const second = document.getElementById('hn')!;
+        second.textContent = 'Fetching hn comments ...';
+        fetch(`https://hn.algolia.com/api/v1/items/${hackerNews}`)
+            .then((res) => res.json())
+            .then((raw) => {
+                type HNComment = {
+                    children: HNComment[];
+                    author: string;
+                    created_at: string;
+                    text: string;
+                    id: string;
+                };
+                const top = raw as HNComment;
+                if (!top.children.length) {
+                    return;
+                }
+
+                waitForMarkdown.then((markdown) => {
+                    const renderHn = (comment: HNComment) => {
+                        if (!comment.text) {
+                            console.warn('no', comment);
+                            return document.createTextNode('');
+                        }
+                        const node = document.createElement('div');
+                        node.className = styles.comment;
+                        node.innerHTML = `
+                    <div class="${styles.top}">
+                    <a href="https://news.ycombinator.com/item?id=${
+                        comment.id
+                    }" target="_blank">
+                        ${comment.author} on ${new Date(
+                            comment.created_at,
+                        ).toLocaleDateString()}
+                    </a>
+                    </div>
+                    <div class="${styles.body}">
+                        ${comment.text}
+                    </div>
+                `;
+                        if (comment.children.length) {
+                            const children = document.createElement('div');
+                            children.style.paddingLeft = '8px';
+                            children.style.borderLeft =
+                                '16px solid var(--color-lightOrange)';
+                            children.style.marginTop = '16px';
+                            comment.children.forEach((child) => {
+                                children.append(renderHn(child));
+                            });
+                            node.append(children);
+                        }
+                        return node;
+                    };
+                    second.innerHTML = `
+            <div style="font-size: 150%; margin-top: 40px">
+                Commentary
+            </div>
+            <div style="font-size: 80%; margin-bottom: 32px">
+                courtesy of <a href="https://news.ycombinator.com/item?id=${hackerNews}" target="_blank">
+                    hacker news
+                </a>
+            </div>`;
+                    top.children.forEach((child) => {
+                        second.append(renderHn(child));
+                    });
+                });
+            });
+    }
+
     fetch(`https://api.github.com/gists/${gist}/comments?per_page=100`, {
         headers: {
             Accept: 'application/vnd.github+json',
@@ -160,7 +232,7 @@ const loadComments = (
                 node.textContent = 'No comments yet!';
                 return;
             }
-            loadMarkdown().then((markdown) => {
+            waitForMarkdown.then((markdown) => {
                 node.textContent = '';
                 comments.forEach((comment) => {
                     const cm = document.createElement('div');
@@ -202,6 +274,7 @@ export let renderPost = (
             article_image,
             draft,
             gist,
+            hn,
         },
         body: postBody,
     }: post,
@@ -220,7 +293,7 @@ export let renderPost = (
             <div className={'post-body ' + css(Shared.Styles.bodyText)}>
                 {renderBody(postBody)}
             </div>
-            {gist ? renderComments(css, gist) : null}
+            {gist ? renderComments(css, gist, hn) : null}
         </BodyWithSmallAboutMeColumn>
     );
 
@@ -422,7 +495,15 @@ export let parseDate = (text: string): triple => {
 export let parseConfig = (
     fileName: string,
     {
-        strings: { title, description, date, thumbnail, article_image, gist },
+        strings: {
+            title,
+            description,
+            date,
+            thumbnail,
+            article_image,
+            gist,
+            hn,
+        },
         stringLists: { tags, categories },
         bools: { featured, draft },
     }: doc,
@@ -441,6 +522,7 @@ export let parseConfig = (
             categories,
             featured,
             draft,
+            hn,
         },
     };
 };
@@ -648,7 +730,9 @@ function renderComments(
         items: import('/Users/jared/clone/sites/jnew/lib/sjsx').CssAttr[],
     ) => string,
     gist: string,
+    hackerNews?: string,
 ) {
+    console.log('comment');
     return (
         <section className={css(Shared.Styles.bodyText)}>
             <div
@@ -673,6 +757,17 @@ function renderComments(
             <div id="comments" data-gist={gist}>
                 Loading comments...
             </div>
+            <a
+                href={`https://gist.github.com/${gist}#comments`}
+                target="_blank"
+                className={css([
+                    A('margin-top', '32px'),
+                    A('display', 'block'),
+                ])}
+            >
+                Add a comment on github
+            </a>
+            <div id="hn"></div>
             <script async>
                 {`const loadComments = ${loadComments.toString()};
                         const styles = ${JSON.stringify({
@@ -698,21 +793,13 @@ function renderComments(
                         let observer = new IntersectionObserver((entries) => {
                             if (!entries[0].isIntersecting) return;
                             observer.disconnect();
-                            loadComments(${JSON.stringify(gist)}, styles);
+                            loadComments(${JSON.stringify(gist)}, ${
+                    hackerNews ? JSON.stringify(hackerNews) : null
+                }, styles);
                         }, {rootMargin: '200px'});
                         observer.observe(document.getElementById('comments'));
                         `}
             </script>
-            <a
-                href={`https://gist.github.com/${gist}#comments`}
-                target="_blank"
-                className={css([
-                    A('margin-top', '32px'),
-                    A('display', 'block'),
-                ])}
-            >
-                Add a comment on github
-            </a>
         </section>
     );
 }

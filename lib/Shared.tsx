@@ -276,6 +276,13 @@ export let PageHead = ({
     #comments p:last-child {
         padding-bottom: 0;
     }
+    #hn p {
+        font-size: 60%;
+        line-height: 1.8em;
+    }
+    #hn p:last-child {
+        padding-bottom: 0;
+    }
 
       div {
         flex-shrink: 0;
