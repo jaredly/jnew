@@ -13,4 +13,5 @@ export type config = {
     draft: boolean;
     fileName: string;
     wordCount?: number;
+    hn?: string;
 };

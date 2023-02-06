@@ -9,6 +9,7 @@ categories:
   - Programming
 date: 2023-02-04
 gist: 13abec33c7576c4636ca87039a999cf2
+hn: 34658021
 ---
 
 *What if type inference felt like a real-time conversation, instead of emailing code back and forth?*

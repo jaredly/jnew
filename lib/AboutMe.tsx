@@ -157,6 +157,26 @@ export let BodyWithSmallAboutMeColumn = ({
 
     let body = (
         <body className={css(Styles.fullBody)} lang="en">
+            <a
+                href="/"
+                className={css([
+                    A('position', 'fixed'),
+                    A('top', '10px'),
+                    A('left', '10px'),
+                    A('padding', '8px'),
+                    A('background-color', 'black'),
+                    Media('min-width: 1061px', [['display', 'none']]),
+                ])}
+            >
+                <div
+                    className={css([
+                        A('height', '32px'),
+                        A('width', '32px'),
+                        A('background-size', 'cover'),
+                    ])}
+                    style="background-image: url(/images/logo/JF_64.png)"
+                />
+            </a>
             <div
                 className={css([
                     ...Styles.columnWrapper,

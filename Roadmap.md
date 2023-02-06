@@ -10,7 +10,7 @@
   - btw don't load the comments until they come into view. for simplicityyyess
   - ok, so I want a script to just download the gists to the posts folder
     and then we can render them, kinda like normal?
-  - [ ] the name being the gist ID is actually annoying, lets have it be an attribute on the frontmatter.
+  - [x] the name being the gist ID is actually annoying, lets have it be an attribute on the frontmatter.
   - [ ] also, should my script actually upload the latest data to gist.xyz? hmmm
 
 ## [x] Homepage
