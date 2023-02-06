@@ -9,7 +9,7 @@ import { doc } from './Toml';
 import { config } from './Types';
 import { chopSuffix } from './Util';
 import { rssWrapper } from './Rss';
-import { process } from './MarkdownParser';
+import { process, processPoetry } from './MarkdownParser';
 import MarkdownIt from 'markdown-it';
 
 export type postBody =
@@ -319,6 +319,7 @@ let rss = (
     urlBase: string,
     posts: post[],
     tags: [string, number][],
+    poetry?: boolean,
 ) => {
     return rssWrapper(
         title,
@@ -326,14 +327,20 @@ let rss = (
             let href = urlBase + '/' + chopSuffix(config.fileName) + '/';
             let readTime = Shared.minuteReadText(config.wordCount);
             let description =
-                (intro ? renderBody(intro) + ' ' : '') +
+                (intro
+                    ? (poetry
+                          ? processPoetry(intro.body as string)
+                          : renderBody(intro)) + ' '
+                    : '') +
                 readTime +
                 (config.draft ? ' [DRAFT]' : '');
             return {
                 title: config.title,
                 description,
                 url: href,
-                content: renderBody(body),
+                content: poetry
+                    ? processPoetry(body.body as string)
+                    : renderBody(body),
                 //  descriptionHtml: description |> Rss.escapeContent,
                 date: config.date,
                 category: undefined,
@@ -429,7 +436,19 @@ export let postList = (
                                                 ...Shared.Styles.bodyText,
                                             ])}
                                         >
-                                            {renderBody(teaser)}
+                                            {tagPrefix === '/poems'
+                                                ? processPoetry(
+                                                      teaser.body as string,
+                                                  )
+                                                : renderBody(teaser)}
+                                            <a
+                                                className={css([
+                                                    A('font-size', '80%'),
+                                                ])}
+                                                href={href}
+                                            >
+                                                ...full post...
+                                            </a>
                                         </div>
                                     ) : null
                                     // (Omd.to_html(Omd.of_string(teaser)))
@@ -467,7 +486,13 @@ export let postList = (
     );
     return {
         main,
-        rss: rss(contentTitle + ' | JaredForsyth.com', urlBase, posts, tags),
+        rss: rss(
+            contentTitle + ' | JaredForsyth.com',
+            urlBase,
+            posts,
+            tags,
+            tagPrefix === '/poems',
+        ),
     };
 };
 
@@ -557,12 +582,13 @@ let parseJsonConfig = (
     } as config;
 };
 
-let getIntro = (body: string) => {
-    const parts = body.split('<!-- more -->');
+let getIntro = (body: string): [string | null, string] => {
+    const mid = '\n<!-- more -->\n';
+    const parts = body.split(mid);
     if (parts.length > 1) {
-        return parts[0];
+        return [parts[0], parts.join('\n')];
     }
-    return null;
+    return [null, body];
 };
 
 // let (|?>>) = (v, f) =>
@@ -573,10 +599,10 @@ let getIntro = (body: string) => {
 
 export let parsePost = (fileName: string, opts: doc, content: string): post => {
     let config = parseConfig(fileName, opts);
-    let intro = getIntro(content);
+    let [intro, body] = getIntro(content);
     let isMarkdown = fileName.endsWith('.md');
     let wordCount = isMarkdown
-        ? content.split(/[^a-zA-Z0-9-]+/).length
+        ? body.split(/[^a-zA-Z0-9-]+/).length
         : undefined;
     config.wordCount = wordCount;
 
@@ -584,12 +610,12 @@ export let parsePost = (fileName: string, opts: doc, content: string): post => {
         ? {
               config,
               intro: intro ? { type: 'Markdown', body: intro } : undefined,
-              body: { type: 'Markdown', body: content },
+              body: { type: 'Markdown', body: body },
           }
         : {
               intro: intro ? { type: 'Html', body: intro } : undefined,
               config,
-              body: { type: 'Html', body: content },
+              body: { type: 'Html', body: body },
           };
 };
 

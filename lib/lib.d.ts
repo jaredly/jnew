@@ -30,6 +30,7 @@ namespace JSX {
         main: props;
         header: props;
         footer: props;
+        em: props;
         h1: props;
         h2: props;
         h3: props;
