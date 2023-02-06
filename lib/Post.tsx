@@ -441,14 +441,16 @@ export let postList = (
                                                       teaser.body as string,
                                                   )
                                                 : renderBody(teaser)}
-                                            <a
-                                                className={css([
-                                                    A('font-size', '80%'),
-                                                ])}
-                                                href={href}
-                                            >
-                                                ...full post...
-                                            </a>
+                                            {!showReadTime ? (
+                                                <a
+                                                    className={css([
+                                                        A('font-size', '80%'),
+                                                    ])}
+                                                    href={href}
+                                                >
+                                                    ...full post...
+                                                </a>
+                                            ) : null}
                                         </div>
                                     ) : null
                                     // (Omd.to_html(Omd.of_string(teaser)))

@@ -5,9 +5,10 @@ import { normal } from './Html';
 export const jsx = (
     name: string | ((args: any & { children: string[] }) => string),
     args: any,
-    ...children: string[]
+    ...children: (string | boolean | null | undefined)[]
 ): string => {
     // console.log(name, children.length);
+    children = children.filter((child) => child != null && child !== false);
     if (name === 'fragment') {
         return children.join('\n');
     }

@@ -35,7 +35,13 @@ let selfClosing = (tag: string) => {
 export let normal = (
     name: string,
     preattrs: [string, string][],
-    { attrs, children }: { attrs: [string, string][]; children: string[] },
+    {
+        attrs,
+        children,
+    }: {
+        attrs: [string, string][];
+        children: (string | boolean | null | undefined)[];
+    },
 ) => {
     let head = name + formatAttributes(preattrs.concat(attrs));
     const prefix = name === 'html' ? '<!DOCTYPE HTML>\n' : '';
