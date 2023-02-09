@@ -10,7 +10,9 @@ date: 2014-03-20 16:04:00
 ---
 A while ago, I made a cellular automata simulator in Go, inspired by [this video](https://www.youtube.com/watch?v=M4cV0nCIZoc) about a "rock, paper, scissors" simulation, where there are three "species" of cells which consume each other. <!-- Here's [a post about that](). -->
 
-Last week I rewrote this in Rust<!-- more -->, with a number of modifications. There are now four colors, which make the system far more stable, resulting in a much more pleasing simulation (imo).
+Last week I rewrote this in Rust,
+<!-- more -->
+with a number of modifications. There are now four colors, which make the system far more stable, resulting in a much more pleasing simulation (imo).
 
 Here's the result:
 
