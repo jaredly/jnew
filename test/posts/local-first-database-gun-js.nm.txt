@@ -16,7 +16,7 @@
 
 # {"type":"normal","depth":1}
 
-  Using my [criteria for a local-first database](https://jaredforsyth.com/posts/in-search-of-a-local-first-database/), here's how it stacks up:
+  Using my [criteria for a local-first database](/posts/in-search-of-a-local-first-database/), here's how it stacks up:
 
 # {"type":"normal","depth":1}
 
@@ -36,7 +36,7 @@
 
 # {"type":"normal","depth":4}
 
-   Looks like they've got a CRDT setup where they denormalize any nested data structures, so you can modify one attribute on one client and another attribute on another, and the changes will be merged. For a given atomic attribute, it uses "last-write-wins" (for a best-effort definition of "last" based on a [hybrid logical clock](https://jaredforsyth.com/posts/hybrid-logical-clocks/)).
+   Looks like they've got a CRDT setup where they denormalize any nested data structures, so you can modify one attribute on one client and another attribute on another, and the changes will be merged. For a given atomic attribute, it uses "last-write-wins" (for a best-effort definition of "last" based on a [hybrid logical clock](/posts/hybrid-logical-clocks/)).
 
 # {"type":"normal","depth":3}
 
@@ -52,7 +52,7 @@
 
 # {"type":"normal","depth":4}
 
-   From their [CRDT docs](https://github.com/amark/gun/wiki/Conflict-Resolution-with-Guns) it looks like they use a [hybrid logical clock](https://jaredforsyth.com/posts/hybrid-logical-clocks/), so intent should be preserved pretty well.
+   From their [CRDT docs](https://github.com/amark/gun/wiki/Conflict-Resolution-with-Guns) it looks like they use a [hybrid logical clock](/posts/hybrid-logical-clocks/), so intent should be preserved pretty well.
 
 # {"type":"header","depth":1}
 

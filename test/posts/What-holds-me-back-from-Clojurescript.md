@@ -82,19 +82,19 @@ But I haven't used them enough to give a real review. In rust I mostly use macro
 #### Clojure Startup time
 [Twitter tells me](https://twitter.com/borkdude/status/669422012759150592) that this doesn't end up being a huge problem, but it's always a huge drag when I try to get started.
 
-```
+```bash
 $ time lein help
 ...
 lein help  1.62s user 0.24s system 104% cpu 1.785 total
 ```
 
-```
+```bash
 $ time boot help
 ...
 boot help  11.56s user 0.70s system 278% cpu 4.395 total
 ```
 
-```
+```bash
 $ time lein repl
 > (ctrl-c as soon as prompt appears)
 lein repl  5.65s user 0.44s system 78% cpu 7.801 total
@@ -102,7 +102,7 @@ lein repl  5.65s user 0.44s system 78% cpu 7.801 total
 
 Someone made an npm package with the bootstrapped clojurescript repl, which helps a lot:
 
-```
+```bash
 $time cljs
 > (ctrl-c as soon as prompt appears)
 cljs  0.95s user 0.13s system 79% cpu 1.361 total
@@ -112,13 +112,13 @@ cljs  0.95s user 0.13s system 79% cpu 1.361 total
 
 #### vs Javascript
 
-```
+```bash
 $ time npm help
 ...
 npm help  0.34s user 0.10s system 79% cpu 0.548 total
 ```
 
-```
+```bash
 $ time node
 > (ctrl-c as soon as prompt appears)
 node  0.10s user 0.01s system 20% cpu 0.543 total

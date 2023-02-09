@@ -20,7 +20,7 @@
 
 # {"type":"normal","depth":1}
 
-  I'll be using my [local-first database criteria](https://jaredforsyth.com/posts/in-search-of-a-local-first-database/) for this evaluation. You can also look at the evaluations of [gun-js](https://jaredforsyth.com/posts/local-first-database-gun-js/) and [remoteStorage.js](https://jaredforsyth.com/posts/local-first-database-remotestorage/) to see how they compare.
+  I'll be using my [local-first database criteria](/posts/in-search-of-a-local-first-database/) for this evaluation. You can also look at the evaluations of [gun-js](/posts/local-first-database-gun-js/) and [remoteStorage.js](/posts/local-first-database-remotestorage/) to see how they compare.
 
 # {"type":"header","depth":1}
 

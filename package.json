@@ -6,30 +6,28 @@
     "scripts": {
         "serve": "http-server test/pages",
         "test": "esy build && sh -c \"$(esy x which Hello) drafts\"",
-        "start": "watchexec -w lib -w bin -w test/posts npm test",
-        "publish": "sh -c $(esy x which Hello) && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets"
+        "start": "env DRAFTS=true watchexec -w test/poems -w lib -w bin -w test/posts npm run build",
+        "pub": "npm run build && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets && cd test/publish && git add .",
+        "build": "esbuild --bundle bin/Build.ts --external:markdown-it-prism --platform=node --sourcemap=inline > ok.js && node --enable-source-maps ok.js && rm ok.js",
+        "upload": "env DRAFTS=true UPLOAD_GISTS=true npm run build",
+        "get-gists": "esbuild --bundle bin/Gists.ts --platform=node ${npm_config_upload} | node"
     },
-    "esy": {
-        "build": "dune build -p #{self.name}"
+    "devDependencies": {
+        "@types/node": "^18.11.18"
     },
     "dependencies": {
-        "@opam/ezjsonm": "*",
-        "@opam/reason": "^3.0.0",
-        "@opam/yojson": "*",
-        "@opam/ocurl": "*",
-        "@opam/ocamlrss": "*",
-        "@jaredly/omd": "jaredly/omd",
-        "@opam/dune": "*",
-        "odate": "jaredly/odate",
-        "@esy-ocaml/reason": "*",
-        "@opam/ocaml-migrate-parsetree": "*",
-        "@opam/ppx_tools_versioned": "*",
-        "@opam/ppx_tools": "*",
-        "@opam/ppxlib": "*",
-        "rex-json": "*",
-        "ocaml": "4.7.2"
-    },
-    "resolutions": {
-        "@jaredly/omd": "link:../../fork/omd/package.json"
+        "@types/markdown-it": "^12.2.3",
+        "@types/object-hash": "^3.0.2",
+        "@types/prismjs": "^1.26.0",
+        "esbuild": "^0.17.5",
+        "markdown-it": "^13.0.1",
+        "markdown-it-anchor": "^8.6.6",
+        "markdown-it-prism": "^2.3.0",
+        "node-fetch": "^3.3.0",
+        "object-hash": "^3.0.0",
+        "prismjs": "^1.29.0",
+        "toml": "^3.0.0",
+        "typescript": "^4.9.5",
+        "yaml": "^2.2.1"
     }
 }
