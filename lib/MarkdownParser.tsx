@@ -116,8 +116,11 @@ import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-graphql';
 import 'prismjs/components/prism-diff';
 
-const mdpoetry = md('default', { breaks: true });
-export const processPoetry = (rawBody: string) => mdpoetry.render(rawBody);
+const mdpoetry = md('default', { breaks: true, html: true });
+export const processPoetry = (rawBody: string) =>
+    mdpoetry.render(
+        rawBody.replace(/\n--+\n/g, '\n<br/><br/><br/><br/><br/>\n\n----\n'),
+    );
 
 const mdit = md('default', {
     linkify: true,
