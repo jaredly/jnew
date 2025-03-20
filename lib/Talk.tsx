@@ -89,6 +89,8 @@ export let renderTalkList = (talks: talk[], contentTitle: string) => {
                             className={css([
                                 A('max-height', '300px'),
                                 ...Shared.Styles.basicImage,
+                                A('object-fit', 'contain'),
+                                A('background', 'white')
                             ])}
                         />
                     ) : (
@@ -96,7 +98,7 @@ export let renderTalkList = (talks: talk[], contentTitle: string) => {
                             className={css([
                                 A(
                                     'font-size',
-                                    Shared.px(Shared.Consts.statusSize),
+                                    Shared.px(Shared.Consts.jaredSize),
                                 ),
                             ])}
                         >

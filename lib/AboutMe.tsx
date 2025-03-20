@@ -97,6 +97,9 @@ export let column = ({
                     A('font-size', '20px'),
                 ])}
             >
+                <a href="https://bsky.app/profile/jaredforsyth.com">
+                    🦋 bsky/@jaredforsyth.com
+                </a>
                 <a href="https://twitter.com/jaredforsyth">
                     twitter/@jaredforsyth
                 </a>

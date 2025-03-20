@@ -190,6 +190,8 @@ let TalksColumn = ({ css, talks }: { css: CssFn; talks: talk[] }) => {
                             className={css([
                                 A('max-height', '300px'),
                                 ...Styles.basicImage,
+                                A('object-fit', 'contain'),
+                                A('background', 'white')
                             ])}
                         />
                     ) : (
