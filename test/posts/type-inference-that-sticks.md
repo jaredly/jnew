@@ -12,6 +12,8 @@ gist: 13abec33c7576c4636ca87039a999cf2
 hn: 34658021
 ---
 
+> **Update 2025:** "The haters said I couldn’t do it. And they were correct. Honestly great call from the haters." 😄 yeah so I tried implementing this, and was in fact a bad user experience.
+
 *What if type inference felt like a real-time conversation, instead of emailing code back and forth?*
 
 With type inference, compilers are faced with a difficult task: intuiting what types a user *had in mind* (but didn't write down) while writing some code. It all falls apart when the types that the algorithm assigns are different from those the user expected, and especially so when the type error reported is far away from the site of mental mismatch.

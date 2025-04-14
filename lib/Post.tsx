@@ -711,7 +711,7 @@ export function latestPosts(
             </a>
             {Shared.hspace(8)}
             {posts
-                .slice(0, 5)
+                .slice(0, 7)
                 .map(
                     ({
                         config: {
@@ -748,6 +748,7 @@ export function latestPosts(
                     },
                 )
                 .join('\n')}
+            <a className={css([A('font-size', '16px')])} href="/posts">More...</a>
             {Shared.hspace(32)}
         </div>
     );
