@@ -748,7 +748,7 @@ export function latestPosts(
                     },
                 )
                 .join('\n')}
-            <a className={css([A('font-size', '16px')])} href="/posts">More...</a>
+            <a className={css([A('font-size', '16px')])} href={base}>More...</a>
             {Shared.hspace(32)}
         </div>
     );

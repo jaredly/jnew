@@ -11,22 +11,24 @@ gist: 532e48dc531c57cf405218b44d5a5de0
 draft: true
 ---
 
-> A vision for validated versioning
+> **Validated versioning**: making the contract between library author and consumer explicit and statically verifiable.
+
+<!-- make unannounced breaking changes unrepresentable -->
 
 Upgrading libraries is both (a) an annoying chore, and (b) has high uncertainty about how "safe" it is to do.
 We rely on semantic versioning to signpost when a library undergoes a "breaking change", but this is far from reliable.
 
-I think a lot of the issues around versioning & dependency management come down to the fact that versioning is currently "stringly typed": we rely on documentation, readmes, and changelogs (none of which can be statically validated) to indicate versioning guarantees. We can do better.
+I think a lot of the issues around versioning & dependency management come down to the fact that **the contract between library author and consumer is currently "stringly typed"**: we rely on documentation, readmes, and changelogs (none of which can be statically validated) to indicate versioning guarantees. We can do better.
 
 <!-- more -->
 
 ## Side note on surface area
 
-On problem closely tied to versioning is that of "API surface area". In many languages (Java, Go, NodeJS, OCaml, Elm, Haskell, Koka, Scala), there's no way to have a "private module": if you want definitions to be usable in other modules in the package, they also are made available to consumers of the package. In some languages (Python, PHP) you can't even have private declarations, so the technical "surface area" of a library is *literally all of your code*. (Rust, Swift, and OCaml+Dune stand out as exceptions to this, although none goes as far as I want).
+On problem closely tied to versioning is that of "API surface area". In many languages (Java, Go, NodeJS, OCaml, Elm, Haskell, Koka, Scala), there's no way to have a "private module": if you want definitions to be usable in other modules in the package, they also are made available to consumers of the package. In some languages (Python, PHP, Unison) you can't even have private declarations, so the technical "surface area" of a library is *literally all of your code*. (Rust, Swift, and OCaml+Dune stand out as exceptions to this, although none goes as far as I want).
 
 This leaves you reliant on convention and documentation to indicate "what the publicly-dependable API consists of" (e.g. "don't import the module named Internal, it may change at any time").
 
-Wouldn't it be nice if our languages actually supported limiting the API surface area of a library?
+Wouldn't it be nice if our languages actually had affordances for limiting the API surface area of a library?
 
 ## Automatic determination of breaking changes
 
@@ -90,3 +92,7 @@ I believe that the main critiques of package management are attributable to (1) 
 > Doesn't this require the package-manager / compiler to be able to run the tests for a library? Should we really be baking testing into the language itself?
 
 Yes, yes it does. If you're building a language that doesn't have unit testing built into it, what are you playing at.
+
+> Doesn't Unison solve dependency management?
+
+Unison is doing a lot of cool things, but there are two reasons it doesn't "solve" this: 1) unison is one of the languages that doesn't even allow for private declarations, let alone private modules; the "public api" of a library is literally all of the code in the library. 2) package management in unison is still quite simplistic, and upgrading a library is a very manual process. I think we can do better.
