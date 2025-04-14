@@ -26,6 +26,9 @@ importers:
       markdown-it-anchor:
         specifier: ^8.6.6
         version: 8.6.7(@types/markdown-it@12.2.3)(markdown-it@13.0.2)
+      markdown-it-footnote:
+        specifier: ^4.0.0
+        version: 4.0.0
       markdown-it-prism:
         specifier: ^2.3.0
         version: 2.3.1
@@ -237,6 +240,9 @@ packages:
       '@types/markdown-it': '*'
       markdown-it: '*'
 
+  markdown-it-footnote@4.0.0:
+    resolution: {integrity: sha512-WYJ7urf+khJYl3DqofQpYfEYkZKbmXmwxQV8c8mO/hGIhgZ1wOe7R4HLFNwqx7TjILbnC98fuyeSsin19JdFcQ==}
+
   markdown-it-prism@2.3.1:
     resolution: {integrity: sha512-oZl9fGKBeSd94GhqpCrA2MO2uAWxKVe0swyX/nBqly+/6d870zae9raMgxJg+OEjhyuOrxTn8p1vMP8RkawzHw==}
     engines: {node: '>=6.0.0'}
@@ -420,6 +426,8 @@ snapshots:
     dependencies:
       '@types/markdown-it': 12.2.3
       markdown-it: 13.0.2
+
+  markdown-it-footnote@4.0.0: {}
 
   markdown-it-prism@2.3.1:
     dependencies:

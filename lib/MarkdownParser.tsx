@@ -1,4 +1,4 @@
-import md from 'markdown-it';
+import md from "markdown-it";
 // let isTwitterUrl = url => Str.string_match(Str.regexp("https?://twitter.com/[^/]+/status"), url, 0);
 
 // let cacheFile = "./.tweet-cache";
@@ -104,42 +104,41 @@ export let saveTwitterCache = () => {
 //   let md = Omd.visit(twitterEmbed, md);
 //   Omd.to_html(~ids?, md)
 // };
-import mdi from 'markdown-it-anchor';
-import mdp from 'markdown-it-prism';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-clojure';
-import 'prismjs/components/prism-reason';
-import 'prismjs/components/prism-ocaml';
-import 'prismjs/components/prism-rust';
-import 'prismjs/components/prism-bash';
-import 'prismjs/components/prism-json';
-import 'prismjs/components/prism-graphql';
-import 'prismjs/components/prism-diff';
+import mdi from "markdown-it-anchor";
+import mdf from "markdown-it-footnote";
+import mdp from "markdown-it-prism";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-clojure";
+import "prismjs/components/prism-reason";
+import "prismjs/components/prism-ocaml";
+import "prismjs/components/prism-rust";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-graphql";
+import "prismjs/components/prism-diff";
 
-const mdpoetry = md('default', { breaks: true, html: true });
-export const processPoetry = (rawBody: string) =>
-    mdpoetry.render(
-        rawBody.replace(/\n--+\n/g, '\n<br/><br/><br/><br/><br/>\n\n----\n'),
-    );
+const mdpoetry = md("default", { breaks: true, html: true });
+export const processPoetry = (rawBody: string) => mdpoetry.render(rawBody.replace(/\n--+\n/g, "\n<br/><br/><br/><br/><br/>\n\n----\n"));
 
-const mdit = md('default', {
+const mdit = md("default", {
     linkify: true,
     typographer: true,
     html: true,
 })
+    .use(mdf)
     .use(mdi, {
         permalink: mdi.permalink.headerLink(),
         slugify: (text) => {
             return text
                 .trim()
-                .replaceAll('"', '&quot;')
-                .replaceAll(/[^a-zA-Z0-9_-]+/g, '-')
-                .replace(/-$/, '');
+                .replaceAll('"', "&quot;")
+                .replaceAll(/[^a-zA-Z0-9_-]+/g, "-")
+                .replace(/-$/, "");
         },
     })
     .use(mdp, {
         highlightInlineCode: true,
-        defaultLanguage: 'javascript',
+        defaultLanguage: "javascript",
     });
 
 export const process = (rawBody: string, ids?: { [key: string]: string }) => {
