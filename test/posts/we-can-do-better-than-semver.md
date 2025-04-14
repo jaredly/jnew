@@ -85,6 +85,10 @@ One issue this would hopefully eliminate is the need to handle "un-breaking" ver
 
 I dunno, I want to have nice things? And a whole-system package manager can only be as smart as the dumbest language. I want smarter languages.
 
+> These ideas aren't new
+
+You're right! I've seen similar things in various comments sections, but I have yet to see a language actually implement them.
+
 > [Packages should be hand-curated, not managed by soulless machines](https://odin-lang.org/docs/faq/#how-do-i-manage-my-code-without-a-package-manager)
 
 I believe that the main critiques of package management are attributable to (1) having a language that is oblivious to the notion of a package, and (2) critiques of human-curated semver, which is precisely what I'm hoping to supplant. There's also (3), "trust no one, the world will betray you", and that's a social problem that it seems the Elm community is doing a good job of combatting.
@@ -95,4 +99,4 @@ Yes, yes it does. If you're building a language that doesn't have unit testing b
 
 > Doesn't Unison solve dependency management?
 
-Unison is doing a lot of cool things, but there are two reasons it doesn't "solve" this: 1) unison is one of the languages that doesn't even allow for private declarations, let alone private modules; the "public api" of a library is literally all of the code in the library. 2) package management in unison is still quite simplistic, and upgrading a library is a very manual process. I think we can do better.
+Unison is doing a lot of cool things, but there are two reasons it doesn't "solve" this: 1) unison is one of the languages that doesn't even allow for private declarations, let alone private modules; the "public api" of a library is literally all of the code in the library. 2) package management in unison is still quite simplistic, and upgrading a library is a very manual process. That said, unison is the best example I've seen of trying to "think bigger" as a language, tackling version control and distributed computing in addition to what we usually see, and so it might be well-placed to adopt some of these ideas.
