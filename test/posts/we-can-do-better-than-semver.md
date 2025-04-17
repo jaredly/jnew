@@ -30,7 +30,9 @@ On problem closely tied to versioning is that of "API surface area". In many lan
 
 This leaves you reliant on convention and documentation to indicate "what the publicly-dependable API consists of" (e.g. "don't import the module named Internal, it may change at any time").
 
-Wouldn't it be nice if our languages actually had affordances for limiting the API surface area of a library?
+Wouldn't it be nice if our languages actually had affordances for limiting the API surface area of a library? [^rely]
+
+[^rely]: I think my ideal would be to have (at least) three access levels for definitions: internal (only visible within this package), private (only visible within this module), and public (visible outside of this package).
 
 ## Automatic determination of breaking changes
 
