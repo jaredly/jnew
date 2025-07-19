@@ -8,7 +8,7 @@ date: 2025-07-18
 draft: true
 ---
 
-I wanted to make a web site, but I didn't want to do the work. It's not a very interesting website, technically speaking, so it would be tedious to implement. Also, corporate wants me to jump into the Beautiful World of Tomorrow, and all that ent[AI]ls.
+I wanted to make a web site, but I didn't want to do the work. It's not a very interesting website, technically speaking, so it would be tedious to implement. Also, corporate wants me to jump into the Beautiful World of Tomorrow, and all that entails.
 
 I have free access to copilot because of my open source work, so I started into it with GPT 4.1, because it's free, but I got to a point where I wanted a second opinion (because it was obviously missing some things), and I figured I'd do a little comparison of the models available to me.
 
@@ -88,7 +88,7 @@ I'll also track how many correct changes it was able to make to the schema:
 | Model | Accuracy | Verbosity | Babysitting | Vote | SuperAdmin | Session | Enums |
 | ----- | -- | -- | -- | - | - | - | - |
 | Claude 4       | 🟢  | 🟢 | 🟢 | ✅ | ✅ | ✅ | ✅ |
-| GPT 4.1        | 🟡 | 🔴 | 🟡 | ✅ | ❌ | ❌ | ✅ |
+| GPT 4.1        | 🟡 | 🔴 | 🟡 | ✅ | ✅ | ❌ | ✅ |
 | GPT 4o         | 🟢  | 🔴 | 🟡 | ✅ | ❌ | ✅ | ✅ |
 | Claude 3.5     | 🟢  | 🟡 | 🟢 | ❌ | ❌ | ❌ | ✅ |
 | Claude 3.7     | 🟢  | 🟡 | 🟢 | ✅ | ✅ | ✅ | ✅ |
@@ -163,8 +163,13 @@ I'll also track how many correct changes it was able to make to the schema:
   h4 {
     font-size: 110%;
   }
+}
+
+.chat-diff {
+  font-size: 50%;
 
 }
+
 </style>
 
 ```js embed
@@ -184,7 +189,10 @@ for (let runner of Object.keys(runners)) {
     const diff = readFile(`compare-agents/${fileName}.diff`)
     tabs.push({name: fileName, body: `<div class="tab-columns">
 <div class="chat-transcript" >${mdToHtml(chat)}</div>
-<div class="chat-diff">${mdToHtml(`\`\`\`diff-javascript\n${diff}\`\`\``)}</div>
+<div class="chat-diff">${mdToHtml(`\`\`\`diff\n${diff}\n\`\`\``).replace(
+  '<pre class="language-diff">',
+  '<pre class="language-diff diff-highlight">',
+)}</div>
 </div>`})
   }
 }

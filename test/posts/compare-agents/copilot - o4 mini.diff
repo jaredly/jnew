@@ -1,0 +1,176 @@
+diff --git prisma/schema.prisma prisma/schema.prisma
+index 1984365..e505405 100644
+--- prisma/schema.prisma
++++ prisma/schema.prisma
+@@ -1,131 +1,170 @@
+ // This is your Prisma schema file,
+ // learn more about it in the docs: https://pris.ly/d/prisma-schema
+ 
+ // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+ // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+ 
+ generator client {
+     provider = "prisma-client-js"
+     output   = "../generated/prisma"
+ }
+ 
+ datasource db {
+     provider = "sqlite"
+     url      = "file:./dev.db"
+ }
+ 
+ enum ArtworkStatus {
+     PORTFOLIO
+     EVENT
+     MATCHED
+     FLAGGED
+ }
+ 
+ enum NotificationType {
+     MATCH
+     EVENT
+     FLAG
+     OTHER
+ }
+ 
+ enum InvitationStatus {
+     PENDING
+     ACCEPTED
+     EXPIRED
+ }
+ 
++enum EventPhase {
++    OPEN
++    VOTING
++    CLOSED
++    ARCHIVED
++}
++
+ model Artist {
+     id                      String            @id @default(uuid())
+     email                   String            @unique
+     passwordHash            String
+     fullName                String
+     profilePic              String? // URL or file path
+     memberships             GroupMembership[]
+     artworks                Artwork[]
+     notifications           Notification[]
++    votes                   Vote[]
+     createdAt               DateTime          @default(now())
++    sessions                Session[]
+     resetToken              String? // for password reset
+     resetTokenExpiry        DateTime?
++    isVerified              Boolean           @default(false)
++    verificationToken       String?           @unique
++    verificationTokenExpiry DateTime?
+ }
+ 
+ model Group {
+     id          String            @id @default(uuid())
+     name        String
+     memberships GroupMembership[]
+     events      Event[]
+     createdAt   DateTime          @default(now())
+     Invitation  Invitation[]
+ }
+ 
+ model GroupMembership {
+     id        String   @id @default(uuid())
+     artist    Artist   @relation(fields: [artistId], references: [id])
+     artistId  String
+     group     Group    @relation(fields: [groupId], references: [id])
+     groupId   String
+     isAdmin   Boolean  @default(false)
+     createdAt DateTime @default(now())
+ 
+     @@unique([artistId, groupId])
+ }
+ 
+ model Event {
+     id              String     @id @default(uuid())
+     group           Group      @relation(fields: [groupId], references: [id])
+     groupId         String
+-    phase           String // open, voting, closed, archived
++    phase           EventPhase
+     submissionLimit Int
+     artworks        Artwork[]
+     matches         Match[]
++    votes           Vote[]
+     createdAt       DateTime   @default(now())
+ }
+ 
+ model Artwork {
+     id          String        @id @default(uuid())
+     artist      Artist        @relation(fields: [artistId], references: [id])
+     artistId    String
+     event       Event?        @relation(fields: [eventId], references: [id])
+     eventId     String?
+     title       String
+     description String?
+     medium      String?
+     dimensions  String?
+     year        Int?
+     images      Json // Array of file paths or URLs
+     status      ArtworkStatus
+     createdAt   DateTime      @default(now())
+     Match1      Match?        @relation("MatchArtwork1")
+     Match2      Match?        @relation("MatchArtwork2")
++    votes       Vote[]
+ }
+ 
+ model Match {
+     id         String   @id @default(uuid())
+     event      Event    @relation(fields: [eventId], references: [id])
+     eventId    String
+     artwork1   Artwork? @relation("MatchArtwork1", fields: [artwork1Id], references: [id])
+     artwork1Id String   @unique
+     artwork2   Artwork? @relation("MatchArtwork2", fields: [artwork2Id], references: [id])
+     artwork2Id String   @unique
+     status     String // e.g., pending, completed
+     createdAt  DateTime @default(now())
+ }
+ 
+ model Invitation {
+     id        String           @id @default(uuid())
+     group     Group            @relation(fields: [groupId], references: [id])
+     groupId   String
+     email     String
+     token     String           @unique
+     status    InvitationStatus
+     createdAt DateTime         @default(now())
+ }
+ 
+ model Notification {
+     id        String           @id @default(uuid())
+     artist    Artist           @relation(fields: [artistId], references: [id])
+     artistId  String
+     type      NotificationType
+     message   String
+     read      Boolean          @default(false)
+     createdAt DateTime         @default(now())
+ }
++
++// Record individual votes
++model Vote {
++    id        String   @id @default(uuid())
++    artist    Artist   @relation(fields: [artistId], references: [id])
++    artistId  String
++    artwork   Artwork  @relation(fields: [artworkId], references: [id])
++    artworkId String
++    event     Event    @relation(fields: [eventId], references: [id])
++    eventId   String
++    value     Int
++    createdAt DateTime @default(now())
++
++    @@unique([artistId, artworkId])
++}
++
++// Persist login sessions
++model Session {
++    id           String   @id @default(uuid())
++    artist       Artist   @relation(fields: [artistId], references: [id])
++    artistId     String
++    refreshToken String   @unique
++    expiresAt    DateTime
++    createdAt    DateTime @default(now())
++}

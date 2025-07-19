@@ -3,6 +3,7 @@ import md from "markdown-it";
 export let saveTwitterCache = () => {
 };
 
+import "prismjs"
 import mdi from "markdown-it-anchor";
 import mdf from "markdown-it-footnote";
 import mdp from "markdown-it-prism";
