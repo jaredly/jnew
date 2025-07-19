@@ -2,8 +2,6 @@
 
 -----------------------------------
 
-**@agent Enable: "Enable Claude Sonnet 3.5 for all clients"**
-
 I'll analyze the Implementation Plan and compare it with the current Prisma schema to identify any missing elements.
 
 Looking at both documents, here are a few things that should be added to the schema:
@@ -14,30 +12,9 @@ Looking at both documents, here are a few things that should be added to the sch
 4. The Artist model should have fields for account verification since email verification is mentioned in the implementation plan
 5. The Match model could benefit from a createdBy field to track which admin created the match
 
-Let me update the schema to include these: 
+Let me update the schema to include these:
 
 
-````
-
-
-
-````
-
-
-
-````
-
-
-
-````
-
-
-
-````
-
-
-
-````
 
 
 After reviewing both documents, I can confirm that the schema now includes all the necessary fields mentioned in the Implementation Plan. The schema includes:

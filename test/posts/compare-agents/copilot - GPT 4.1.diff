@@ -5,40 +5,40 @@ index 1984365..7ac9976 100644
 @@ -1,131 +1,160 @@
  // This is your Prisma schema file,
  // learn more about it in the docs: https://pris.ly/d/prisma-schema
- 
+
  // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
  // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
- 
+
  generator client {
      provider = "prisma-client-js"
      output   = "../generated/prisma"
  }
- 
+
  datasource db {
      provider = "sqlite"
      url      = "file:./dev.db"
  }
- 
+
  enum ArtworkStatus {
      PORTFOLIO
      EVENT
      MATCHED
      FLAGGED
  }
- 
+
  enum NotificationType {
      MATCH
      EVENT
      FLAG
      OTHER
  }
- 
+
  enum InvitationStatus {
      PENDING
      ACCEPTED
      EXPIRED
  }
- 
+
 +enum EventPhase {
 +    OPEN
 +    VOTING
@@ -64,9 +64,8 @@ index 1984365..7ac9976 100644
      createdAt        DateTime          @default(now())
      resetToken       String? // for password reset
      resetTokenExpiry DateTime?
-+    role             UserRole          @default(USER)
  }
- 
+
  model Group {
      id          String            @id @default(uuid())
      name        String
@@ -75,7 +74,7 @@ index 1984365..7ac9976 100644
      createdAt   DateTime          @default(now())
      Invitation  Invitation[]
  }
- 
+
  model GroupMembership {
      id        String   @id @default(uuid())
      artist    Artist   @relation(fields: [artistId], references: [id])
@@ -84,10 +83,10 @@ index 1984365..7ac9976 100644
      groupId   String
      isAdmin   Boolean  @default(false)
      createdAt DateTime @default(now())
- 
+
      @@unique([artistId, groupId])
  }
- 
+
  model Event {
      id              String     @id @default(uuid())
      group           Group      @relation(fields: [groupId], references: [id])
@@ -100,7 +99,7 @@ index 1984365..7ac9976 100644
 +    votes           Vote[]
      createdAt       DateTime   @default(now())
  }
- 
+
  model Artwork {
      id          String        @id @default(uuid())
      artist      Artist        @relation(fields: [artistId], references: [id])
@@ -118,8 +117,9 @@ index 1984365..7ac9976 100644
      Match1      Match?        @relation("MatchArtwork1")
      Match2      Match?        @relation("MatchArtwork2")
 +    votes       Vote[]
++    role        UserRole      @default(USER)
  }
- 
+
  model Match {
      id         String   @id @default(uuid())
      event      Event    @relation(fields: [eventId], references: [id])
@@ -131,7 +131,7 @@ index 1984365..7ac9976 100644
      status     String // e.g., pending, completed
      createdAt  DateTime @default(now())
  }
- 
+
  model Invitation {
      id        String           @id @default(uuid())
      group     Group            @relation(fields: [groupId], references: [id])
@@ -141,7 +141,7 @@ index 1984365..7ac9976 100644
      status    InvitationStatus
      createdAt DateTime         @default(now())
  }
- 
+
  model Notification {
      id        String           @id @default(uuid())
      artist    Artist           @relation(fields: [artistId], references: [id])

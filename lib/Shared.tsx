@@ -464,7 +464,7 @@ export let PageWithTopAndBottom = ({
                     style="background-image: url(/images/logo/JF_64.png)"
                 />
             </a>
-            <main role="main">
+            <main>
                 <article lang="en">
                     <header>
                         {!backgroundImage ? (

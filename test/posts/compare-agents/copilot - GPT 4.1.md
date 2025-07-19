@@ -26,8 +26,8 @@ Based on the "Implementation Plan" and your current Prisma schema, here’s a co
 - **Event Submission Limit**: `submissionLimit` in `Event` (good)
 
 ### What’s Missing or Could Be Improved:
-1. **Voting Records**:  
-   - The plan calls for voting logic and a Tindr-style interface.  
+1. **Voting Records**:
+   - The plan calls for voting logic and a Tindr-style interface.
    - There is no model for recording individual votes (who voted for which artwork, and what was the vote).
    - Suggest adding a `Vote` model:
      ```prisma
@@ -44,7 +44,7 @@ Based on the "Implementation Plan" and your current Prisma schema, here’s a co
      }
      ```
 
-2. **Event Phase Enum**:  
+2. **Event Phase Enum**:
    - `Event.phase` is a string, but the plan specifies phases: open, voting, closed, archived.
    - Suggest changing to an enum for safety:
      ```prisma
@@ -57,17 +57,17 @@ Based on the "Implementation Plan" and your current Prisma schema, here’s a co
      // Then use: phase EventPhase
      ```
 
-3. **Audit/Moderation Logging**:  
+3. **Audit/Moderation Logging**:
    - The plan mentions admin moderation and flagging, but there’s no explicit audit log or moderation record.
    - Optional: Add a `ModerationLog` model for tracking admin actions.
 
-4. **User Data Export/Deletion**:  
+4. **User Data Export/Deletion**:
    - For privacy compliance, consider if you need a way to track deletion requests or exports (could be handled outside schema).
 
-5. **Legal/Privacy**:  
+5. **Legal/Privacy**:
    - No schema changes needed, but ensure you have fields for data retention if required.
 
-6. **Notification Delivery**:  
+6. **Notification Delivery**:
    - If you want to track email notifications vs. in-app, you could add a `deliveryMethod` field to `Notification`.
 
 ### Summary
@@ -83,23 +83,9 @@ Would you like to proceed with adding a `Vote` model and updating `Event.phase` 
 **yes please**
 
 
-````
-
-
-
-````
-
-
 The `Vote` model was added and `Event.phase` now uses an enum, but Prisma requires opposite relation fields for each relation. To fix this, I will add the necessary relation arrays to `Event`, `Artist`, and `Artwork` models.
 
-I'll update the schema to resolve these errors. 
-
-
-````
-
-
-
-````
+I'll update the schema to resolve these errors.
 
 
 The schema now includes a `Vote` model and uses an enum for `Event.phase`. Relation arrays for votes have been added to `Event`, `Artist`, and `Artwork` to resolve all Prisma relation errors.

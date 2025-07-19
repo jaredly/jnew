@@ -14,6 +14,18 @@ I have free access to copilot because of my open source work, so I started into 
 
 <!-- more -->
 
+## The TL;DR Tier List
+
+| Tier | Agents
+| - | - |
+| S | Claude 4
+| A | Claude 3.7
+| B | GPT 4o, o4 mini
+| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek
+| D | Claude 3.5, Cline / Qwen3
+| E | Qwen3, Mistral, Codestral, Deepseek r1 14b, Starcoder, Continue / Llama3
+| F | Codellama 13b, Llama3
+
 ## The Scenario
 
 I worked with GPT4.1 to produce a somewhat detailed [`Implementation Plan.spec`](https://github.com/jaredly/artswap/blob/8f1e2d7a450309f4c270c112431fe1e473722d95/Implementation%20Plan.spec), and then a [Prisma schema](https://github.com/jaredly/artswap/blob/8f1e2d7a450309f4c270c112431fe1e473722d95/prisma/schema.prisma) defining the data model for the website.
@@ -85,14 +97,14 @@ I'll also track how many correct changes it was able to make to the schema:
 
 ### Github Copilot Remote Models
 
-| Model | Accuracy | Verbosity | Babysitting | Vote | SuperAdmin | Session | Enums |
-| ----- | -- | -- | -- | - | - | - | - |
-| Claude 4       | 🟢  | 🟢 | 🟢 | ✅ | ✅ | ✅ | ✅ |
-| GPT 4.1        | 🟡 | 🔴 | 🟡 | ✅ | ✅ | ❌ | ✅ |
-| GPT 4o         | 🟢  | 🔴 | 🟡 | ✅ | ❌ | ✅ | ✅ |
-| Claude 3.5     | 🟢  | 🟡 | 🟢 | ❌ | ❌ | ❌ | ✅ |
-| Claude 3.7     | 🟢  | 🟡 | 🟢 | ✅ | ✅ | ✅ | ✅ |
-| o4 mini        | 🟢  | 🟡 | 🟡 | ✅ | ❌ | ✅ | ✅ |
+| Model          | Accuracy | Verbosity | Babysitting | Vote | SuperAdmin | Session | Enums |
+| -----          | -- | -- | -- | - | - | - | - |
+| Claude 4       | 🟢 | 🟢 | 🟢 | ✅ | ✅ | ✅ | ✅ |
+| GPT 4.1        | 🟡 | 🟡 | 🟡 | ✅ | 😬 | ❌ | ✅ |
+| GPT 4o         | 🟢 | 🟡 | 🟡 | ✅ | ❌ | ✅ | ✅ |
+| Claude 3.5     | 🟢 | 🟢 | 🟢 | ❌ | ❌ | ❌ | ✅ |
+| Claude 3.7     | 🟢 | 🟡 | 🟢 | ✅ | ✅ | ✅ | ✅ |
+| o4 mini        | 🟢 | 🟢 | 🟡 | ✅ | ❌ | ✅ | ✅ |
 | Gemini 2.5 Pro | 🟢 | 🟢 | 🟢 | ✅ | ❌ | ❌ | ✅ |
 
 <br/>
@@ -102,7 +114,7 @@ I'll also track how many correct changes it was able to make to the schema:
 | Model | Accuracy | Verbosity | Babysitting | Vote | SuperAdmin | Session | Enums |
 | ----- | -- | -- | -- | - | - | - | - |
 | Mistral        | 🔴 | 🟢 | 🟡 | ❌ | ❌ | ❌ | ❌ |
-| Codellama 13b  | 🔴 | 🟡 | 🟡 | ❌ | ❌ | ❌ | ❌ |
+| Codellama 13b  | 🔴 | 🟡 | 🔴 | ❌ | ❌ | ❌ | ❌ |
 | Codestral      | 🔴 | 🟡 | 🟡 | 😬 | ❌ | ❌ | ❌ |
 | Starcoder      | 🔴 | 🟡 | 🟡 | ✅ | ❌ | ❌ | 😬 |
 | Llama3         | 🔴 | 🟡 | 🟡 | ❌ | ❌ | ❌ | ❌ |
@@ -241,11 +253,11 @@ Excellent work. After making the initial edit, it noticed that there were linter
 
 ### Gemini 2.5 Pro
 
-Added a "Artwork Flag" model, for tragging the reason a piece was flagged. Could be useful.
+Added a "Artwork Flag" model, for tracking the reason a piece was flagged. Could be useful.
 
 ### Mistral (Ollama)
 
-Didn't actually make the change using the tool; it output the "new file version" into the chat, and I had to press a button to "adopt those changes into the current file". Perhaps needs more prompting?
+Didn't actually make the change using the tool; it output the "new file version" into the chat, and I had to press a button to "adopt those changes into the current file". Perhaps needs more prompting? Might work better under Cline.
 
 While it didn't make any of the changes I was hoping for, it did manage to make /valid/ changes (adding some arguably-useful properties to 4 different entities).
 
@@ -263,26 +275,20 @@ When it did make suggestions they were bad, and contained errors.
 
 ### Starcoder (Ollama)
 
+- Got the Vote model
 - tried to do an Event Phase enum, and made the change in the Event entity, but failed to define the actual enum
 - also produced some errors (the 1-to-2 relation of Match to Artwork, it bungled it)
 
 ### Llama3 (Ollama)
 
 - made straight up false statements about the current schema
+- and then didn't actually make any edits
 
 ### Qwen3 (Ollama)
 
 - Sooo verbose
 - No babysitting needed! Impressive
 - the changes it suggested were useful (email verification token tracking), but it missed the things I wanted
-
-### Cline Qwen3
-
-- seems to have been overwhelmed by Cline's large prompt. Didn't come up with any useful changes
-
-### Cline Deepseek R1 (14b)
-
-- actually did a pretty decent job!
 
 ### Deepseek R1 (Copilot)
 
@@ -291,7 +297,16 @@ When it did make suggestions they were bad, and contained errors.
 - produced invalid prisma code (hallucinated pragmas `@oneToManyInverse` and `manyToManyInverse` instead of the actual `@relation` pragma)
 - deleted the `GroupMembership` entity entirely, and removed many attributes from other entities
 
+### Cline Qwen3
+
+- seems to have been overwhelmed by Cline's large prompt.
+- Didn't come up with any useful changes
+
+### Cline Deepseek R1 (14b)
+
+- actually did a pretty decent job!
+
 ### Continue (llama3)
 
 - understood the prompt, but whiffed it on making suggestions.
-- claimed to add a line (the `match` attribute of the `Event` entity), when that line already existed. all it did was add a comment claiming credit
+- claimed to add a line to the `Event` entity (the `match` attribute), when that line already existed. all it did was add a comment claiming credit

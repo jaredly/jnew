@@ -46,21 +46,7 @@ Would you like me to update the schema with these recommendations?
 **yes please**
 
 
-````
-
-
-
-````
-
-
-The changes were applied successfully, but there are validation errors due to missing opposite relation fields in the `Artist` and `Artwork` models for the new `Session`, `Flag`, and `Device` models. I will fix these by adding the necessary relation fields. 
-
-
-````
-
-
-
-````
+The changes were applied successfully, but there are validation errors due to missing opposite relation fields in the `Artist` and `Artwork` models for the new `Session`, `Flag`, and `Device` models. I will fix these by adding the necessary relation fields.
 
 
 The missing relation fields have been added to the `Artist` and `Artwork` models to resolve the validation errors. Let me know if you need further assistance!

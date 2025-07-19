@@ -2,7 +2,7 @@
 
 I'll analyze the Implementation Plan document and check if the Prisma schema is missing anything mentioned in the plan.
 
-Let me first review the Prisma schema and the Implementation Plan to identify any potential gaps. 
+Let me first review the Prisma schema and the Implementation Plan to identify any potential gaps.
 
 Now, let's analyze the Implementation Plan to identify any potential gaps in the schema.
 
@@ -18,14 +18,7 @@ After reviewing the Implementation Plan and your Prisma schema, I've identified 
 
 5. **User Sessions**: For authentication, it might be useful to have a Session model.
 
-Here's my suggested update to your Prisma schema: 
-
-
-````
-
-
-
-````
+Here's my suggested update to your Prisma schema:
 
 
 Based on the Implementation Plan document, I've made several enhancements to your Prisma schema:

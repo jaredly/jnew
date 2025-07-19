@@ -19,13 +19,6 @@ index 1984365..ce851c9 100644
      url      = "file:./dev.db"
  }
  
-+enum EventPhase {
-+    OPEN
-+    EVENT
-+    MATCHED
-+    FLAGGED
-+}
-+
  enum ArtworkStatus {
      PORTFOLIO
      EVENT
