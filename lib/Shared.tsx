@@ -404,6 +404,9 @@ export let PageHead = ({
         color: #6e6e6e;
         font-size: 30px;
       }
+      html.dark-mode h3 {
+        color: #ccc;
+      }
       h5 {
         font-family: open sans;
         margin: 0;

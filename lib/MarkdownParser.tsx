@@ -1,109 +1,8 @@
 import md from "markdown-it";
-// let isTwitterUrl = url => Str.string_match(Str.regexp("https?://twitter.com/[^/]+/status"), url, 0);
-
-// let cacheFile = "./.tweet-cache";
-
-// let module StrMap = Map.Make(String);
-
-// let loadTwitterCache = (table) => {
-//   switch (Yojson.Basic.from_file(cacheFile)) {
-// | exception _ => {
-//   print_endline("Unable to parse twitter cache");
-//   ()
-// }
-// | `Assoc(items) =>
-//   List.iter(
-//     ((name, value)) => {
-//       switch value {
-//       | `String(value) => Hashtbl.replace(table, name, value)
-//       | _ => {
-//         print_endline("Unexpected value for " ++ name ++ ": " ++ Yojson.Basic.to_string(value));
-//       }
-//       }
-//     },
-//     items
-//   )
-// | _ => {
-//   print_endline("Unexpected json from twitter cache");
-//   ()
-// }
-// };
-// };
-
-// let twitterCache = Hashtbl.create(100);
-// loadTwitterCache(twitterCache);
 
 export let saveTwitterCache = () => {
-    // let items = Hashtbl.fold(
-    //   (key, value, items) => [(key, `String(value)), ...items],
-    //   twitterCache,
-    //   []
-    // );
-    // Yojson.Basic.to_file(cacheFile, `Assoc(items))
 };
 
-// open Omd;
-// let twitterEmbed = element => switch element {
-// | Url(href, [Text(contents)], "") when (href == contents || contents == "tweet") && isTwitterUrl(href) => {
-//   let contents = if (Hashtbl.mem(twitterCache, href)) {
-//     Some(Hashtbl.find(twitterCache, href))
-//   } else {
-//     Curl.global_init(Curl.CURLINIT_GLOBALSSL);
-//     let t = Curl.init();
-//     Curl.set_url(t, "https://publish.twitter.com/oembed?omit_script=1&url=" ++ href);
-//     let data = ref("");
-//     Curl.set_writefunction(t, newData => {
-//       data := data^ ++ newData;
-//       String.length(newData);
-//     });
-//     Curl.perform(t);
-//     Curl.cleanup(t);
-//     Curl.global_cleanup();
-//     let parsed = switch (Yojson.Basic.from_string(data^)) {
-//     | exception _ => None
-//     | data => {
-//       switch data {
-//       | `Assoc(items) => {
-//         switch (List.assoc("html", items)) {
-//         | exception Not_found => None
-//         | `String(html) => Some(html)
-//         | _ => None
-//         }
-//       }
-//       | _ => None
-//       }
-//     }
-//     };
-//     switch parsed {
-//     | None => {
-//       print_endline("Unexpected twitter response: " ++ data^);
-//       None
-//     }
-//     | Some(html) => {
-//       Hashtbl.replace(twitterCache, href, html);
-//       Some(html)
-//     }
-//     };
-//   };
-//   switch contents {
-//   | None => None
-//   | Some(contents) =>
-//   /* Some([Url(href, [Text("A TWITTER TWEET")], title)]) */
-//     Some([
-//       Url(href, [Text(href)], ""),
-//       NL,
-//       Raw(contents)
-//     ])
-//   }
-// }
-// | _ => None
-// };
-
-// let process = (~ids=?, rawBody) => {
-//   let md = Omd.of_string(~extensions=[], rawBody);
-//   let md = Omd.visit(twitterEmbed, md);
-//   Omd.to_html(~ids?, md)
-// };
 import mdi from "markdown-it-anchor";
 import mdf from "markdown-it-footnote";
 import mdp from "markdown-it-prism";
@@ -116,9 +15,93 @@ import "prismjs/components/prism-bash";
 import "prismjs/components/prism-json";
 import "prismjs/components/prism-graphql";
 import "prismjs/components/prism-diff";
+import "prismjs/plugins/diff-highlight/prism-diff-highlight.js";
+import { existsSync, readFileSync } from "fs";
 
 const mdpoetry = md("default", { breaks: true, html: true });
 export const processPoetry = (rawBody: string) => mdpoetry.render(rawBody.replace(/\n--+\n/g, "\n<br/><br/><br/><br/><br/>\n\n----\n"));
+
+function markdownItJsEmbed(md) {
+  const fence = md.renderer.rules.fence || (() => '');
+
+  md.core.ruler.after('block', 'js-embed-eval', state => {
+    const tokens = state.tokens;
+
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+
+      if (
+        token.type === 'fence' &&
+        token.info.trim().toLowerCase() === 'js embed'
+      ) {
+        let html = '';
+        try {
+            const f = new Function('{readFile, mdToHtml}', token.content); // ⚠️ dangerous!
+            const result = f({readFile: (name: string) => {
+                const path = __dirname + '/test/posts/' + name
+                if (existsSync(path)) {
+                    return readFileSync(path, 'utf8')
+                } else {
+                    console.log('cant fine', path)
+                    return `File not found: ${name}`
+                }
+            }, mdToHtml: (text) => {
+                return process(text)
+            }})
+
+          html = typeof result === 'string' ? result : String(result);
+        } catch (err) {
+          html = `<pre><code>Error: ${md.utils.escapeHtml(err.message)}</code></pre>`;
+        }
+
+        // Replace this token with an HTML block token
+        const htmlToken = new state.Token('html_block', '', 0);
+        htmlToken.content = html;
+
+        tokens.splice(i, 1, htmlToken);
+      }
+    }
+  });
+}
+
+// function markdownItJsEmbed(md) {
+//   const defaultFence = md.renderer.rules.fence || function(tokens, idx, options, env, slf) {
+//     return slf.renderToken(tokens, idx, options);
+//   };
+
+//   md.renderer.rules.fence = (tokens, idx, options, env, slf) => {
+//     const token = tokens[idx];
+
+//     console.log('EVAL it', token.info.trim())
+//     if (token.info.trim() === 'js embed') {
+//         console.log("YES EVAL")
+//       let result;
+//       try {
+//         const f = new Function('{readFile, mdToHtml}', token.content); // ⚠️ dangerous!
+//         result = f({readFile: (name: string) => {
+//             const path = __dirname + '/../test/posts/' + name
+//             if (existsSync(path)) {
+//                 return readFileSync(path, 'utf8')
+//             } else {
+//                 return `File not found: ${name}`
+//             }
+//         }, mdToHtml: (text) => {
+//             return process(text)
+//         }})
+//         if (typeof result !== 'string') {
+//           result = JSON.stringify(result, null, 2);
+//         }
+//       } catch (err) {
+//         result = `Error: ${err.message}`;
+//       }
+
+//       return `<pre><code>${md.utils.escapeHtml(result)}</code></pre>\n`;
+//     }
+
+//     // fallback to default rendering
+//     return defaultFence(tokens, idx, options, env, slf);
+//   };
+// }
 
 const mdit = md("default", {
     linkify: true,
@@ -139,7 +122,8 @@ const mdit = md("default", {
     .use(mdp, {
         highlightInlineCode: true,
         defaultLanguage: "javascript",
-    });
+    })
+    .use(markdownItJsEmbed)
 
 export const process = (rawBody: string, ids?: { [key: string]: string }) => {
     return mdit.render(rawBody);
