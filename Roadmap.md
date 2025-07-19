@@ -1,4 +1,26 @@
 
+"Package-aware Programming Language Design"
+So many programming languages are oblivious to the distinction between "code in this application / library" and "code in dependency libraries". This is bad.
+
+"Your Language should be more private"
+
+Dependency management is the worst, in large part because so many programming languages seem were designed with package management as an afterthought, or even as something completely left up to third parties.
+I've been pursuing the question "what would it look like to build a language / compiler in a way that made dependency management much much better?"
+
+Let's talk about API surface area.
+
+
+https://tonsky.me/blog/alpha/
+
+#
+
+What about a series of blog posts:
+
+"An overview of the problesm with dependencies"
+and then links to each
+- api surface area, its a problem (here's how Kipos will solve it)
+- semver is stringly typed, how to do better
+
 ## Better than semver
 
 
@@ -23,6 +45,21 @@ Let's talk nuts and bolts:
 
 
 
+Problem statements:
+- as a library maintainer, I want to fix a bug once, instead of having to fix it in several different (major/minor) branches in the repo
+-
+
+
+
+With Validated Versioning, how do you deal with things like a UI library that changes some styles?
+Would those be breaking, or nonbreaking? Presumably, any "exported constant" that changes would comprise a breaking change, right?
+> for those libraries, do we fall back on semver?
+
+
+Let's talk about dependency resolutions.
+The difference between (semver major bump) and (whole new library) is: semver major bump
+can be adopted by changing one line in package.json.
+(whole new library) involves changing every import-site.
 
 
 
