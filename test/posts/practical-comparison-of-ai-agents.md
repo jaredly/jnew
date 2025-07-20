@@ -21,31 +21,29 @@ I have free access to copilot because of my open source work, so I started into 
 | S | Claude 4
 | A | Claude 3.7
 | B | GPT 4o, o4 mini
-| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek
+| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek r1
 | D | Claude 3.5, Cline / Qwen3
-| E | Qwen3, Mistral, Codestral, Deepseek r1 14b, Starcoder, Continue / Llama3
+| E | Qwen3, Mistral, Codestral, Deepseek r1, Starcoder, Continue / Llama3
 | F | Codellama 13b, Llama3
+
+{.tier-table}
+
+<br/>
 
 ## The Scenario
 
-I worked with GPT4.1 to produce a somewhat detailed [`Implementation Plan.spec`](https://github.com/jaredly/artswap/blob/8f1e2d7a450309f4c270c112431fe1e473722d95/Implementation%20Plan.spec), and then a [Prisma schema](https://github.com/jaredly/artswap/blob/8f1e2d7a450309f4c270c112431fe1e473722d95/prisma/schema.prisma) defining the data model for the website.
+I worked with GPT4.1 to produce a somewhat detailed [Implementation Plan.spec](https://github.com/jaredly/artswap/blob/8f1e2d7a450309f4c270c112431fe1e473722d95/Implementation%20Plan.spec), and then a [Prisma schema](https://github.com/jaredly/artswap/blob/8f1e2d7a450309f4c270c112431fe1e473722d95/prisma/schema.prisma) defining the data model for the website.
 
-I did a look-over of the `schema.prisma` file, and it was clear that at least one important thing was missing (the ability to mark a user as a "super admin"), so I switched over to Claude 4 Sonnet and asked:
+When I did a manual review of the `schema.prisma` file, it was clear that at least one important thing was missing (the ability to mark a user as a "super admin"), so I switched over to Claude 4 Sonnet and asked:
 
 > Can you look over the "Implenetation Plan" document, and see if we're missing anything from this prisma schema?
 
-And it not only found & fixed the issue I had identified (the super-admin bit), but also found several other deficiencies in the data model that could be inferred from the implementation plan, but weren't necessarily obivous.
+It not only found & fixed the issue I had identified (the super-admin bit), but also found several other deficiencies in the data model that could be inferred from the implementation plan, but weren't necessarily obivous.
 
 1. a core part of the website is letting artists "like" or "dislike" other artist's submissions, but there wasn't a model to represent a `Vote` entity
 2. the `Event` entity had no `title` or `description` fields
 3. there wasn't an entity for tracking user sessions
 4. the `Event` entity has a `phase` attribute that is currently a string, with a comment indicating the phases. Changing it to a prisma `enum` is more robust
-
-## Ways in which this scenario is "hard"
-
-- The implementation spec has a section where it lists models that are needed, but is missing `Vote` and `Session` entities, which are implied by the rest of the spec
-- My prompt is a little grammatically embiguous, and misspelled the name of the spec file
-- the prisma schema has an unusual 1-to-2 relation, which confused some of the models
 
 ## The Criteria
 
@@ -59,14 +57,22 @@ Here are the criteria:
 - **Verbosity:** how much text does it expect me to read? (lower is better)
 - **Babysitting:** do I have to prompt it to actually make the changes suggested, or does it take the initiative?
 
-I'll also track how many correct changes it was able to make to the schema:
+I'll also track how many important correct changes it was able to make to the schema:
 
 - Adding an entity to track `Vote`s
 - Making it so an Artist can be marked as a `Super Admin` (either via a flag or a `role` enum)
 - Adding an entity to track user `Session`s
 - Converting the `Event`'s `phase` attribute to an `enum`
 
+## Ways in which this scenario is "hard"
+
+- The implementation spec has a section where it lists models that are needed, but is missing `Vote` and `Session` entities, which are implied by the rest of the spec
+- My prompt is a little grammatically embiguous, and I misspelled the name of the spec file
+- the prisma schema has an unusual 1-to-2 relation, which confused some of the models
+
 ## The Results
+
+✅ = success, ❌ = failure, 😬 = almost
 
 <style>
   table td {
@@ -75,23 +81,33 @@ I'll also track how many correct changes it was able to make to the schema:
       padding: 0 5px;
       text-align: center;
   }
-  table td:first-of-type, table th:first-of-type {
-      text-align: left;
-      font-size: 80%;
-      white-space: pre;
-  }
-  table th {
-      /* background-color: #373d4a;  */
-      border-bottom: 2px solid black;
-      border-bottom: 2px solid #7e6eb2;
-      font-size: 70%;
-      padding: 0 5px;
-      /* max-width: 80px; */
-      /* word-break: break-all; */
-      white-space: pre;
-  }
   table {
-      border-collapse: collapse;
+    border-collapse: collapse;
+    max-width: 100vw;
+    overflow: auto;
+    display: block;
+
+    td:first-of-type, th:first-of-type {
+        text-align: left;
+        font-size: 80%;
+        white-space: pre;
+    }
+    th {
+        /* background-color: #373d4a;  */
+        border-bottom: 2px solid black;
+        border-bottom: 2px solid #7e6eb2;
+        font-size: 70%;
+        padding: 0 5px;
+        /* max-width: 80px; */
+        /* word-break: break-all; */
+        white-space: pre;
+    }
+  }
+  table.tier-table {
+    td, th {
+      text-align: left;
+      font-size: 100%;
+    }
   }
 </style>
 
@@ -124,6 +140,8 @@ I'll also track how many correct changes it was able to make to the schema:
 <br/>
 
 ### Third-party agent extensions
+
+I also tried out two third-party extensions providing AI agents: [Cline](https://cline.bot/) and [Continue](https://docs.continue.dev/), to see if they would do a better job with some of the local ollama agents, and they did! Accuracy, Verbosity, and Babysitting were much better, though the edits made were still less than impressive.
 
 | Extension / Model | Accuracy | Verbosity | Babysitting | Vote | SuperAdmin | Session | Enums |
 | ----- | -- | -- | -- | - | - | - | - |
@@ -159,7 +177,7 @@ I'll also track how many correct changes it was able to make to the schema:
 }
 
 .chat-transcript {
-  border: 1px solid green;
+  /* border: 1px solid green; */
   padding: 6px 12px;
   font-size: 50%;
   line-height: 1.5;
@@ -200,8 +218,12 @@ for (let runner of Object.keys(runners)) {
     const chat = readFile(`compare-agents/${fileName}.md`)
     const diff = readFile(`compare-agents/${fileName}.diff`)
     tabs.push({name: fileName, body: `<div class="tab-columns">
-<div class="chat-transcript" >${mdToHtml(chat)}</div>
-<div class="chat-diff">${mdToHtml(`\`\`\`diff\n${diff}\n\`\`\``).replace(
+<div class="chat-transcript">
+<h1>Chat Transcript</h1>
+${mdToHtml(chat)}</div>
+<div class="chat-diff">
+<h1>Changes to the schema</h1>
+${mdToHtml(`\`\`\`diff\n${diff}\n\`\`\``).replace(
   '<pre class="language-diff">',
   '<pre class="language-diff diff-highlight">',
 )}</div>
@@ -234,9 +256,25 @@ ${tabs.map(({name, body}, i) => (
 
 ## Conclusions
 
-Claude 4 is the current darling for a reason: it's really good! I was surprised to see that Claude 3.7 was essentially just as competent (just a little wordier). Behind them I would put Gemini 2.5 Pro, GPT 4o, and o4 mini; all three were helpful, but not nearly up to the standard of Claude.
+### Here's the Tier list again
 
-GPT 4.1 and Claude 3.5 are in a tier below that, where they can do a lot for you, but will likely need much more specific instructions, and can't be expected to make rock-solid higher-level decisions about a project.
+| Tier | Agents
+| - | - |
+| S | Claude 4
+| A | Claude 3.7
+| B | GPT 4o, o4 mini
+| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek r1
+| D | Claude 3.5, Cline / Qwen3
+| E | Qwen3, Mistral, Codestral, Deepseek r1, Starcoder, Continue / Llama3
+| F | Codellama 13b, Llama3
+
+{.tier-table}
+
+<br/>
+
+At the top of the list we have, unsurprisingly, Claude 4, followed closely by Claude 3.7. And, based on this analysis, these are the only two I would trust to make complex, low-human-oversight changes to a codebase.
+
+GPT 4o and o4 mini are in a tier below that, where they can do a lot for you, but will likely need some more prompting, and can't be as relied on to make higher-level decisions about a project.
 
 Unsurprisingly, the local models that will run on my M1 Macbook Pro are much less capable (and, with the exception of Qwen3, soooo much slower); though I was impressed with Qwen3 (again, probably needs more specific instructions to be helpful) and Deepseek, especially when it was prompted by Cline.
 

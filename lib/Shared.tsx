@@ -167,22 +167,46 @@ export let PageHead = ({
             />
             <link
                 rel="stylesheet"
-                href="//brick.a.ssl.fastly.net/Linux+Libertine:400,400i,700,700i/Merriweather:200,200i,400,400i,700,700i/Open+Sans:400,400i,700,700i"
+                href="//brick.a.ssl.fastly.net/Linux+Libertine:400,400i,700,700i/Open+Sans:400,400i,700,700i"
             />
             <link
                 href="https://fonts.googleapis.com/css?family=Inconsolata:400,700"
                 rel="stylesheet"
             />
+            <style>
+                {`
+                @font-face {
+                    font-family: 'Merriweather';
+                    src: url('/assets/Merriweather[opsz,wdth,wght].woff2') format('woff2');
+                    font-style: normal;
+                    font-weight: 300 900;
+                    font-stretch: 87% 112%;
+                    font-
+                }
+
+                @font-face {
+                    font-family: 'Merriweather';
+                    src: url('/assets/Merriweather-Italic[opsz,wdth,wght].woff2') format('woff2');
+                    font-style: italic;
+                    font-weight: 300 900;
+                    font-stretch: 87% 112%;
+                }`}
+            </style>
             <link
                 href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-one-light.min.css"
                 rel="stylesheet"
                 media="not (prefers-color-scheme: dark)"
             />
             <link
-                href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-vsc-dark-plus.min.css"
+                href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-one-dark.min.css"
                 rel="stylesheet"
                 media="(prefers-color-scheme: dark)"
             />
+            {/* <link
+                href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-vsc-dark-plus.min.css"
+                rel="stylesheet"
+                media="(prefers-color-scheme: dark)"
+            /> */}
             <script>
                 {`if (localStorage.viewMode) {
                     document.getElementsByTagName('html')[0].className = localStorage.viewMode;
@@ -706,9 +730,10 @@ export const Styles = {
         A('hyphens', 'auto'),
         A('font-family', 'Merriweather'),
         A('font-weight', '200'),
+        A('font-stretch', '112%'),
         Media('max-width: 600px', [
             ['font-size', '20px'],
-            ['line-height', '30px'],
+            ['line-height', '34px'],
         ]),
     ],
 

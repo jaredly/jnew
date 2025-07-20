@@ -7,6 +7,7 @@ import "prismjs"
 import mdi from "markdown-it-anchor";
 import mdf from "markdown-it-footnote";
 import mdp from "markdown-it-prism";
+import mda from "markdown-it-attrs";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-clojure";
 import "prismjs/components/prism-reason";
@@ -22,10 +23,8 @@ import { existsSync, readFileSync } from "fs";
 const mdpoetry = md("default", { breaks: true, html: true });
 export const processPoetry = (rawBody: string) => mdpoetry.render(rawBody.replace(/\n--+\n/g, "\n<br/><br/><br/><br/><br/>\n\n----\n"));
 
-function markdownItJsEmbed(md) {
-  const fence = md.renderer.rules.fence || (() => '');
-
-  md.core.ruler.after('block', 'js-embed-eval', state => {
+function markdownItJsEmbed(md: any) {
+  md.core.ruler.after('block', 'js-embed-eval', (state: any) => {
     const tokens = state.tokens;
 
     for (let i = 0; i < tokens.length; i++) {
@@ -37,7 +36,7 @@ function markdownItJsEmbed(md) {
       ) {
         let html = '';
         try {
-            const f = new Function('{readFile, mdToHtml}', token.content); // ⚠️ dangerous!
+            const f = new Function('{readFile, mdToHtml}', token.content);
             const result = f({readFile: (name: string) => {
                 const path = __dirname + '/test/posts/' + name
                 if (existsSync(path)) {
@@ -46,13 +45,13 @@ function markdownItJsEmbed(md) {
                     console.log('cant fine', path)
                     return `File not found: ${name}`
                 }
-            }, mdToHtml: (text) => {
+            }, mdToHtml: (text: string) => {
                 return process(text)
             }})
 
           html = typeof result === 'string' ? result : String(result);
         } catch (err) {
-          html = `<pre><code>Error: ${md.utils.escapeHtml(err.message)}</code></pre>`;
+          html = `<pre><code>Error: ${md.utils.escapeHtml((err as Error).message)}</code></pre>`;
         }
 
         // Replace this token with an HTML block token
@@ -120,9 +119,10 @@ const mdit = md("default", {
                 .replace(/-$/, "");
         },
     })
+    .use(mda)
     .use(mdp, {
         highlightInlineCode: true,
-        defaultLanguage: "javascript",
+        defaultLanguage: "typescript",
     })
     .use(markdownItJsEmbed)
 
