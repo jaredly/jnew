@@ -8,9 +8,9 @@ date: 2025-07-18
 draft: true
 ---
 
-I wanted to make a web site, but I didn't want to do the work. It's not a very interesting website, technically speaking, so it would be tedious to implement. Also, corporate wants me to jump into the Beautiful World of Tomorrow, and all that entails.
+I wanted to make a web site, but I didn't want to do the work. It's not a very interesting website, technically speaking, so it would be tedious to implement. Also, corporate wants me to jump into the Beautiful World of Tomorrow, and all that ent<em>ai</em>ls.
 
-I have free access to copilot because of my open source work, so I started into it with GPT 4.1, because it's free, but I got to a point where I wanted a second opinion (because it was obviously missing some things), and I figured I'd do a little comparison of the models available to me.
+I have free access to VSCode + Copilot because of my open source work, so I started into it with GPT 4.1, because it's free. After some initial scaffolding, I got to a point where I wanted a second opinion (because it was obviously missing some things), and I figured I'd do a little comparison of the models available to me.
 
 <!-- more -->
 
@@ -19,9 +19,9 @@ I have free access to copilot because of my open source work, so I started into 
 | Tier | Agents
 | - | - |
 | S | Claude 4
-| A | Claude 3.7
-| B | GPT 4o, o4 mini
-| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek r1, Cursor / Claude4
+| A | Claude 3.7, Cursor / Claude 4
+| B | GPT 4o, o4 mini, Cursor / GPT 4.1
+| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek r1
 | D | Claude 3.5, Cline / Qwen3
 | E | Qwen3, Mistral, Codestral, Deepseek r1, Starcoder, Continue / Llama3
 | F | Codellama 13b, Llama3
@@ -38,11 +38,10 @@ When I did a manual review of the `schema.prisma` file, it was clear that at lea
 
 > Can you look over the "Implenetation Plan" document, and see if we're missing anything from this prisma schema?
 
-It not only found & fixed the issue I had identified (the super-admin bit), but also found several other deficiencies in the data model that could be inferred from the implementation plan, but weren't necessarily obivous.
+It not only found & fixed the issue I had identified (the super admin bit), but also found several other deficiencies in the data model that could be inferred from the implementation plan, but weren't necessarily obivous.
 
-1. a core part of the website is letting artists "like" or "dislike" other artist's submissions, but there wasn't a model to represent a `Vote` entity
-2. the `Event` entity had no `title` or `description` fields
-3. there wasn't an entity for tracking user sessions
+1. a core part of the website is letting artists "like" or "dislike" other artist's submissions, but there wasn't an entity to represent these `Vote`s
+3. there wasn't an entity for tracking user `Session`s
 4. the `Event` entity has a `phase` attribute that is currently a string, with a comment indicating the phases. Changing it to a prisma `enum` is more robust
 
 ## The Criteria
@@ -55,12 +54,12 @@ Here are the criteria:
   - relatedly, does it make changes that are wrong or invalid?
   - does it understand the prompt, or do I have to reword things?
 - **Verbosity:** how much text does it expect me to read? (lower is better)
-- **Babysitting:** do I have to prompt it to actually make the changes suggested, or does it take the initiative?
+- **Babysitting:** do I have to prompt it to actually make the changes suggested or fix linter errors, or does it take the initiative?
 
 I'll also track how many important correct changes it was able to make to the schema:
 
 - Adding an entity to track `Vote`s
-- Making it so an Artist can be marked as a `Super Admin` (either via a flag or a `role` enum)
+- Making it so an Artist can be marked as a "super admin" (either via a flag or a `role` enum)
 - Adding an entity to track user `Session`s
 - Converting the `Event`'s `phase` attribute to an `enum`
 
@@ -139,16 +138,19 @@ I'll also track how many important correct changes it was able to make to the sc
 
 <br/>
 
-### Third-party agent extensions
+### Third-party agent extensions and Cursor
 
-I also tried out two third-party extensions providing AI agents: [Cline](https://cline.bot/) and [Continue](https://docs.continue.dev/), to see if they would do a better job with some of the local ollama agents, and they did! Accuracy, Verbosity, and Babysitting were much better, though the edits made were still less than impressive. I also tried out Claude 4 under Cursor to see if it would be different.
+I also tried out two third-party extensions providing AI agents: [Cline](https://cline.bot/) and [Continue](https://docs.continue.dev/), to see if they would do a better job with some of the local ollama agents, and they did! Accuracy, Verbosity, and Babysitting were much better, though the edits made were still less than impressive.
+
+I also tried out Claude 4 and GPT 4.1 under [Cursor](http://cursor.com/) to see if it would be different.
 
 | Extension / Model | Accuracy | Verbosity | Babysitting | Vote | SuperAdmin | Session | Enums |
 | ----- | -- | -- | -- | - | - | - | - |
-| Cline / Qwen3 | 🟢 | 🔴 | 🟢 | ❌ | ❌ | ❌ | ✅ |
-| Cline / Deepseek | 🟢 | 🟢 | 🟢 | ❌ | ✅ | ✅ | ❌ |
-| Continue / Llama3 | 🟡 | 🟡  | 🟢 | ❌ | ❌ | ❌  | ❌ |
-| Cursor / Claude 4 | 🟢 | 🟡 | 🟡 | ✅ | ❌ | ❌ | ✅ |
+| Cline / Qwen3     | 🟢 | 🔴 | 🟢 | ❌ | ❌ | ❌ | ✅ |
+| Cline / Deepseek  | 🟢 | 🟢 | 🟢 | ❌ | ✅ | ✅ | ❌ |
+| Continue / Llama3 | 🟡 | 🟡 | 🟢 | ❌ | ❌ | ❌ | ❌ |
+| Cursor / Claude 4 | 🟢 | 🔴 | 🟡 | ✅ | ✅ | ✅ | ✅ |
+| Cursor / GPT 4.1  | 🟢 | 🔴 | 🟡 | ✅ | ✅ | ❌ | ✅ |
 
 <br/>
 
@@ -209,7 +211,7 @@ const runners = {
   'copilot-local': ['Mistral', 'Codellama 13b', 'Codestral', 'Starcoder', 'Llama3', 'Qwen3', 'Deepseek r1 14b'],
   'cline': ['Qwen3', 'Deepseek r1 14b'],
   'continue': ['Llama3'],
-  'cursor': ['Claude 4'],
+  'cursor': ['Claude 4', 'GPT 4.1'],
 }
 
 const tabs = []
@@ -263,9 +265,9 @@ ${tabs.map(({name, body}, i) => (
 | Tier | Agents
 | - | - |
 | S | Claude 4
-| A | Claude 3.7
-| B | GPT 4o, o4 mini
-| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek r1, Cursor / Claude4
+| A | Claude 3.7, Cursor / Claude 4
+| B | GPT 4o, o4 mini, Cursor / GPT 4.1
+| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek r1
 | D | Claude 3.5, Cline / Qwen3
 | E | Qwen3, Mistral, Codestral, Deepseek r1, Starcoder, Continue / Llama3
 | F | Codellama 13b, Llama3
@@ -274,17 +276,19 @@ ${tabs.map(({name, body}, i) => (
 
 <br/>
 
-At the top of the list we have, unsurprisingly, Claude 4, followed closely by Claude 3.7. And, based on this analysis, these are the only two I would trust to make complex, low-human-oversight changes to a codebase.
+At the top of the list we have, unsurprisingly, Claude 4, followed closely by Claude 3.7 (and Cursor+Claude 4). Based on this analysis, these are the only two LLMs I would trust to make complex, low-human-oversight changes to a codebase.
 
-GPT 4o and o4 mini are in a tier below that, where they can do a lot for you, but will likely need some more prompting, and can't be as relied on to make higher-level decisions about a project.
+GPT 4o, o4 mini, and Cursor+GPT4.1 are in a tier below that, where they can do a lot for you, but will likely need some more prompting, and can't be as relied on to make higher-level decisions about a project.
 
 Unsurprisingly, the local models that will run on my M1 Macbook Pro are much less capable (and soooo slooooww), though I was impressed with Qwen3 and Deepseek, especially when they where prompted by Cline.
+
+It's interesting that both Cursor runs were super verbose, and that Claude 4 under Cursor required babysitting, whereas under VSCode it did not.
 
 ## Caveats
 
 - this is an intentionally specific and idiosyncratic scenario, but it is real-world, and I think it's an interesting example of what some of these models can and can't do
-- if I wanted to be really scientific about it, I would try each model several times and report averages or something like that, but 🤷‍♂️ I didn't, 'cause credits aren't free
-- I intentionally didn't do any custom prompting. I could imagine careful custom prompting making some of these things better
+- if I wanted to be really scientific about it, I would try each model several times and report averages or something like that, but 🤷‍♂️ I didn't, 'cause credits aren't free. It's entirely likely that another run would cause a given model to perform rather worse or rather better than I observed.
+- I intentionally didn't do any custom prompting. I could imagine careful custom prompting making some of these things better.
 
 ## Detailed notes
 

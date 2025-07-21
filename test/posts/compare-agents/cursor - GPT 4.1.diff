@@ -1,8 +1,8 @@
 diff --git prisma/schema.prisma prisma/schema.prisma
-index 1984365..1848e25 100644
+index 1984365..8e8abe6 100644
 --- prisma/schema.prisma
 +++ prisma/schema.prisma
-@@ -1,131 +1,199 @@
+@@ -1,131 +1,190 @@
  // This is your Prisma schema file,
  // learn more about it in the docs: https://pris.ly/d/prisma-schema
  
@@ -39,40 +39,29 @@ index 1984365..1848e25 100644
      EXPIRED
  }
  
-+enum UserRole {
-+    USER
-+    SUPER_ADMIN
-+}
-+
-+enum UserStatus {
-+    ACTIVE
-+    SUSPENDED
-+    DEACTIVATED
++enum EventPhase {
++    OPEN
++    VOTING
++    CLOSED
++    ARCHIVED
 +}
 +
  model Artist {
-     id                      String               @id @default(uuid())
-     email                   String               @unique
-     passwordHash            String
-     fullName                String
-     profilePic              String? // URL or file path
-+    role                    UserRole             @default(USER)
-+    status                  UserStatus           @default(ACTIVE)
-+    emailVerified           Boolean              @default(false)
-+    verificationToken       String?
-+    verificationTokenExpiry DateTime?
-+    resetToken              String? // for password reset
-+    resetTokenExpiry        DateTime?
-     memberships             GroupMembership[]
-     artworks                Artwork[]
-     notifications           Notification[]
-+    votes                   Vote[]
-+    eventParticipations     EventParticipation[]
-+    auditLogs               AuditLog[]
-+    sessions                Session[]
-     createdAt               DateTime             @default(now())
--    resetToken   String? // for password reset
--    resetTokenExpiry DateTime?
+     id               String            @id @default(uuid())
+     email            String            @unique
+     passwordHash     String
+     fullName         String
+     profilePic       String? // URL or file path
+     memberships      GroupMembership[]
+     artworks         Artwork[]
+     notifications    Notification[]
+     createdAt        DateTime          @default(now())
+     resetToken       String? // for password reset
+     resetTokenExpiry DateTime?
++    isSuperAdmin     Boolean           @default(false) // global admin
++    Vote             Vote[]
++    Flag             Flag[]
++    AuditLog         AuditLog[]
  }
  
  model Group {
@@ -97,16 +86,16 @@ index 1984365..1848e25 100644
  }
  
  model Event {
-     id              String               @id @default(uuid())
-     group           Group                @relation(fields: [groupId], references: [id])
+     id              String     @id @default(uuid())
+     group           Group      @relation(fields: [groupId], references: [id])
      groupId         String
-     phase           String // open, voting, closed, archived
+-    phase           String // open, voting, closed, archived
++    phase           EventPhase // open, voting, closed, archived
      submissionLimit Int
      artworks        Artwork[]
      matches         Match[]
+     createdAt       DateTime   @default(now())
 +    votes           Vote[]
-+    participations  EventParticipation[]
-     createdAt       DateTime             @default(now())
  }
  
  model Artwork {
@@ -122,10 +111,11 @@ index 1984365..1848e25 100644
      year        Int?
      images      Json // Array of file paths or URLs
      status      ArtworkStatus
-+    votes       Vote[]
      createdAt   DateTime      @default(now())
      Match1      Match?        @relation("MatchArtwork1")
      Match2      Match?        @relation("MatchArtwork2")
++    votes       Vote[]
++    flags       Flag[]
  }
  
  model Match {
@@ -140,51 +130,6 @@ index 1984365..1848e25 100644
      createdAt  DateTime @default(now())
  }
  
-+model Vote {
-+    id        String   @id @default(uuid())
-+    artist    Artist   @relation(fields: [artistId], references: [id])
-+    artistId  String
-+    artwork   Artwork  @relation(fields: [artworkId], references: [id])
-+    artworkId String
-+    event     Event    @relation(fields: [eventId], references: [id])
-+    eventId   String
-+    liked     Boolean
-+    createdAt DateTime @default(now())
-+
-+    @@unique([artistId, artworkId, eventId])
-+}
-+
-+model EventParticipation {
-+    id       String   @id @default(uuid())
-+    artist   Artist   @relation(fields: [artistId], references: [id])
-+    artistId String
-+    event    Event    @relation(fields: [eventId], references: [id])
-+    eventId  String
-+    joinedAt DateTime @default(now())
-+
-+    @@unique([artistId, eventId])
-+}
-+
-+model Session {
-+    id        String   @id @default(uuid())
-+    artist    Artist   @relation(fields: [artistId], references: [id])
-+    artistId  String
-+    token     String   @unique
-+    expiresAt DateTime
-+    createdAt DateTime @default(now())
-+}
-+
-+model AuditLog {
-+    id         String   @id @default(uuid())
-+    actor      Artist   @relation(fields: [actorId], references: [id])
-+    actorId    String
-+    action     String // "FLAG_ARTWORK", "REMOVE_USER", "CHANGE_EVENT_PHASE", etc.
-+    targetType String // "ARTWORK", "USER", "EVENT", "GROUP"
-+    targetId   String
-+    details    Json? // Additional context
-+    createdAt  DateTime @default(now())
-+}
-+
  model Invitation {
      id        String           @id @default(uuid())
      group     Group            @relation(fields: [groupId], references: [id])
@@ -204,3 +149,48 @@ index 1984365..1848e25 100644
      read      Boolean          @default(false)
      createdAt DateTime         @default(now())
  }
++
++model Vote {
++    id        String   @id @default(uuid())
++    event     Event    @relation(fields: [eventId], references: [id])
++    eventId   String
++    voter     Artist   @relation(fields: [voterId], references: [id])
++    voterId   String
++    artwork   Artwork  @relation(fields: [artworkId], references: [id])
++    artworkId String
++    value     Int // 1 = like, 0 = skip/dislike, or use enum if needed
++    createdAt DateTime @default(now())
++
++    @@unique([eventId, voterId, artworkId])
++}
++
++model Flag {
++    id         String   @id @default(uuid())
++    artwork    Artwork  @relation(fields: [artworkId], references: [id])
++    artworkId  String
++    reporter   Artist   @relation(fields: [reporterId], references: [id])
++    reporterId String
++    reason     String?
++    createdAt  DateTime @default(now())
++}
++
++model AuditLog {
++    id         String   @id @default(uuid())
++    actor      Artist?  @relation(fields: [actorId], references: [id])
++    actorId    String?
++    action     String
++    targetType String
++    targetId   String
++    details    String?
++    createdAt  DateTime @default(now())
++}
++
++model EmailLog {
++    id        String   @id @default(uuid())
++    to        String
++    subject   String
++    body      String?
++    status    String // sent, failed, etc.
++    error     String?
++    createdAt DateTime @default(now())
++}
