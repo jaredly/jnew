@@ -5,7 +5,8 @@ tags:
 categories:
 - Programming
 date: 2025-07-18
-draft: true
+draft: false
+gist: 69bc8dc9e5ba4cf1c653b09feca64b49
 ---
 
 I wanted to make a web site, but I didn't want to do the work. It's not a very interesting website, technically speaking, so it would be tedious to implement. Also, corporate wants me to jump into the Beautiful World of Tomorrow, and all that ent<em>ai</em>ls.
