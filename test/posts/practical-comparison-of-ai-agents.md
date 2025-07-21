@@ -1,5 +1,5 @@
 ---
-title: Comparing AI Coding Agents
+title: A Practical Comparison of AI Coding Agents
 tags:
 - ai
 categories:
@@ -21,7 +21,7 @@ I have free access to copilot because of my open source work, so I started into 
 | S | Claude 4
 | A | Claude 3.7
 | B | GPT 4o, o4 mini
-| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek r1
+| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek r1, Cursor / Claude4
 | D | Claude 3.5, Cline / Qwen3
 | E | Qwen3, Mistral, Codestral, Deepseek r1, Starcoder, Continue / Llama3
 | F | Codellama 13b, Llama3
@@ -141,13 +141,14 @@ I'll also track how many important correct changes it was able to make to the sc
 
 ### Third-party agent extensions
 
-I also tried out two third-party extensions providing AI agents: [Cline](https://cline.bot/) and [Continue](https://docs.continue.dev/), to see if they would do a better job with some of the local ollama agents, and they did! Accuracy, Verbosity, and Babysitting were much better, though the edits made were still less than impressive.
+I also tried out two third-party extensions providing AI agents: [Cline](https://cline.bot/) and [Continue](https://docs.continue.dev/), to see if they would do a better job with some of the local ollama agents, and they did! Accuracy, Verbosity, and Babysitting were much better, though the edits made were still less than impressive. I also tried out Claude 4 under Cursor to see if it would be different.
 
 | Extension / Model | Accuracy | Verbosity | Babysitting | Vote | SuperAdmin | Session | Enums |
 | ----- | -- | -- | -- | - | - | - | - |
 | Cline / Qwen3 | 🟢 | 🔴 | 🟢 | ❌ | ❌ | ❌ | ✅ |
 | Cline / Deepseek | 🟢 | 🟢 | 🟢 | ❌ | ✅ | ✅ | ❌ |
 | Continue / Llama3 | 🟡 | 🟡  | 🟢 | ❌ | ❌ | ❌  | ❌ |
+| Cursor / Claude 4 | 🟢 | 🟡 | 🟡 | ✅ | ❌ | ❌ | ✅ |
 
 <br/>
 
@@ -208,6 +209,7 @@ const runners = {
   'copilot-local': ['Mistral', 'Codellama 13b', 'Codestral', 'Starcoder', 'Llama3', 'Qwen3', 'Deepseek r1 14b'],
   'cline': ['Qwen3', 'Deepseek r1 14b'],
   'continue': ['Llama3'],
+  'cursor': ['Claude 4'],
 }
 
 const tabs = []
@@ -263,7 +265,7 @@ ${tabs.map(({name, body}, i) => (
 | S | Claude 4
 | A | Claude 3.7
 | B | GPT 4o, o4 mini
-| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek r1
+| C | GPT 4.1, Gemini 2.5 Pro, Cline / Deepseek r1, Cursor / Claude4
 | D | Claude 3.5, Cline / Qwen3
 | E | Qwen3, Mistral, Codestral, Deepseek r1, Starcoder, Continue / Llama3
 | F | Codellama 13b, Llama3
@@ -278,6 +280,12 @@ GPT 4o and o4 mini are in a tier below that, where they can do a lot for you, bu
 
 Unsurprisingly, the local models that will run on my M1 Macbook Pro are much less capable (and soooo slooooww), though I was impressed with Qwen3 and Deepseek, especially when they where prompted by Cline.
 
+## Caveats
+
+- this is an intentionally specific and idiosyncratic scenario, but it is real-world, and I think it's an interesting example of what some of these models can and can't do
+- if I wanted to be really scientific about it, I would try each model several times and report averages or something like that, but 🤷‍♂️ I didn't, 'cause credits aren't free
+- I intentionally didn't do any custom prompting. I could imagine careful custom prompting making some of these things better
+
 ## Detailed notes
 
 ### Claude 4 Sonnet
@@ -287,7 +295,7 @@ Excellent work. After making the initial edit, it noticed that there were linter
 ### GPT 4.1
 
 - I had to discard a session because it totally failed due to a syntax error that it introduced in the schema (it ended up deleting several entities from the file).
-- It did well with the `Vote` entity, but when I asked it to add support for a "super admin" role, there were several issues: first, it tried to add the field to the `Artwork` entity, not the `Artist` entity, and when I corrected it, it removed the errand field, again failed to add it to the `Artist` entity, but told me that it had completed the task (when it had not)
+- It did well with the `Vote` entity, but when I asked it to add support for a "super admin" role, there were several issues: first, it tried to add the field to the `Artwork` entity, not the `Artist` entity, and when I corrected it, it removed the errant field, again failed to add it to the `Artist` entity, but told me that it had completed the task (when it had not)
 
 ### Gemini 2.5 Pro
 
@@ -295,7 +303,7 @@ Added a "Artwork Flag" model, for tracking the reason a piece was flagged. Could
 
 ### Mistral (Ollama)
 
-Didn't actually make the change using the tool; it output the "new file version" into the chat, and I had to press a button to "adopt those changes into the current file". Perhaps needs more prompting? Might work better under Cline.
+Didn't actually make the change using the tool; it output the "new file version" into the chat, and I had to press a button to "adopt those changes into the current file". Perhaps needs more prompting? Might work better under Cline. (ok I tried it under Cline and it did worse 🤔)
 
 While it didn't make any of the changes I was hoping for, it did manage to make /valid/ changes (adding some arguably-useful properties to 4 different entities).
 
@@ -337,8 +345,8 @@ When it did make suggestions they were bad, and contained errors.
 
 ### Cline Qwen3
 
-- If I disrecard the `<think></think>` blocks, it's not too verbose, but cline just showed them verbatim, so it was soooo verbose
-- Got the EventPhase right?
+- If I disregard the `<think></think>` blocks, it's not too verbose, but cline just showed them verbatim, so it was soooo verbose
+- Got the EventPhase right!
 
 ### Cline Deepseek R1 (14b)
 
@@ -348,3 +356,8 @@ When it did make suggestions they were bad, and contained errors.
 
 - understood the prompt, but whiffed it on making suggestions.
 - claimed to add a line to the `Event` entity (the `match` attribute), when that line already existed. all it did was add a comment claiming credit
+
+### Cursor Claude 4
+
+- In the dialog, it identified a `Session` entity as missing, as well as "super-admin" tracking, but it didn't actually make those changes to the document.
+- Surprisingly, Claude 4 needed more babysitting in Cursor than it did in VSCode+Copilot 🤔 must be a prompting difference?
