@@ -145,7 +145,7 @@ I also tried out two third-party extensions providing AI agents: [Cline](https:/
 
 | Extension / Model | Accuracy | Verbosity | Babysitting | Vote | SuperAdmin | Session | Enums |
 | ----- | -- | -- | -- | - | - | - | - |
-| Cline / Qwen3 | 🟢 | 🟢 | 🟢 | ❌ | ❌ | ❌ | ❌ |
+| Cline / Qwen3 | 🟢 | 🔴 | 🟢 | ❌ | ❌ | ❌ | ✅ |
 | Cline / Deepseek | 🟢 | 🟢 | 🟢 | ❌ | ✅ | ✅ | ❌ |
 | Continue / Llama3 | 🟡 | 🟡  | 🟢 | ❌ | ❌ | ❌  | ❌ |
 
@@ -276,7 +276,7 @@ At the top of the list we have, unsurprisingly, Claude 4, followed closely by Cl
 
 GPT 4o and o4 mini are in a tier below that, where they can do a lot for you, but will likely need some more prompting, and can't be as relied on to make higher-level decisions about a project.
 
-Unsurprisingly, the local models that will run on my M1 Macbook Pro are much less capable (and, with the exception of Qwen3, soooo much slower); though I was impressed with Qwen3 (again, probably needs more specific instructions to be helpful) and Deepseek, especially when it was prompted by Cline.
+Unsurprisingly, the local models that will run on my M1 Macbook Pro are much less capable (and soooo slooooww), though I was impressed with Qwen3 and Deepseek, especially when they where prompted by Cline.
 
 ## Detailed notes
 
@@ -332,13 +332,13 @@ When it did make suggestions they were bad, and contained errors.
 
 - misunderstood the prompt; had to be reprompted with clearer wording
 - didn't realize that the `Artist` entity was for users, wanted to create a new `User` entity
-- produced invalid prisma code (hallucinated pragmas `@oneToManyInverse` and `manyToManyInverse` instead of the actual `@relation` pragma)
+- produced invalid prisma code (hallucinated pragmas `@oneToManyInverse` and `@manyToManyInverse` instead of the actual `@relation` pragma)
 - deleted the `GroupMembership` entity entirely, and removed many attributes from other entities
 
 ### Cline Qwen3
 
-- seems to have been overwhelmed by Cline's large prompt.
-- Didn't come up with any useful changes
+- If I disrecard the `<think></think>` blocks, it's not too verbose, but cline just showed them verbatim, so it was soooo verbose
+- Got the EventPhase right?
 
 ### Cline Deepseek R1 (14b)
 
