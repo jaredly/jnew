@@ -1,4 +1,11 @@
-import { mkdir, mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
+import {
+	existsSync,
+	mkdir,
+	mkdirSync,
+	readdirSync,
+	readFileSync,
+	writeFileSync,
+} from "fs";
 import { collectTalks, renderTalkList } from "./Talk";
 import { chopSuffix } from "./Util";
 // import toml from 'toml';
@@ -32,25 +39,39 @@ let splitTopYaml = (text: string): [any | null, string] => {
 	return [parseToml(parts[0]), parts.slice(1).join(divider)];
 };
 
-let collectPages = <V>(
+const collectPages = <V, S>(
 	inputDir: string,
 	outputDir: string,
 	baseDir: string,
 	parse: (name: string, text: string) => V,
-): [string, V][] => {
-	let base = inputDir + "/" + baseDir;
+	parseSub?: (name: string, text: string) => S,
+): { dest: string; fullDest: string; page: V; subs: S[] }[] => {
+	const base = inputDir + "/" + baseDir;
 	return readdirSync(base)
 		.filter(
 			(f) => f.endsWith(".md") || f.endsWith(".html") || f.endsWith(".nm.txt"),
 		)
 		.map((fileName) => {
-			let fullName = base + "/" + fileName;
-			let contents = readFileSync(fullName, "utf8");
-			let result = parse(baseDir + "/" + fileName, contents);
-			let dest = outputDir + "/" + baseDir + "/" + chopSuffix(fileName);
+			const fullName = base + "/" + fileName;
+			const maybeDirname = base + "/" + fileName.split(".")[0];
+			let subs: S[] = [];
+			if (parseSub && existsSync(maybeDirname)) {
+				subs = readdirSync(maybeDirname)
+					.filter(
+						(f) =>
+							f.endsWith(".md") || f.endsWith(".html") || f.endsWith(".nm.txt"),
+					)
+					.map((fileName) => {
+						const fullName = maybeDirname + "/" + fileName;
+						return parseSub(fullName, readFileSync(fullName, "utf8"));
+					});
+			}
+			const contents = readFileSync(fullName, "utf8");
+			const result = parse(baseDir + "/" + fileName, contents);
+			const dest = outputDir + "/" + baseDir + "/" + chopSuffix(fileName);
 			mkdirSync(dest, { recursive: true });
-			let fullDest = dest + "/" + "index.html";
-			return [fullDest, result];
+			const fullDest = dest + "/" + "index.html";
+			return { dest, fullDest, page: result, subs };
 		});
 };
 
@@ -88,29 +109,32 @@ let assembleProjectTags = (projects: project[]) => {
 	);
 };
 
-export let processProjects = (inputDir: string, outputDir: string) => {
+export const processProjects = (inputDir: string, outputDir: string) => {
 	/* Project pages */
-	let projects = collectPages(
+	const projects = collectPages(
 		inputDir,
 		outputDir,
 		"projects",
 		(fileName, contents) => {
-			let [opts, body] = splitTopYaml(contents);
+			const [opts, body] = splitTopYaml(contents);
 			return parseProject(fileName, opts, body);
 		},
+		(fileName, contents) => {
+			return { fileName, contents };
+		},
 	)
-		.map(([dest, config]) => {
-			let html = renderProject(config);
-			writeFileSync(dest, html, "utf8");
-			return config;
+		.map(({ fullDest, page, subs }) => {
+			const html = renderProject(page);
+			writeFileSync(fullDest, html, "utf8");
+			return page;
 		})
 		.sort(sortProjectsByDate);
-	let projectTags = assembleProjectTags(projects);
-	let projectTagCounts = Object.entries(projectTags)
+	const projectTags = assembleProjectTags(projects);
+	const projectTagCounts = Object.entries(projectTags)
 		.map(([res, value]) => [res, value.length] as [string, number])
 		.sort(([k, n], [v, n2]) => n2 - n);
 
-	let html = renderList({
+	const html = renderList({
 		tags: projectTagCounts,
 		projects,
 		contentTitle: "All projects",
@@ -118,9 +142,9 @@ export let processProjects = (inputDir: string, outputDir: string) => {
 	writeFileSync(outputDir + "/projects/index.html", html);
 
 	Object.entries(projectTags).forEach(([tag, posts]) => {
-		let dest = outputDir + "/projects/tags/" + tag;
+		const dest = outputDir + "/projects/tags/" + tag;
 		mkdirSync(dest, { recursive: true });
-		let html = renderList({
+		const html = renderList({
 			tags: projectTagCounts,
 			projects: posts.sort(sortProjectsByDate),
 			contentTitle: "Tag: " + tag,
@@ -131,31 +155,31 @@ export let processProjects = (inputDir: string, outputDir: string) => {
 	return projects;
 };
 
-export let processPoetry = (inputDir: string, outputDir: string) => {
-	let fullPosts = collectPages(
+export const processPoetry = (inputDir: string, outputDir: string) => {
+	const fullPosts = collectPages(
 		inputDir,
 		outputDir,
 		"poems",
 		(fileName, contents) => {
-			let [opts, body] = splitTopYaml(contents);
+			const [opts, body] = splitTopYaml(contents);
 			return parsePost(fileName, opts, body);
 		},
 	);
-	let posts = fullPosts
-		.map((p) => p[1])
+	const posts = fullPosts
+		.map((p) => p.page)
 		.filter(Boolean)
 		.sort(sortPostsByDate);
-	fullPosts.forEach(([dest, post]) => {
-		let html = renderPoem(posts, post);
-		writeFileSync(dest, html, "utf8");
+	fullPosts.forEach(({ fullDest, page }) => {
+		const html = renderPoem(posts, page);
+		writeFileSync(fullDest, html, "utf8");
 	});
 
-	let tags = assembleTags(posts);
-	let tagCounts = Object.entries(tags)
+	const tags = assembleTags(posts);
+	const tagCounts = Object.entries(tags)
 		.map(([res, value]) => [res, value.length] as [string, number])
 		.sort(([k, n], [v, n2]) => n2 - n);
 
-	let { main: html, rss } = postList(
+	const { main: html, rss } = postList(
 		"https://jaredforsyth.com",
 		posts,
 		tagCounts,
@@ -206,21 +230,21 @@ export let processBlog = (
 			}
 		},
 	);
-	let allPosts = fullPosts
-		.map((p) => p[1])
+	const allPosts = fullPosts
+		.map((p) => p.page)
 		.filter(Boolean)
 		.sort(sortPostsByDate);
-	let posts = excludeDrafts
+	const posts = excludeDrafts
 		? allPosts.filter((post) => !post.config.draft)
 		: allPosts;
-	fullPosts.forEach(([dest, post]) => {
-		let html = renderPost(posts, post);
-		writeFileSync(dest, html, "utf8");
+	fullPosts.forEach(({ fullDest, page }) => {
+		const html = renderPost(posts, page);
+		writeFileSync(fullDest, html, "utf8");
 	});
 	//   renderPages(renderPost(posts), fullPosts)
 
-	let tags = assembleTags(posts);
-	let tagCounts = Object.entries(tags)
+	const tags = assembleTags(posts);
+	const tagCounts = Object.entries(tags)
 		.map(([res, value]) => [res, value.length] as [string, number])
 		.sort(([k, n], [v, n2]) => n2 - n);
 
