@@ -1,7 +1,7 @@
-    {
-      "name" : "a-reason-react-tutorial",
-      "reason" : {"react-jsx" : 3},
-      "refmt": 3,
-      "bs-dependencies": ["reason-react"],
-      "sources": ["src", "render"]
-    }
+{
+	"name": "a-reason-react-tutorial",
+	"reason": { "react-jsx": 3 },
+	"refmt": 3,
+	"bs-dependencies": ["reason-react"],
+	"sources": ["src", "render"]
+}

@@ -1,65 +1,62 @@
-let props = '';
+let props = "";
 
 let escapeAttributeValue = (value: string) =>
-    typeof value === 'string'
-        ? value.replace(/&/g, '&amp;').replace(/\"/g, '&quot;')
-        : typeof value === 'boolean'
-        ? value + ''
-        : (console.log('attributed value is', value), JSON.stringify(value));
+	typeof value === "string"
+		? value.replace(/&/g, "&amp;").replace(/\"/g, "&quot;")
+		: typeof value === "boolean"
+			? value + ""
+			: (console.log("attributed value is", value), JSON.stringify(value));
 
 let formatAttributes = (attrs: [string, string][]) =>
-    attrs
-        .map(
-            ([name, v]) =>
-                ' ' +
-                (name === 'className' ? 'class' : name) +
-                '="' +
-                escapeAttributeValue(v) +
-                '"',
-        )
-        .join('');
+	attrs
+		.map(
+			([name, v]) =>
+				" " +
+				(name === "className" ? "class" : name) +
+				'="' +
+				escapeAttributeValue(v) +
+				'"',
+		)
+		.join("");
 
 let selfClosing = (tag: string) => {
-    switch (tag) {
-        case 'meta':
-            return true;
-        case 'br':
-            return true;
-        case 'img':
-            return true;
-        default:
-            return false;
-    }
+	switch (tag) {
+		case "meta":
+			return true;
+		case "br":
+			return true;
+		case "img":
+			return true;
+		default:
+			return false;
+	}
 };
 
 export let normal = (
-    name: string,
-    preattrs: [string, string][],
-    {
-        attrs,
-        children,
-    }: {
-        attrs: [string, string][];
-        children: (string | boolean | null | undefined)[];
-    },
+	name: string,
+	preattrs: [string, string][],
+	{
+		attrs,
+		children,
+	}: {
+		attrs: [string, string][];
+		children: (string | boolean | null | undefined)[];
+	},
 ) => {
-    let head = name + formatAttributes(preattrs.concat(attrs));
-    const prefix = name === 'html' ? '<!DOCTYPE HTML>\n' : '';
-    if (children.length === 0) {
-        return (
-            prefix +
-            '<' +
-            head +
-            (selfClosing(name) ? '/>' : '></' + name + '>')
-        );
-    } else {
-        let body = children.join('\n');
-        if (body.includes('\n')) {
-            return prefix + '<' + head + '>\n' + body + '\n</' + name + '>';
-        } else {
-            return prefix + '<' + head + '>' + body + '</' + name + '>';
-        }
-    }
+	let head = name + formatAttributes(preattrs.concat(attrs));
+	const prefix = name === "html" ? "<!DOCTYPE HTML>\n" : "";
+	if (children.length === 0) {
+		return (
+			prefix + "<" + head + (selfClosing(name) ? "/>" : "></" + name + ">")
+		);
+	} else {
+		let body = children.join("\n");
+		if (body.includes("\n")) {
+			return prefix + "<" + head + ">\n" + body + "\n</" + name + ">";
+		} else {
+			return prefix + "<" + head + ">" + body + "</" + name + ">";
+		}
+	}
 };
 
 // let filterPresentValues = List.fold_left(
@@ -74,16 +71,16 @@ export let normal = (
 // let filterPresentValues = vals => List.rev(filterPresentValues(vals));
 
 const supported = [
-    'class',
-    'id',
-    'lang',
-    'title',
-    'style',
-    'itemprop',
-    'itemtype',
-    'itemscope',
-    'role',
-    'name',
+	"class",
+	"id",
+	"lang",
+	"title",
+	"style",
+	"itemprop",
+	"itemtype",
+	"itemscope",
+	"role",
+	"name",
 ];
 
 type pairs = [string, string][];

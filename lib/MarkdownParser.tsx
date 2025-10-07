@@ -1,9 +1,8 @@
 import md from "markdown-it";
 
-export let saveTwitterCache = () => {
-};
+export let saveTwitterCache = () => {};
 
-import "prismjs"
+import "prismjs";
 import mdi from "markdown-it-anchor";
 import mdf from "markdown-it-footnote";
 import mdp from "markdown-it-prism";
@@ -21,47 +20,53 @@ import "prismjs/plugins/diff-highlight/prism-diff-highlight.js";
 import { existsSync, readFileSync } from "fs";
 
 const mdpoetry = md("default", { breaks: true, html: true });
-export const processPoetry = (rawBody: string) => mdpoetry.render(rawBody.replace(/\n--+\n/g, "\n<br/><br/><br/><br/><br/>\n\n----\n"));
+export const processPoetry = (rawBody: string) =>
+	mdpoetry.render(
+		rawBody.replace(/\n--+\n/g, "\n<br/><br/><br/><br/><br/>\n\n----\n"),
+	);
 
 function markdownItJsEmbed(md: any) {
-  md.core.ruler.after('block', 'js-embed-eval', (state: any) => {
-    const tokens = state.tokens;
+	md.core.ruler.after("block", "js-embed-eval", (state: any) => {
+		const tokens = state.tokens;
 
-    for (let i = 0; i < tokens.length; i++) {
-      const token = tokens[i];
+		for (let i = 0; i < tokens.length; i++) {
+			const token = tokens[i];
 
-      if (
-        token.type === 'fence' &&
-        token.info.trim().toLowerCase() === 'js embed'
-      ) {
-        let html = '';
-        try {
-            const f = new Function('{readFile, mdToHtml}', token.content);
-            const result = f({readFile: (name: string) => {
-                const path = __dirname + '/test/posts/' + name
-                if (existsSync(path)) {
-                    return readFileSync(path, 'utf8')
-                } else {
-                    console.log('cant fine', path)
-                    return `File not found: ${name}`
-                }
-            }, mdToHtml: (text: string) => {
-                return process(text)
-            }})
+			if (
+				token.type === "fence" &&
+				token.info.trim().toLowerCase() === "js embed"
+			) {
+				let html = "";
+				try {
+					const f = new Function("{readFile, mdToHtml}", token.content);
+					const result = f({
+						readFile: (name: string) => {
+							const path = __dirname + "/test/posts/" + name;
+							if (existsSync(path)) {
+								return readFileSync(path, "utf8");
+							} else {
+								console.log("cant fine", path);
+								return `File not found: ${name}`;
+							}
+						},
+						mdToHtml: (text: string) => {
+							return process(text);
+						},
+					});
 
-          html = typeof result === 'string' ? result : String(result);
-        } catch (err) {
-          html = `<pre><code>Error: ${md.utils.escapeHtml((err as Error).message)}</code></pre>`;
-        }
+					html = typeof result === "string" ? result : String(result);
+				} catch (err) {
+					html = `<pre><code>Error: ${md.utils.escapeHtml((err as Error).message)}</code></pre>`;
+				}
 
-        // Replace this token with an HTML block token
-        const htmlToken = new state.Token('html_block', '', 0);
-        htmlToken.content = html;
+				// Replace this token with an HTML block token
+				const htmlToken = new state.Token("html_block", "", 0);
+				htmlToken.content = html;
 
-        tokens.splice(i, 1, htmlToken);
-      }
-    }
-  });
+				tokens.splice(i, 1, htmlToken);
+			}
+		}
+	});
 }
 
 // function markdownItJsEmbed(md) {
@@ -104,28 +109,28 @@ function markdownItJsEmbed(md: any) {
 // }
 
 const mdit = md("default", {
-    linkify: true,
-    typographer: true,
-    html: true,
+	linkify: true,
+	typographer: true,
+	html: true,
 })
-    .use(mdf)
-    .use(mdi, {
-        permalink: mdi.permalink.headerLink(),
-        slugify: (text) => {
-            return text
-                .trim()
-                .replaceAll('"', "&quot;")
-                .replaceAll(/[^a-zA-Z0-9_-]+/g, "-")
-                .replace(/-$/, "");
-        },
-    })
-    .use(mda)
-    .use(mdp, {
-        highlightInlineCode: true,
-        defaultLanguage: "typescript",
-    })
-    .use(markdownItJsEmbed)
+	.use(mdf)
+	.use(mdi, {
+		permalink: mdi.permalink.headerLink(),
+		slugify: (text) => {
+			return text
+				.trim()
+				.replaceAll('"', "&quot;")
+				.replaceAll(/[^a-zA-Z0-9_-]+/g, "-")
+				.replace(/-$/, "");
+		},
+	})
+	.use(mda)
+	.use(mdp, {
+		highlightInlineCode: true,
+		defaultLanguage: "typescript",
+	})
+	.use(markdownItJsEmbed);
 
 export const process = (rawBody: string, ids?: { [key: string]: string }) => {
-    return mdit.render(rawBody);
+	return mdit.render(rawBody);
 };
