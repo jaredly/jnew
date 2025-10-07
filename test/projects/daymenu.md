@@ -8,3 +8,5 @@ status: beta
 date: 2025-10-07
 
 Trying to get google verified.
+
+Privacy policy: https://github.com/jaredly/daymenu/blob/main/Privacy.md
