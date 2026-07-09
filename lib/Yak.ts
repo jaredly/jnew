@@ -14,6 +14,7 @@ import { dateSort } from "./Shared";
 import { parseToml } from "./Toml";
 import { parseNm, parsePost, post, postList, renderPost } from "./Post";
 import { renderPoem } from "./Poetry";
+import { process as processMarkdown } from "./MarkdownParser";
 
 let sortPostsByDate = (
 	{ config: { date: date1 } }: post,
@@ -63,7 +64,7 @@ const collectPages = <V, S>(
 					)
 					.map((fileName) => {
 						const fullName = maybeDirname + "/" + fileName;
-						return parseSub(fullName, readFileSync(fullName, "utf8"));
+						return parseSub(fileName, readFileSync(fullName, "utf8"));
 					});
 			}
 			const contents = readFileSync(fullName, "utf8");
@@ -123,9 +124,13 @@ export const processProjects = (inputDir: string, outputDir: string) => {
 			return { fileName, contents };
 		},
 	)
-		.map(({ fullDest, page, subs }) => {
+		.map(({ fullDest, dest, page, subs }) => {
 			const html = renderProject(page);
 			writeFileSync(fullDest, html, "utf8");
+			subs.forEach(({ fileName, contents }) => {
+				const name = fileName.split(".").slice(0, -1).join(".");
+				writeFileSync(dest + "/" + name + ".html", processMarkdown(contents));
+			});
 			return page;
 		})
 		.sort(sortProjectsByDate);
@@ -192,9 +197,9 @@ export const processPoetry = (inputDir: string, outputDir: string) => {
 	writeFileSync(outputDir + "/poems/rss.xml", rss);
 
 	Object.entries(tags).forEach(([tag, posts]) => {
-		let dest = outputDir + "/poems/tags/" + tag;
+		const dest = outputDir + "/poems/tags/" + tag;
 		mkdirSync(dest, { recursive: true });
-		let { main: html, rss } = postList(
+		const { main: html, rss } = postList(
 			"https://jaredforsyth.com",
 			posts.sort(sortPostsByDate),
 			tagCounts,
