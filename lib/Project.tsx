@@ -95,7 +95,7 @@ let renderUpdate = ({css, update: [[year, month, day], screenshot, content]}: {c
     );
 };
 
-export let renderProject = ({title: contentTitle, tags, description, github, longDescription, status, screenshot, updates}: project) => {
+export let renderProject = ({title: contentTitle, tags, description, github, link, longDescription, status, screenshot, updates}: project) => {
     let {css, inlineCss} = startPage();
 
     let body = (
@@ -112,6 +112,13 @@ export let renderProject = ({title: contentTitle, tags, description, github, lon
                         A('flex-direction', 'row'),
                     ])}
                 >
+                    {link ? (
+                        <a href={link} target="_blank" style="margin-left: 10px">
+                            Link
+                        </a>
+                    ) : (
+                        ''
+                    )}
                     {status && statusSymbol[status] && (
                         <span title={status} className={css([A('padding-right', '8px')])}>
                             {statusSymbol[status]}
@@ -132,7 +139,7 @@ export let renderProject = ({title: contentTitle, tags, description, github, lon
                     <div style="flex: 1" />
                     {github ? (
                         <a href={github} target="_blank">
-                            {github}
+                            Github
                         </a>
                     ) : (
                         ''
@@ -140,7 +147,17 @@ export let renderProject = ({title: contentTitle, tags, description, github, lon
                 </div>
             </div>
             <div className={css(Shared.Styles.bodyText)}>
-                {screenshot ? <img src={screenshot} alt={contentTitle + ' screenshot'} className={css([A('width', '100%')])} /> : ''}
+                {screenshot ?
+                    (
+                        link
+                            ?
+                            <a href={link} target="_blank">
+                                <img src={screenshot} alt={contentTitle + ' screenshot'} className={css([A('width', '100%')])} />
+                            </a>
+                        :
+                        <img src={screenshot} alt={contentTitle + ' screenshot'} className={css([A('width', '100%')])} />
+                    )
+                    : ''}
                 {longDescription ? <div style="padding: 16px 0">{process(longDescription)}</div> : ''}
                 <div style="height: 32px" />
                 {updates.map((update) => renderUpdate({css, update})).join('\n')}
@@ -235,7 +252,7 @@ export const renderList = ({tags, projects, contentTitle}: {tags: [string, numbe
             </div>
             {Shared.hspace(64)}
             {projects
-                .map(({title, tags, status, github, description, longDescription, screenshot, wip, fileName, updates}) => {
+                .map(({title, tags, status, github, link, description, longDescription, screenshot, wip, fileName, updates}) => {
                     let href = '/' + chopSuffix(fileName) + '/';
                     let numUpdates = updates.length;
                     return (
@@ -263,6 +280,7 @@ export const renderList = ({tags, projects, contentTitle}: {tags: [string, numbe
                                 </a>
                                 <div style="flex: 1" />
                                 {github ? githubLink({css, href: github}) : ''}
+                                {link ? <a href={link}>Link</a> : null}
                             </div>
                             {Shared.hspace(8)}
                             <div className={css(metaText)}>

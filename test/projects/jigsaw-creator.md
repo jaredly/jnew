@@ -1,7 +1,6 @@
 title: Jigsaw Creator
 description: A tool for creating jigsaw puzzle boards
 screenshot: /images/projects/jigsaw-creator.png
-github: https://github.com/jaredly/umkehr/examples/react-crdt/jigsaw-board-creator.html
 link: https://jigsaw-creator.quick.jaredforsyth.com/
 ---
 date: 2026-07-09
