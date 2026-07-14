@@ -497,7 +497,7 @@ export let parseConfig = (
 	{
 		strings: { title, description, date, thumbnail, article_image, gist, hn },
 		stringLists: { tags, categories },
-		bools: { featured, draft },
+		bools: { featured, draft, gist: gistBool },
 	}: doc,
 ): config => {
 	let config = defaultConfig(fileName);
@@ -506,7 +506,7 @@ export let parseConfig = (
 		...{
 			title,
 			description,
-			gist,
+			gist: gist ?? gistBool,
 			date: date ? parseDate(date) : config.date,
 			thumbnail,
 			article_image,
