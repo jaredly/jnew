@@ -1,38 +1,42 @@
 {
-    "name": "my-website",
-    "private": true,
-    "version": "1.0.0",
-    "description": "My website",
-    "scripts": {
-        "serve": "http-server test/pages",
-        "start": "env DRAFTS=true watchexec -w test/poems -w lib -w bin -w test/posts npm run build",
-        "pub": "npm run build && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets && cd test/publish && git add .",
-        "build": "esbuild --bundle bin/Build.ts --external:markdown-it-prism --platform=node --sourcemap=inline > ok.js && node --enable-source-maps ok.js && rm ok.js",
-        "upload": "env DRAFTS=true UPLOAD_GISTS=true npm run build",
-        "get-gists": "esbuild --bundle bin/Gists.ts --platform=node ${npm_config_upload} | node"
-    },
-    "devDependencies": {
-        "@types/node": "^18.11.18"
-    },
-    "dependencies": {
-        "@types/markdown-it": "^12.2.3",
-        "@types/object-hash": "^3.0.2",
-        "@types/prismjs": "^1.26.0",
-        "esbuild": "^0.17.5",
-        "markdown-it": "^13.0.1",
-        "markdown-it-anchor": "^8.6.6",
-        "markdown-it-footnote": "^4.0.0",
-        "markdown-it-prism": "^2.3.0",
-        "node-fetch": "^3.3.0",
-        "object-hash": "^3.0.0",
-        "prismjs": "^1.29.0",
-        "toml": "^3.0.0",
-        "typescript": "^4.9.5",
-        "yaml": "^2.2.1"
-    },
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "esbuild"
-        ]
-    }
+	"name": "my-website",
+	"private": true,
+	"version": "1.0.0",
+	"description": "My website",
+	"scripts": {
+		"serve": "http-server test/pages",
+		"serve-pub": "http-server test/publish",
+		"start": "env DRAFTS=true watchexec -w test/poems -w lib -w bin -w test/posts -w test/projects npm run build",
+		"pub": "npm run build && rsync -r test/pages/ test/publish && rsync -r test/images/ test/publish/images && rsync -r test/assets/ test/publish/assets && cd test/publish && git add .",
+		"build": "esbuild --bundle bin/Build.ts --external:markdown-it-prism --platform=node --sourcemap=inline > ok.js && node --enable-source-maps ok.js && rm ok.js",
+		"upload": "env DRAFTS=true UPLOAD_GISTS=true npm run build",
+		"get-gists": "esbuild --bundle bin/Gists.ts --platform=node ${npm_config_upload} | node"
+	},
+	"devDependencies": {
+		"@types/markdown-it-attrs": "^4.1.3",
+		"@types/markdown-it-footnote": "^3.0.4",
+		"@types/node": "^18.11.18"
+	},
+	"dependencies": {
+		"@types/markdown-it": "^12.2.3",
+		"@types/object-hash": "^3.0.2",
+		"@types/prismjs": "^1.26.0",
+		"esbuild": "^0.17.5",
+		"markdown-it": "^13.0.1",
+		"markdown-it-anchor": "^8.6.6",
+		"markdown-it-attrs": "^4.3.1",
+		"markdown-it-footnote": "^4.0.0",
+		"markdown-it-prism": "^2.3.0",
+		"node-fetch": "^3.3.0",
+		"object-hash": "^3.0.0",
+		"prismjs": "^1.29.0",
+		"toml": "^3.0.0",
+		"typescript": "^4.9.5",
+		"yaml": "^2.2.1"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
+	}
 }

@@ -1,60 +1,66 @@
+const full = require(
+	__dirname + "/posts/structure-editor-literature-review.nm.json",
+);
 
-const full = require(__dirname + '/posts/structure-editor-literature-review.nm.json');
-
-const nodesById = {}
-const nodeSize = {}
+const nodesById = {};
+const nodeSize = {};
 
 const walk = (node, fn) => {
-  node.children.forEach(child => walk(child, fn))
-  fn(node)
-}
+	node.children.forEach((child) => walk(child, fn));
+	fn(node);
+};
 
-walk(full.root, node => {
-  nodeSize[node.id] = node.children.reduce((sum, child) => sum + nodeSize[child.id], 1)
-  nodesById[node.id] = node
-})
+walk(full.root, (node) => {
+	nodeSize[node.id] = node.children.reduce(
+		(sum, child) => sum + nodeSize[child.id],
+		1,
+	);
+	nodesById[node.id] = node;
+});
 
 // const types = {}
 // walk(full.root, node => types[node.type] = true)
 // console.log(Object.keys(types).join(','))
 // types: undefined,code-playground,base,normal,symlink,image,table,todo,ordered_list,list
 
-const renderContent = node => {
-  switch (node.type) {
-    case 'image':
-      return `<div><img src="${node.imageSrc}" alt="${node.content}"/><p>${node.content}</p></div>`
-    case undefined:
-    case 'base':
-    case 'normal':
-    case 'todo':
-      // TODO markdown render
-      return `<p>${node.content}</p>`
-    case 'symlink':
-      return `<a href="#${node.content}">${renderContent(nodesById[node.content])}</a>`
-    default:
-      return `${node.type}<code><pre>${JSON.stringify({...node, children: undefined})}</pre></code>`
-  }
-}
-
-const renderNode = node => {
-  return `<div id="${node.id}" class="node">
-    <div class="contents">
-    ${nodeSize[node.id] > 1 ? nodeSize[node.id] : ''} ${renderContent(node)}
-    </div>
-    ${node.children.length 
-    ? `<div class="children">
-    ${node.children.map(renderNode).join('\n')}
-    </div>` : ''}
-  </div>`
+const renderContent = (node) => {
+	switch (node.type) {
+		case "image":
+			return `<div><img src="${node.imageSrc}" alt="${node.content}"/><p>${node.content}</p></div>`;
+		case undefined:
+		case "base":
+		case "normal":
+		case "todo":
+			// TODO markdown render
+			return `<p>${node.content}</p>`;
+		case "symlink":
+			return `<a href="#${node.content}">${renderContent(nodesById[node.content])}</a>`;
+		default:
+			return `${node.type}<code><pre>${JSON.stringify({ ...node, children: undefined })}</pre></code>`;
+	}
 };
 
+const renderNode = (node) => {
+	return `<div id="${node.id}" class="node">
+    <div class="contents">
+    ${nodeSize[node.id] > 1 ? nodeSize[node.id] : ""} ${renderContent(node)}
+    </div>
+    ${
+			node.children.length
+				? `<div class="children">
+    ${node.children.map(renderNode).join("\n")}
+    </div>`
+				: ""
+		}
+  </div>`;
+};
 
-const replaceSymlinks = node => {
-  if (node.type === 'symlink') {
-    node = nodesById[node.content]
-  }
-  return {...node, children: node.children.map(replaceSymlinks)}
-}
+const replaceSymlinks = (node) => {
+	if (node.type === "symlink") {
+		node = nodesById[node.content];
+	}
+	return { ...node, children: node.children.map(replaceSymlinks) };
+};
 
 const preamble = `
 title: Structure Editors: A Literature Review
@@ -101,9 +107,11 @@ for (const node of document.querySelectorAll('.node')) {
 }
 </script>
 
-`
+`;
 
-
-const fs = require('fs')
+const fs = require("fs");
 // const fixed = {...full, root: replaceSymlinks(full.root)}
-fs.writeFileSync(__dirname + '/posts/structured-editors-a-literature-review.html', preamble + renderNode(full.root))
+fs.writeFileSync(
+	__dirname + "/posts/structured-editors-a-literature-review.html",
+	preamble + renderNode(full.root),
+);
