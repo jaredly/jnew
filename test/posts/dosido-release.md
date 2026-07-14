@@ -10,6 +10,8 @@ gist: 67a67b9978aaf1352f73dc3a5d01cbe6
 
 I don't know about you, but my personal projects often metastasize. I start going in one direction, and after a while I've learned a lot about what I really want so I start a fresh implementation in a new subfolder, and along the way I'm building tools and libraries as I discover I need them. After a while it's a tangled mess, where the production app uses maybe 30% of the code, and there are at least three reusable libraries waiting to be born, if only I could get my act together to do the cleanup.
 
+<!-- more -->
+
 So now I've finally gathered the will to do some refactoring, but why do the work by hand when [I can automate the process](https://xkcd.com/1319/)?
 
 I was surprised to discover that there wasn't a ready-made cli tool for 'move this typescript file from here to here, fixing impacted imports'. So I built that (`dosido move`), as well as 'move this definition to a new/another file' (`dosido extract`).
