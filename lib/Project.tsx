@@ -167,7 +167,11 @@ export let renderProject = ({title: contentTitle, tags, description, github, lin
 
     return (
         <html lang="en">
-            <PageHead title={contentTitle} description={description}>
+            <PageHead
+                title={contentTitle}
+                description={description}
+                article_image={screenshot}
+            >
                 <style>{inlineCss()}</style>
             </PageHead>
             {body}

@@ -1,0 +1,27 @@
+
+- tessera pieces; encoding, generating, generalizing, playing with
+- jigsaw puzzle mania
+    - need to test with some people, maybe a FEI funtimes
+- umkehr
+    - undo/redo for everyone! because your users deserve better
+    - oops, it's a CRDT too! and we've solved migration, etc, and also here's a whole jigsaw puzzle game using it
+- block-rich-text-crdt: Rich Causal Blocks
+    - and we're recreated word pretty much!
+- blobbyvolley2; rust edition
+- tasks RPI flow & skills, talking through the history
+    - I would say 'make these files' and then delete them before committing
+    - in some cases, I would paste them into the pull request description
+    - then in my personal projects, I started moving them to a folder after creating
+    - then I would make the folder first, and tell the agent to use that
+    - then I made the `tasks` cli, which spat out rote phrases
+        - added 'simple' and 'bugfix' types, as some things didn't need the full RPI path
+    - then I asked codex to "make me some skills for this".
+        - you can see the conversation in the tasks repo btw
+    - then I added a `commit` skill, which turned out to be a neat innovation (it checks to verify that implementation finished)
+    - most recent addition is the 'subtasks' functionality, which I haven't had the chance to really try out
+- dressage; a harness for refined agentic development
+    - RPIC
+    - jump to a new thread for each step, to prevent context pollution
+    - worktree ready (TBD)
+
+- the LDS Graphs stuff!! I really want to write about that.
