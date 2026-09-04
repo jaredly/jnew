@@ -109,6 +109,14 @@ export let MetaHead = (props: {
 			<meta property="og:type" content="article" />
 			<meta property="og:title" content={props.title} />
 			<meta property="og:description" content={props.description} />
+			<meta
+				name="og:image"
+				content={
+					props.article_image ??
+					props.thumbnail ??
+					"https://jaredforsyth.com/images/logo/JF_black_128.png"
+				}
+			/>
 			<link rel="shortcut icon" href="/images/logo/JF_black_32.png" />
 			<title> {props.title} </title>
 		</fragment>
