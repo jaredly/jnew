@@ -43,6 +43,9 @@ export const Consts = {
 	},
 };
 
+const absolute = (img?: string) => img && img.startsWith('/')
+    ? 'https://jaredforsyth.com' + img : img
+
 export let Twitter = ({
 	contentTitle,
 	description,
@@ -65,8 +68,8 @@ export let Twitter = ({
 			<meta
 				name="twitter:image"
 				content={
-					article_image ??
-					thumbnail ??
+					absolute(article_image) ??
+					absolute(thumbnail) ??
 					"https://jaredforsyth.com/images/logo/JF_black_128.png"
 				}
 			/>
@@ -110,10 +113,10 @@ export let MetaHead = (props: {
 			<meta property="og:title" content={props.title} />
 			<meta property="og:description" content={props.description} />
 			<meta
-				name="og:image"
+				property="og:image"
 				content={
-					props.article_image ??
-					props.thumbnail ??
+					absolute(props.article_image) ??
+					absolute(props.thumbnail) ??
 					"https://jaredforsyth.com/images/logo/JF_black_128.png"
 				}
 			/>
