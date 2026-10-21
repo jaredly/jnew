@@ -1,6 +1,9 @@
 import fs from "fs";
 import fetch from "node-fetch";
 
+// To upload a post as a gist,
+// run `gh gist create my-post.md` in test/posts/
+
 const main = async () => {
 	const gists = JSON.parse(fs.readFileSync("./test/gists.json", "utf8"));
 	await Promise.all(
